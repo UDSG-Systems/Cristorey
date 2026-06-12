@@ -73,7 +73,7 @@
       width: 52px;
       height: 52px;
       border-radius: 50%;
-      background: var(--navy);
+      background: var(--white);
       color: var(--gold2);
       display: flex;
       align-items: center;
@@ -84,9 +84,10 @@
       letter-spacing: 0.02em;
       flex-shrink: 0;
       overflow: hidden;
+      padding: 4px;
     }
 
-    .brand-logo img { width: 100%; height: 100%; object-fit: cover; }
+    .brand-logo img { width: 100%; height: 100%; object-fit: contain; }
 
     .brand-text {
       display: flex;
@@ -173,8 +174,8 @@
       text-align: center;
       padding: 80px 24px;
       background:
-        linear-gradient(160deg, rgba(20,43,70,0.82) 0%, rgba(28,58,94,0.68) 55%, rgba(177,147,74,0.45) 100%),
-        repeating-linear-gradient(135deg, #2a4a73 0 80px, #1c3a5e 80px 160px);
+        linear-gradient(160deg, rgba(20,43,70,0.85) 0%, rgba(28,58,94,0.72) 55%, rgba(177,147,74,0.5) 100%),
+        url('assets/hero.jpeg') center 30% / cover no-repeat;
     }
 
     .hero-content { max-width: 760px; }
@@ -272,25 +273,9 @@
     .split-media {
       aspect-ratio: 4/5;
       border-radius: 8px;
-      background:
-        repeating-linear-gradient(45deg, var(--navy) 0 24px, var(--navy2) 24px 48px);
+      background: url('assets/hero.jpeg') center / cover no-repeat;
       position: relative;
       overflow: hidden;
-    }
-
-    .split-media::after {
-      content: 'IMAGEN DE LA PARROQUIA';
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      color: rgba(255,255,255,0.55);
-      font-size: 11px;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      padding: 24px;
     }
 
     .split-media.alt {
@@ -540,7 +525,7 @@
 
     .footer-brand { display: flex; align-items: flex-start; gap: 14px; }
 
-    .footer-brand .brand-logo { background: var(--gold); color: var(--navy2); }
+    .footer-brand .brand-logo { background: var(--white); }
 
     .footer-brand .name {
       font-family: 'Cormorant Garamond', serif;
@@ -616,8 +601,7 @@
 <header>
   <a class="brand" href="#inicio">
     <span class="brand-logo">
-      <!-- Reemplaza este span por <img src="logo.png" alt="Parroquia Cristo Rey"/> -->
-      CR
+      <img src="assets/logo.png" alt="Parroquia Cristo Rey"/>
     </span>
     <span class="brand-text">
       <span class="name">Cristo Rey</span>
@@ -858,7 +842,9 @@
 <footer id="donar">
   <div class="footer-grid">
     <div class="footer-brand">
-      <span class="brand-logo">CR</span>
+      <span class="brand-logo">
+        <img src="assets/logo.png" alt="Parroquia Cristo Rey"/>
+      </span>
       <div>
         <div class="name">Parroquia Cristo Rey</div>
         <p>Iglesia Católica dedicada a la evangelización, los sacramentos y el servicio a la comunidad.</p>
