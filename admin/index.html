@@ -92,6 +92,33 @@
     .status.err { display: block; background: rgba(192,57,43,0.1); color: #b3261e; border: 1px solid rgba(192,57,43,0.4); font-weight: 500; }
     .status.info { display: block; background: rgba(20,43,70,0.06); color: var(--navy); border: 1px solid var(--line); }
 
+    /* ── TOAST NOTIFICATIONS ── */
+    .toast-wrap {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      z-index: 9999;
+    }
+    .toast {
+      font-family: 'Jost', sans-serif;
+      font-size: 13.5px;
+      font-weight: 600;
+      padding: 14px 20px;
+      border-radius: 4px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      max-width: 320px;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .toast.ok { background: #1f9d4d; color: #ffffff; border: 1px solid #1a8442; }
+    .toast.err { background: #c0392b; color: #ffffff; border: 1px solid #a3301f; }
+    .toast.info { background: var(--navy); color: var(--cream); border: 1px solid var(--navy2); }
+
     /* ── TOOLBAR / EDITOR ── */
     .toolbar {
       display: flex;
@@ -357,6 +384,8 @@
 
 </div>
 
+<div class="toast-wrap" id="toastWrap"></div>
+
 <footer class="site-footer">
   <div class="footer-logo"><img src="../assets/logo.png" alt="Parroquia Cristo Rey"/></div>
   <div class="name">Parroquia Cristo Rey</div>
@@ -392,6 +421,19 @@
   function showStatus(msg, type) {
     statusEl.textContent = msg;
     statusEl.className = 'status ' + type;
+  }
+
+  const toastWrapEl = $('#toastWrap');
+  function showToast(msg, type) {
+    const toast = document.createElement('div');
+    toast.className = 'toast ' + type;
+    toast.textContent = msg;
+    toastWrapEl.appendChild(toast);
+    requestAnimationFrame(() => toast.classList.add('show'));
+    setTimeout(() => {
+      toast.classList.remove('show');
+      setTimeout(() => toast.remove(), 300);
+    }, 4000);
   }
 
   function b64ToBytes(b64) {
@@ -587,14 +629,12 @@
     const content = $('#f-content').innerHTML.trim();
 
     if (!title || !category || !excerpt || !content) {
-      showStatus('Completa título, categoría, resumen y contenido.', 'err');
+      showToast('Completa título, categoría, resumen y contenido.', 'err');
       return;
     }
 
     let slug = editingSlug || slugify(title);
-    if (!slug) { showStatus('El título no es válido para generar un enlace.', 'err'); return; }
-
-    showStatus('Publicando...', 'info');
+    if (!slug) { showToast('El título no es válido para generar un enlace.', 'err'); return; }
 
     try {
       let cover = '';
@@ -612,31 +652,30 @@
         posts = posts.map(p => p.slug === editingSlug ? newPost : p);
       } else {
         if (posts.some(p => p.slug === slug)) {
-          showStatus('Ya existe un artículo con un título muy similar. Cambia el título.', 'err');
+          showToast('Ya existe un artículo con un título muy similar. Cambia el título.', 'err');
           return;
         }
         posts.push(newPost);
       }
 
       await savePosts(editingSlug ? `Editar artículo: ${title}` : `Publicar artículo: ${title}`);
-      showStatus('¡Publicado! El artículo ya aparece en la Revista.', 'ok');
+      showToast('¡Publicado! El artículo ya aparece en la Revista.', 'ok');
       closeEditor();
       renderList();
     } catch (e) {
-      showStatus('Error al publicar: ' + e.message, 'err');
+      showToast('Error al publicar: ' + e.message, 'err');
     }
   }
 
   async function deletePost(slug) {
     if (!confirm('¿Eliminar este artículo? Esta acción no se puede deshacer.')) return;
-    showStatus('Eliminando...', 'info');
     try {
       posts = posts.filter(p => p.slug !== slug);
       await savePosts(`Eliminar artículo: ${slug}`);
-      showStatus('Artículo eliminado.', 'ok');
+      showToast('Artículo eliminado.', 'ok');
       renderList();
     } catch (e) {
-      showStatus('Error al eliminar: ' + e.message, 'err');
+      showToast('Error al eliminar: ' + e.message, 'err');
     }
   }
 
@@ -717,11 +756,9 @@
     const description = $('#ev-description').value.trim();
 
     if (!title || !tag || !description) {
-      showStatus('Completa título, categoría y descripción.', 'err');
+      showToast('Completa título, categoría y descripción.', 'err');
       return;
     }
-
-    showStatus('Publicando...', 'info');
 
     try {
       if (editingEventId) {
@@ -732,24 +769,23 @@
       }
 
       await saveEvents(editingEventId ? `Editar evento: ${title}` : `Publicar evento: ${title}`);
-      showStatus('¡Publicado! El evento ya aparece en la página principal.', 'ok');
+      showToast('¡Publicado! El evento ya aparece en la página principal.', 'ok');
       closeEventEditor();
       renderEventList();
     } catch (e) {
-      showStatus('Error al publicar: ' + e.message, 'err');
+      showToast('Error al publicar: ' + e.message, 'err');
     }
   }
 
   async function deleteEvent(id) {
     if (!confirm('¿Eliminar este evento? Esta acción no se puede deshacer.')) return;
-    showStatus('Eliminando...', 'info');
     try {
       events = events.filter(ev => ev.id !== id);
       await saveEvents(`Eliminar evento: ${id}`);
-      showStatus('Evento eliminado.', 'ok');
+      showToast('Evento eliminado.', 'ok');
       renderEventList();
     } catch (e) {
-      showStatus('Error al eliminar: ' + e.message, 'err');
+      showToast('Error al eliminar: ' + e.message, 'err');
     }
   }
 
