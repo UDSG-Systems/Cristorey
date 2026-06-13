@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Revista — Parroquia Cristo Rey</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Jost:wght@200;300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../assets/site.css"/>
+  <style>
+    .article-hero {
+      position: relative;
+      min-height: 56vh;
+      display: flex;
+      align-items: flex-end;
+      padding: 180px 56px 70px;
+      background: linear-gradient(135deg, var(--navy), var(--gold));
+      background-size: cover;
+      background-position: center;
+    }
+    .article-hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(13,30,51,0.25) 0%, rgba(13,30,51,0.85) 100%);
+    }
+    .article-hero-inner {
+      position: relative;
+      z-index: 2;
+      max-width: 820px;
+      margin: 0 auto;
+      width: 100%;
+      color: var(--cream);
+    }
+    .article-hero .tag {
+      font-size: 11px;
+      letter-spacing: 0.36em;
+      text-transform: uppercase;
+      color: var(--gold2);
+      margin-bottom: 18px;
+    }
+    .article-hero h1 {
+      font-weight: 500;
+      font-size: clamp(2.2rem, 5.5vw, 3.8rem);
+      line-height: 1.15;
+      margin-bottom: 18px;
+    }
+    .article-hero .meta {
+      font-size: 12px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(248,243,231,0.7);
+    }
+
+    .article-body {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 70px 56px 60px;
+    }
+    .article-body p {
+      font-size: 18px;
+      line-height: 2.05;
+      color: var(--ink);
+      margin-bottom: 26px;
+      font-weight: 300;
+    }
+    .article-body p:first-of-type::first-letter {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 4.4rem;
+      font-weight: 600;
+      color: var(--gold);
+      float: left;
+      line-height: 0.85;
+      margin: 8px 14px 0 0;
+    }
+    .article-body h2, .article-body h3 {
+      font-weight: 600;
+      margin: 40px 0 18px;
+      line-height: 1.25;
+    }
+    .article-body h2 { font-size: 2rem; }
+    .article-body h3 { font-size: 1.5rem; }
+    .article-body blockquote {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.6rem;
+      line-height: 1.6;
+      color: var(--navy);
+      border-left: 2px solid var(--gold);
+      padding-left: 28px;
+      margin: 36px 0;
+    }
+    .article-body img {
+      width: 100%;
+      border-radius: 2px;
+      margin: 30px 0;
+    }
+    .article-body ul, .article-body ol {
+      margin: 0 0 26px 1.4em;
+      font-size: 17px;
+      line-height: 1.95;
+      color: var(--ink);
+    }
+    .article-body a { color: var(--navy); border-bottom: 1px solid var(--gold); text-decoration: none; }
+
+    .article-nav {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 0 56px 100px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--line);
+      padding-top: 32px;
+    }
+    .article-nav a {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--navy);
+      border-bottom: 1px solid var(--gold);
+      padding-bottom: 4px;
+    }
+    .article-nav a:hover { color: var(--gold); }
+
+    .not-found {
+      padding: 220px 24px 140px;
+      text-align: center;
+    }
+    .not-found h1 { font-size: 2.4rem; font-weight: 500; margin-bottom: 16px; }
+    .not-found p { color: var(--mid); margin-bottom: 28px; }
+
+    @media (max-width: 700px) {
+      .article-hero { padding: 140px 24px 48px; }
+      .article-body { padding: 48px 24px 40px; }
+      .article-nav { padding: 0 24px 70px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header always-solid" id="header">
+  <a class="brand" href="../index.html">
+    <span class="brand-logo"><img src="../assets/logo.png" alt="Parroquia Cristo Rey"/></span>
+    <span class="brand-text">
+      <span class="name">Cristo Rey</span>
+      <span class="sub">Iglesia Católica</span>
+    </span>
+  </a>
+  <nav class="main-nav">
+    <a href="../index.html#nosotros">Nosotros</a>
+    <a href="../index.html#horarios">Horarios</a>
+    <a href="../index.html#ministerios">Ministerios</a>
+    <a href="../index.html#eventos">Eventos</a>
+    <a href="index.html" class="active">Revista</a>
+    <a href="../index.html#contacto">Contacto</a>
+  </nav>
+  <a class="btn btn-gold" href="../index.html#horarios">Horarios de Misa</a>
+</header>
+
+<main id="article-root"></main>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-logo"><img src="../assets/logo.png" alt="Parroquia Cristo Rey"/></div>
+  <div class="name">Parroquia Cristo Rey</div>
+  <div class="tag">Iglesia Católica</div>
+  <div class="footer-nav">
+    <a href="../index.html#nosotros">Nosotros</a>
+    <a href="../index.html#horarios">Horarios</a>
+    <a href="../index.html#ministerios">Ministerios</a>
+    <a href="../index.html#eventos">Eventos</a>
+    <a href="index.html">Revista</a>
+    <a href="../index.html#contacto">Contacto</a>
+  </div>
+  <div class="copy">© 2026 Parroquia Cristo Rey. Todos los derechos reservados.</div>
+</footer>
+
+<script src="../assets/site.js"></script>
+<script>
+  function fmtDate(iso) {
+    const d = new Date(iso + 'T00:00:00');
+    return d.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
+  }
+
+  const slug = new URLSearchParams(window.location.search).get('slug');
+  const root = document.getElementById('article-root');
+
+  fetch('../assets/blog/posts.json')
+    .then(r => r.json())
+    .then(posts => {
+      const post = posts.find(p => p.slug === slug);
+      if (!post) {
+        root.innerHTML = `
+          <div class="not-found">
+            <h1>Artículo no encontrado</h1>
+            <p>El artículo que buscas no existe o fue movido.</p>
+            <a class="btn btn-line" href="index.html">Volver a la Revista</a>
+          </div>`;
+        return;
+      }
+
+      document.title = post.title + ' — Revista Cristo Rey';
+
+      const heroStyle = post.cover
+        ? `background-image:url('${post.cover}')`
+        : '';
+
+      root.innerHTML = `
+        <section class="article-hero" style="${heroStyle}">
+          <div class="article-hero-inner">
+            <div class="tag">${post.category}</div>
+            <h1>${post.title}</h1>
+            <div class="meta">${fmtDate(post.date)} · ${post.author}</div>
+          </div>
+        </section>
+        <article class="article-body">${post.content}</article>
+        <div class="article-nav">
+          <a href="index.html">← Volver a la Revista</a>
+        </div>`;
+    })
+    .catch(() => {
+      root.innerHTML = `
+        <div class="not-found">
+          <h1>No se pudo cargar el artículo</h1>
+          <a class="btn btn-line" href="index.html">Volver a la Revista</a>
+        </div>`;
+    });
+</script>
+
+</body>
+</html>

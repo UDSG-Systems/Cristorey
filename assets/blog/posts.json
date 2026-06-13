@@ -1,0 +1,35 @@
+[
+  {
+    "id": "1",
+    "slug": "bienvenidos-a-la-revista-cristo-rey",
+    "title": "Bienvenidos a la Revista de Cristo Rey",
+    "category": "Comunidad",
+    "author": "Parroquia Cristo Rey",
+    "date": "2026-06-13",
+    "cover": "../assets/hero.jpeg",
+    "excerpt": "Inauguramos este espacio para compartir la vida de nuestra comunidad: reflexiones, testimonios, eventos y noticias de la parroquia.",
+    "content": "<p>Con mucha alegría inauguramos la Revista de la Parroquia Cristo Rey, un espacio donde compartiremos reflexiones, testimonios, noticias y momentos importantes de la vida de nuestra comunidad.</p><p>Aquí encontrarás artículos sobre nuestras celebraciones, la vida de los grupos pastorales, catequesis, y mucho más. Te invitamos a leer, compartir y participar activamente en la vida de la parroquia.</p><p>Que este espacio sea también un lugar de encuentro espiritual, donde la fe se comparte y la comunidad crece unida.</p>"
+  },
+  {
+    "id": "2",
+    "slug": "preparacion-para-la-primera-comunion-2026",
+    "title": "Abren las inscripciones para la Primera Comunión 2026",
+    "category": "Catequesis",
+    "author": "Equipo de Catequesis",
+    "date": "2026-06-10",
+    "cover": "",
+    "excerpt": "La parroquia abre el periodo de inscripción para los niños que se preparan a recibir por primera vez la Eucaristía este año.",
+    "content": "<p>Informamos a toda la comunidad que ya se encuentran abiertas las inscripciones para el programa de Primera Comunión 2026.</p><p>Los interesados pueden acercarse a la oficina parroquial en horario de atención para realizar la inscripción y recibir el calendario de catequesis. Es necesario presentar el certificado de bautismo del niño o niña.</p><p>Las clases iniciarán el próximo mes y se impartirán los sábados. ¡Te esperamos!</p>"
+  },
+  {
+    "id": "3",
+    "slug": "noche-de-adoracion-eucaristica",
+    "title": "Una noche para encontrarnos con Cristo: Adoración Eucarística",
+    "category": "Espiritualidad",
+    "author": "Parroquia Cristo Rey",
+    "date": "2026-06-05",
+    "cover": "",
+    "excerpt": "Reflexionamos sobre la importancia de la adoración eucarística en la vida de fe de nuestra comunidad parroquial.",
+    "content": "<p>Cada mes, nuestra comunidad se reúne para un momento especial de adoración al Santísimo Sacramento. En el silencio y la quietud, muchos hermanos encuentran consuelo, paz y respuestas en su caminar de fe.</p><p>Te invitamos a vivir esta experiencia, que es abierta a todos sin importar tu situación o momento espiritual. Cristo nos espera.</p><p>La próxima adoración será anunciada en nuestra sección de eventos. ¡No te la pierdas!</p>"
+  }
+]

@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Revista — Parroquia Cristo Rey</title>
+  <meta name="description" content="Revista de la Parroquia Cristo Rey: noticias, reflexiones y vida de nuestra comunidad."/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Jost:wght@200;300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../assets/site.css"/>
+  <style>
+    /* ── PAGE HEAD ── */
+    .page-head {
+      background: var(--navy);
+      color: var(--cream);
+      padding: 180px 56px 90px;
+      text-align: center;
+    }
+    .page-head .sec-label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.36em;
+      text-transform: uppercase;
+      color: var(--gold2);
+      margin-bottom: 6px;
+    }
+    .page-head h1 {
+      font-weight: 500;
+      font-size: clamp(2.6rem, 6vw, 4.2rem);
+      line-height: 1.1;
+    }
+    .page-head h1 em { font-style: italic; color: var(--gold2); }
+    .page-head p {
+      font-size: 16px;
+      line-height: 1.9;
+      color: rgba(248,243,231,0.65);
+      max-width: 600px;
+      margin: 20px auto 0;
+    }
+
+    .container { max-width: 1180px; margin: 0 auto; }
+
+    /* ── FEATURED ── */
+    .featured {
+      padding: 90px 56px 40px;
+    }
+    .featured-card {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 56px;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 2px;
+      overflow: hidden;
+      text-decoration: none;
+      color: var(--ink);
+      background: var(--white);
+      transition: box-shadow 0.3s ease;
+    }
+    .featured-card:hover { box-shadow: 0 24px 60px rgba(20,43,70,0.12); }
+
+    .featured-media {
+      aspect-ratio: 4/3;
+      background: linear-gradient(135deg, var(--navy), var(--gold));
+      background-size: cover;
+      background-position: center;
+    }
+
+    .featured-body { padding: 0 48px 0 0; }
+    .featured-body .tag {
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 16px;
+    }
+    .featured-body h2 {
+      font-weight: 600;
+      font-size: clamp(1.8rem, 3.4vw, 2.6rem);
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+    .featured-body p {
+      font-size: 15px;
+      line-height: 1.9;
+      color: var(--mid);
+      margin-bottom: 22px;
+    }
+    .featured-meta {
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--mid);
+    }
+    .featured-meta .read {
+      display: inline-block;
+      margin-top: 18px;
+      color: var(--navy);
+      font-weight: 600;
+      border-bottom: 1px solid var(--gold);
+      padding-bottom: 4px;
+    }
+
+    /* ── GRID ── */
+    .archive { padding: 40px 56px 130px; }
+
+    .archive-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 36px;
+      margin-top: 40px;
+    }
+
+    .post-card {
+      text-decoration: none;
+      color: var(--ink);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .post-media {
+      aspect-ratio: 4/3;
+      border-radius: 2px;
+      background: linear-gradient(135deg, var(--paper), var(--gold2));
+      background-size: cover;
+      background-position: center;
+      margin-bottom: 22px;
+      transition: opacity 0.25s;
+    }
+    .post-card:hover .post-media { opacity: 0.85; }
+
+    .post-card .tag {
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+    .post-card h3 {
+      font-weight: 600;
+      font-size: 1.4rem;
+      line-height: 1.3;
+      margin-bottom: 10px;
+      transition: color 0.2s;
+    }
+    .post-card:hover h3 { color: var(--gold); }
+    .post-card p {
+      font-size: 13.5px;
+      line-height: 1.85;
+      color: var(--mid);
+      margin-bottom: 14px;
+    }
+    .post-card .meta {
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--mid);
+      margin-top: auto;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 0;
+      color: var(--mid);
+      font-size: 15px;
+    }
+
+    @media (max-width: 1024px) {
+      .featured-card { grid-template-columns: 1fr; }
+      .featured-body { padding: 0 40px 40px; }
+      .archive-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 700px) {
+      .page-head { padding: 140px 24px 64px; }
+      .featured, .archive { padding: 56px 24px; }
+      .archive-grid { grid-template-columns: 1fr; }
+      .featured-body { padding: 0 24px 32px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header always-solid" id="header">
+  <a class="brand" href="../index.html">
+    <span class="brand-logo"><img src="../assets/logo.png" alt="Parroquia Cristo Rey"/></span>
+    <span class="brand-text">
+      <span class="name">Cristo Rey</span>
+      <span class="sub">Iglesia Católica</span>
+    </span>
+  </a>
+  <nav class="main-nav">
+    <a href="../index.html#nosotros">Nosotros</a>
+    <a href="../index.html#horarios">Horarios</a>
+    <a href="../index.html#ministerios">Ministerios</a>
+    <a href="../index.html#eventos">Eventos</a>
+    <a href="index.html" class="active">Revista</a>
+    <a href="../index.html#contacto">Contacto</a>
+  </nav>
+  <a class="btn btn-gold" href="../index.html#horarios">Horarios de Misa</a>
+</header>
+
+<!-- PAGE HEAD -->
+<section class="page-head">
+  <div class="sec-label">Vida Parroquial</div>
+  <h1>La <em>Revista</em> de Cristo Rey</h1>
+  <p>Noticias, reflexiones y testimonios de nuestra comunidad.</p>
+</section>
+
+<!-- FEATURED -->
+<section class="featured">
+  <div class="container" id="featured"></div>
+</section>
+
+<!-- ARCHIVE -->
+<section class="archive">
+  <div class="container">
+    <div class="archive-grid" id="archive"></div>
+    <div class="empty-state" id="empty" hidden>Aún no hay más artículos publicados.</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-logo"><img src="../assets/logo.png" alt="Parroquia Cristo Rey"/></div>
+  <div class="name">Parroquia Cristo Rey</div>
+  <div class="tag">Iglesia Católica</div>
+  <div class="footer-nav">
+    <a href="../index.html#nosotros">Nosotros</a>
+    <a href="../index.html#horarios">Horarios</a>
+    <a href="../index.html#ministerios">Ministerios</a>
+    <a href="../index.html#eventos">Eventos</a>
+    <a href="index.html">Revista</a>
+    <a href="../index.html#contacto">Contacto</a>
+  </div>
+  <div class="copy">© 2026 Parroquia Cristo Rey. Todos los derechos reservados.</div>
+</footer>
+
+<script src="../assets/site.js"></script>
+<script>
+  const FALLBACK_GRADIENTS = [
+    'linear-gradient(135deg, var(--navy), var(--gold))',
+    'linear-gradient(135deg, var(--paper), var(--gold2))',
+    'linear-gradient(135deg, var(--navy2), var(--gold2))',
+    'linear-gradient(135deg, var(--gold), var(--paper))'
+  ];
+
+  function fmtDate(iso) {
+    const d = new Date(iso + 'T00:00:00');
+    return d.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
+  }
+
+  fetch('../assets/blog/posts.json')
+    .then(r => r.json())
+    .then(posts => {
+      posts = posts.slice().sort((a, b) => new Date(b.date) - new Date(a.date));
+      const featuredEl = document.getElementById('featured');
+      const archiveEl = document.getElementById('archive');
+      const emptyEl = document.getElementById('empty');
+
+      if (!posts.length) {
+        featuredEl.closest('section').hidden = true;
+        emptyEl.hidden = false;
+        return;
+      }
+
+      const [first, ...rest] = posts;
+
+      const mediaStyle = (post, idx) => post.cover
+        ? `background-image:url('${post.cover}')`
+        : `background-image:${FALLBACK_GRADIENTS[idx % FALLBACK_GRADIENTS.length]}`;
+
+      featuredEl.innerHTML = `
+        <a class="featured-card" href="post.html?slug=${encodeURIComponent(first.slug)}">
+          <div class="featured-media" style="${mediaStyle(first, 0)}"></div>
+          <div class="featured-body">
+            <div class="tag">${first.category}</div>
+            <h2>${first.title}</h2>
+            <p>${first.excerpt}</p>
+            <div class="featured-meta">${fmtDate(first.date)} · ${first.author}</div>
+            <span class="read">Leer artículo</span>
+          </div>
+        </a>`;
+
+      if (!rest.length) {
+        emptyEl.hidden = false;
+        return;
+      }
+
+      archiveEl.innerHTML = rest.map((post, i) => `
+        <a class="post-card" href="post.html?slug=${encodeURIComponent(post.slug)}">
+          <div class="post-media" style="${mediaStyle(post, i + 1)}"></div>
+          <div class="tag">${post.category}</div>
+          <h3>${post.title}</h3>
+          <p>${post.excerpt}</p>
+          <div class="meta">${fmtDate(post.date)}</div>
+        </a>`).join('');
+    })
+    .catch(() => {
+      document.getElementById('featured').closest('section').hidden = true;
+      const empty = document.getElementById('empty');
+      empty.hidden = false;
+      empty.textContent = 'No se pudieron cargar los artículos.';
+    });
+</script>
+
+</body>
+</html>
