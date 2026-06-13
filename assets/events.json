@@ -1,0 +1,23 @@
+[
+  {
+    "id": "1",
+    "date": "2026-06-15",
+    "tag": "Catequesis",
+    "title": "Inicio de inscripciones",
+    "description": "Abrimos inscripciones para primera comunión y confirmación. Pasa por la oficina parroquial."
+  },
+  {
+    "id": "2",
+    "date": "2026-06-21",
+    "tag": "Comunidad",
+    "title": "Adoración Eucarística",
+    "description": "Hora santa de adoración al Santísimo, abierta a toda la comunidad. Todos son bienvenidos."
+  },
+  {
+    "id": "3",
+    "date": "2026-06-28",
+    "tag": "Solidaridad",
+    "title": "Campaña de Cáritas",
+    "description": "Recolección de alimentos y donativos para familias en situación de necesidad de nuestra zona."
+  }
+]

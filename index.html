@@ -552,6 +552,13 @@
     .event-row:hover .arrow { background: var(--navy); color: var(--gold2); border-color: var(--navy); }
     .event-row .arrow svg { width: 14px; height: 14px; }
 
+    .empty-events {
+      text-align: center;
+      padding: 40px 0;
+      color: var(--mid);
+      font-size: 14px;
+    }
+
     /* ── CONTACT ── */
     .contact-wrap {
       display: grid;
@@ -878,34 +885,8 @@
       <h2>Eventos y <em>Anuncios</em></h2>
       <p>Mantente al día con las actividades y celebraciones de nuestra comunidad.</p>
     </div>
-    <div class="event-list reveal">
-      <div class="event-row">
-        <div class="date">15<span>Junio</span></div>
-        <div class="info">
-          <div class="tag">Catequesis</div>
-          <h3>Inicio de inscripciones</h3>
-          <p>Abrimos inscripciones para primera comunión y confirmación. Pasa por la oficina parroquial.</p>
-        </div>
-        <div class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M13 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-      </div>
-      <div class="event-row">
-        <div class="date">21<span>Junio</span></div>
-        <div class="info">
-          <div class="tag">Comunidad</div>
-          <h3>Adoración Eucarística</h3>
-          <p>Hora santa de adoración al Santísimo, abierta a toda la comunidad. Todos son bienvenidos.</p>
-        </div>
-        <div class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M13 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-      </div>
-      <div class="event-row">
-        <div class="date">28<span>Junio</span></div>
-        <div class="info">
-          <div class="tag">Solidaridad</div>
-          <h3>Campaña de Cáritas</h3>
-          <p>Recolección de alimentos y donativos para familias en situación de necesidad de nuestra zona.</p>
-        </div>
-        <div class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M13 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-      </div>
+    <div class="event-list reveal" id="eventList">
+      <div class="empty-events">Cargando eventos...</div>
     </div>
   </div>
 </section>
@@ -992,6 +973,40 @@
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
   }, { threshold: 0.15 });
   reveals.forEach(el => io.observe(el));
+
+  // Eventos y Anuncios
+  const MONTHS_ES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  fetch('assets/events.json')
+    .then(r => r.json())
+    .then(events => {
+      const eventListEl = document.getElementById('eventList');
+      const today = new Date(); today.setHours(0,0,0,0);
+      events = events
+        .filter(ev => new Date(ev.date + 'T00:00:00') >= today)
+        .sort((a, b) => new Date(a.date) - new Date(b.date));
+
+      if (!events.length) {
+        eventListEl.innerHTML = '<div class="empty-events">No hay eventos próximos por el momento.</div>';
+        return;
+      }
+
+      eventListEl.innerHTML = events.map(ev => {
+        const d = new Date(ev.date + 'T00:00:00');
+        return `
+        <div class="event-row">
+          <div class="date">${d.getDate()}<span>${MONTHS_ES[d.getMonth()]}</span></div>
+          <div class="info">
+            <div class="tag">${ev.tag}</div>
+            <h3>${ev.title}</h3>
+            <p>${ev.description}</p>
+          </div>
+          <div class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M13 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>`;
+      }).join('');
+    })
+    .catch(() => {
+      document.getElementById('eventList').innerHTML = '<div class="empty-events">No se pudieron cargar los eventos.</div>';
+    });
 </script>
 
 </body>
