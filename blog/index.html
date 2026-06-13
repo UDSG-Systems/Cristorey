@@ -292,7 +292,7 @@
           <div class="tag">${post.category}</div>
           <h3>${post.title}</h3>
           <p>${post.excerpt}</p>
-          <div class="meta">${fmtDate(post.date)}</div>
+          <div class="meta">${fmtDate(post.date)} · ${post.author}</div>
         </a>`).join('');
     })
     .catch(() => {
