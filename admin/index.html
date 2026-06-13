@@ -220,13 +220,19 @@
         <input type="password" id="password" placeholder="Contraseña del equipo" autocomplete="off"/>
       </div>
       <button class="btn btn-gold" id="connect">Entrar</button>
-      <button class="btn btn-line" id="disconnect">Salir</button>
     </div>
     <div class="token-status" id="tokenStatus">No has iniciado sesión.</div>
   </div>
 
   <!-- STATUS -->
   <div class="status" id="status"></div>
+
+  <!-- APP BODY (hidden until logged in) -->
+  <div id="appBody" hidden>
+
+  <div class="row-actions" style="justify-content:flex-end; margin-top:0; margin-bottom:24px;">
+    <button class="btn btn-line" id="disconnect">Cerrar sesión</button>
+  </div>
 
   <!-- EDITOR -->
   <div class="panel" id="editorPanel" hidden>
@@ -298,9 +304,11 @@
       <button class="btn btn-line" id="refresh">Actualizar lista</button>
     </div>
     <div class="post-list" id="postList">
-      <div class="empty">Conéctate para ver y administrar los artículos.</div>
+      <div class="empty">Cargando artículos...</div>
     </div>
   </div>
+
+  </div><!-- /appBody -->
 
 </div>
 
@@ -396,6 +404,20 @@
       .replace(/^-|-$/g, '');
   }
 
+  function showLoggedIn() {
+    $('#accessPanel').hidden = true;
+    $('#appBody').hidden = false;
+    tokenStatusEl.textContent = 'Sesión iniciada.';
+    tokenStatusEl.classList.add('connected');
+  }
+
+  function showLoggedOut() {
+    $('#accessPanel').hidden = false;
+    $('#appBody').hidden = true;
+    tokenStatusEl.textContent = 'No has iniciado sesión.';
+    tokenStatusEl.classList.remove('connected');
+  }
+
   async function connect() {
     const password = $('#password').value.trim();
     if (!password) { showStatus('Ingresa la contraseña.', 'err'); return; }
@@ -403,13 +425,11 @@
       token = await unlock(password);
       sessionStorage.setItem(SESSION_KEY, token);
       $('#password').value = '';
-      tokenStatusEl.textContent = 'Sesión iniciada.';
-      tokenStatusEl.classList.add('connected');
+      showLoggedIn();
       showStatus('Acceso concedido.', 'ok');
       await loadPosts();
     } catch (e) {
-      tokenStatusEl.textContent = 'No has iniciado sesión.';
-      tokenStatusEl.classList.remove('connected');
+      showLoggedOut();
       showStatus(e.message, 'err');
     }
   }
@@ -418,16 +438,18 @@
     token = '';
     sessionStorage.removeItem(SESSION_KEY);
     $('#password').value = '';
-    tokenStatusEl.textContent = 'No has iniciado sesión.';
-    tokenStatusEl.classList.remove('connected');
     posts = []; postsSha = null;
-    renderList();
+    closeEditor();
+    showLoggedOut();
     showStatus('Sesión cerrada.', 'info');
   }
 
   async function loadPosts() {
     const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${POSTS_PATH}?ref=${BRANCH}`, { headers: ghHeaders() });
-    if (!res.ok) throw new Error('No se pudo cargar la lista de artículos.');
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(`No se pudo cargar la lista de artículos (${res.status}): ${err.message || 'error desconocido'}`);
+    }
     const data = await res.json();
     postsSha = data.sha;
     posts = JSON.parse(b64ToUtf8(data.content));
@@ -619,10 +641,15 @@
   });
 
   if (token) {
-    tokenStatusEl.textContent = 'Sesión iniciada.';
-    tokenStatusEl.classList.add('connected');
+    showLoggedIn();
     loadPosts().catch(e => showStatus(e.message, 'err'));
+  } else {
+    showLoggedOut();
   }
+
+  $('#password').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') connect();
+  });
 </script>
 
 </body>
