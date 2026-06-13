@@ -31,5 +31,16 @@
     "cover": "",
     "excerpt": "Reflexionamos sobre la importancia de la adoración eucarística en la vida de fe de nuestra comunidad parroquial.",
     "content": "<p>Cada mes, nuestra comunidad se reúne para un momento especial de adoración al Santísimo Sacramento. En el silencio y la quietud, muchos hermanos encuentran consuelo, paz y respuestas en su caminar de fe.</p><p>Te invitamos a vivir esta experiencia, que es abierta a todos sin importar tu situación o momento espiritual. Cristo nos espera.</p><p>La próxima adoración será anunciada en nuestra sección de eventos. ¡No te la pierdas!</p>"
+  },
+  {
+    "id": "este-es-un-articulo-de-prueba",
+    "slug": "este-es-un-articulo-de-prueba",
+    "title": "Este es un articulo de prueba",
+    "category": "Comunidad",
+    "author": "Parroquia Cristo Rey",
+    "date": "2026-06-13",
+    "cover": "../assets/blog/images/este-es-un-articulo-de-prueba.jpeg",
+    "excerpt": "Prueba",
+    "content": "<span style=\"color: rgb(85, 85, 85); font-family: Figtree, Arial, sans-serif; font-size: 18px;\">&nbsp;No hay nada más esencial para nuestra fe que la adoración a Dios. Al adorarlo, descubrimos quiénes somos y cuál es nuestro propósito, recibimos el misterio de su gracia y somos transformados en santos. Si queremos ser guiados hacia la santidad, esta guía comienza, se sustenta y se orienta hacia la adoración a Dios aquí en la tierra.&nbsp;</span>"
   }
 ]
