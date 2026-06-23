@@ -176,6 +176,8 @@
       background: var(--white);
     }
     .post-row .meta { display: flex; flex-direction: column; gap: 4px; }
+    .post-row .meta-with-thumb { display: flex; align-items: center; gap: 14px; }
+    .post-row .thumb { width: 60px; height: 44px; object-fit: cover; border-radius: 2px; flex-shrink: 0; }
     .post-row .title { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 1.1rem; }
     .post-row .sub { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--mid); }
     .post-row .actions { display: flex; gap: 10px; flex-shrink: 0; }
@@ -380,6 +382,35 @@
     </div>
   </div>
 
+  <!-- GALLERY UPLOAD -->
+  <div class="panel">
+    <h2>Galería de fotos</h2>
+    <p class="hint">Sube fotos para mostrarlas en el carrusel de la página principal.</p>
+    <div class="field-row">
+      <div class="field">
+        <label>Foto</label>
+        <input type="file" id="gal-file" accept="image/*"/>
+      </div>
+      <div class="field">
+        <label>Descripción (opcional)</label>
+        <input type="text" id="gal-caption" placeholder="Ej. Fiesta patronal 2026"/>
+      </div>
+    </div>
+    <div class="row-actions" style="justify-content:flex-start; margin-top:0;">
+      <button class="btn btn-gold" id="uploadGalleryImage">Subir foto</button>
+      <button class="btn btn-line" id="refreshGallery">Actualizar lista</button>
+    </div>
+  </div>
+
+  <!-- GALLERY LIST -->
+  <div class="panel">
+    <h2>Fotos publicadas</h2>
+    <p class="hint">Elimina fotos de la galería del sitio.</p>
+    <div class="post-list" id="galleryList">
+      <div class="empty">Cargando galería...</div>
+    </div>
+  </div>
+
   </div><!-- /appBody -->
 
 </div>
@@ -401,6 +432,8 @@
   const POSTS_PATH = 'assets/blog/posts.json';
   const IMAGES_PATH = 'assets/blog/images';
   const EVENTS_PATH = 'assets/events.json';
+  const GALLERY_PATH = 'assets/gallery.json';
+  const GALLERY_IMAGES_PATH = 'assets/gallery/images';
   const AUTH_PATH = '../assets/blog/auth.json';
   const SESSION_KEY = 'cristorey_session_token';
 
@@ -409,6 +442,7 @@
   const tokenStatusEl = $('#tokenStatus');
   const postListEl = $('#postList');
   const eventListEl = $('#eventList');
+  const galleryListEl = $('#galleryList');
 
   let token = sessionStorage.getItem(SESSION_KEY) || '';
   let posts = [];
@@ -417,6 +451,8 @@
   let events = [];
   let eventsSha = null;
   let editingEventId = null;
+  let gallery = [];
+  let gallerySha = null;
 
   function showStatus(msg, type) {
     statusEl.textContent = msg;
@@ -521,6 +557,7 @@
       showStatus('Acceso concedido.', 'ok');
       await loadPosts();
       await loadEvents();
+      await loadGallery();
     } catch (e) {
       showLoggedOut();
       showStatus(e.message, 'err');
@@ -533,6 +570,7 @@
     $('#password').value = '';
     posts = []; postsSha = null;
     events = []; eventsSha = null;
+    gallery = []; gallerySha = null;
     closeEditor();
     closeEventEditor();
     showLoggedOut();
@@ -808,6 +846,108 @@
     eventsSha = data.content.sha;
   }
 
+  // ── GALLERY ──
+
+  async function loadGallery() {
+    const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${GALLERY_PATH}?ref=${BRANCH}`, { headers: ghHeaders() });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(`No se pudo cargar la galería (${res.status}): ${err.message || 'error desconocido'}`);
+    }
+    const data = await res.json();
+    gallerySha = data.sha;
+    gallery = JSON.parse(b64ToUtf8(data.content));
+    renderGalleryList();
+  }
+
+  function renderGalleryList() {
+    if (!gallery.length) {
+      galleryListEl.innerHTML = '<div class="empty">Aún no hay fotos. Sube la primera.</div>';
+      return;
+    }
+    galleryListEl.innerHTML = gallery.slice().reverse().map(img => `
+      <div class="post-row">
+        <div class="meta meta-with-thumb">
+          <img class="thumb" src="../${img.url}" alt=""/>
+          <div class="title">${img.caption || '(sin descripción)'}</div>
+        </div>
+        <div class="actions">
+          <button class="danger" data-delete-image="${img.id}">Eliminar</button>
+        </div>
+      </div>`).join('');
+  }
+
+  async function uploadGalleryImage() {
+    if (!token) { showToast('Inicia sesión con la contraseña primero.', 'err'); return; }
+    const file = $('#gal-file').files[0];
+    if (!file) { showToast('Selecciona una foto primero.', 'err'); return; }
+    const caption = $('#gal-caption').value.trim();
+
+    try {
+      const id = Date.now().toString();
+      const ext = (file.name.split('.').pop() || 'jpg').toLowerCase();
+      const filename = `${id}.${ext}`;
+      const dataUrl = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+      const base64 = dataUrl.split(',')[1];
+
+      const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${GALLERY_IMAGES_PATH}/${filename}`, {
+        method: 'PUT',
+        headers: ghHeaders({ 'Content-Type': 'application/json' }),
+        body: JSON.stringify({
+          message: `Subir foto a la galería: ${filename}`,
+          content: base64,
+          branch: BRANCH
+        })
+      });
+      if (!res.ok) throw new Error('No se pudo subir la foto.');
+
+      gallery.push({ id, url: `assets/gallery/images/${filename}`, caption });
+      await saveGallery(`Agregar foto a la galería`);
+      showToast('¡Foto subida! Ya aparece en la galería del sitio.', 'ok');
+      $('#gal-file').value = '';
+      $('#gal-caption').value = '';
+      renderGalleryList();
+    } catch (e) {
+      showToast('Error al subir la foto: ' + e.message, 'err');
+    }
+  }
+
+  async function deleteGalleryImage(id) {
+    if (!confirm('¿Eliminar esta foto de la galería? Esta acción no se puede deshacer.')) return;
+    try {
+      gallery = gallery.filter(img => img.id !== id);
+      await saveGallery(`Eliminar foto de la galería: ${id}`);
+      showToast('Foto eliminada.', 'ok');
+      renderGalleryList();
+    } catch (e) {
+      showToast('Error al eliminar: ' + e.message, 'err');
+    }
+  }
+
+  async function saveGallery(message) {
+    const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${GALLERY_PATH}`, {
+      method: 'PUT',
+      headers: ghHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify({
+        message,
+        content: utf8ToB64(JSON.stringify(gallery, null, 2)),
+        sha: gallerySha,
+        branch: BRANCH
+      })
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.message || 'No se pudo guardar.');
+    }
+    const data = await res.json();
+    gallerySha = data.content.sha;
+  }
+
   // Toolbar
   document.querySelectorAll('.toolbar button').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -854,10 +994,19 @@
     if (delId) deleteEvent(delId);
   });
 
+  $('#uploadGalleryImage').addEventListener('click', uploadGalleryImage);
+  $('#refreshGallery').addEventListener('click', () => loadGallery().catch(e => showStatus(e.message, 'err')));
+
+  galleryListEl.addEventListener('click', (e) => {
+    const delId = e.target.dataset.deleteImage;
+    if (delId) deleteGalleryImage(delId);
+  });
+
   if (token) {
     showLoggedIn();
     loadPosts().catch(e => showStatus(e.message, 'err'));
     loadEvents().catch(e => showStatus(e.message, 'err'));
+    loadGallery().catch(e => showStatus(e.message, 'err'));
   } else {
     showLoggedOut();
   }

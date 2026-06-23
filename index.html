@@ -490,6 +490,79 @@
     /* ── EVENTS (horizontal editorial list) ── */
     .event-list { display: flex; flex-direction: column; }
 
+    /* ── GALLERY CAROUSEL ── */
+    .gallery-carousel {
+      position: relative;
+      max-width: 920px;
+      margin: 0 auto;
+      border-radius: 2px;
+      overflow: hidden;
+      background: var(--ink);
+    }
+    .gallery-track {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+    .gallery-slide {
+      flex: 0 0 100%;
+      aspect-ratio: 16/9;
+      background: var(--navy);
+    }
+    .gallery-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .gallery-caption {
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      padding: 20px 28px;
+      background: linear-gradient(to top, rgba(13,30,51,0.75), transparent);
+      color: var(--cream);
+      font-size: 14px;
+      letter-spacing: 0.03em;
+    }
+    .gallery-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 42px; height: 42px;
+      border-radius: 50%;
+      background: rgba(13,30,51,0.55);
+      color: var(--cream);
+      border: 1px solid rgba(248,243,231,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .gallery-nav:hover { background: var(--navy); }
+    .gallery-nav.prev { left: 16px; }
+    .gallery-nav.next { right: 16px; }
+    .gallery-nav svg { width: 18px; height: 18px; }
+    .gallery-dots {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 18px;
+    }
+    .gallery-dots span {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--line);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .gallery-dots span.active { background: var(--gold); }
+    .empty-gallery {
+      text-align: center;
+      padding: 40px 0;
+      color: var(--mid);
+      font-size: 14px;
+    }
+
     .event-row {
       display: grid;
       grid-template-columns: 140px 1fr auto;
@@ -728,6 +801,7 @@
     <a href="#nosotros">Nosotros</a>
     <a href="#horarios">Horarios</a>
     <a href="#ministerios">Ministerios</a>
+    <a href="#galeria">Galería</a>
     <a href="#eventos">Eventos</a>
     <a href="blog/index.html">Revista</a>
     <a href="https://nichoscristorey.com/" target="_blank" rel="noopener">Nichos Cristo Rey</a>
@@ -878,6 +952,20 @@
   </div>
 </section>
 
+<!-- GALERÍA -->
+<section class="cream-sec" id="galeria">
+  <div class="container">
+    <div class="sec-head reveal">
+      <div class="sec-label">Momentos</div>
+      <h2>Nuestra <em>Galería</em></h2>
+      <p>Un vistazo a la vida y celebraciones de nuestra comunidad parroquial.</p>
+    </div>
+    <div class="gallery-carousel reveal" id="galleryCarousel">
+      <div class="empty-gallery">Cargando galería...</div>
+    </div>
+  </div>
+</section>
+
 <!-- EVENTOS -->
 <section class="paper-sec" id="eventos">
   <div class="container">
@@ -954,6 +1042,7 @@
     <a href="#nosotros">Nosotros</a>
     <a href="#horarios">Horarios</a>
     <a href="#ministerios">Ministerios</a>
+    <a href="#galeria">Galería</a>
     <a href="#eventos">Eventos</a>
     <a href="blog/index.html">Revista</a>
     <a href="https://nichoscristorey.com/" target="_blank" rel="noopener">Nichos Cristo Rey</a>
@@ -1008,6 +1097,58 @@
     })
     .catch(() => {
       document.getElementById('eventList').innerHTML = '<div class="empty-events">No se pudieron cargar los eventos.</div>';
+    });
+
+  // Galería
+  fetch('assets/gallery.json')
+    .then(r => r.json())
+    .then(images => {
+      const carouselEl = document.getElementById('galleryCarousel');
+      if (!images.length) {
+        carouselEl.innerHTML = '<div class="empty-gallery">Aún no hay fotos en la galería.</div>';
+        return;
+      }
+
+      carouselEl.innerHTML = `
+        <div class="gallery-track" id="galleryTrack">
+          ${images.map(img => `
+            <div class="gallery-slide">
+              <img src="${img.url}" alt="${img.caption || 'Parroquia Cristo Rey'}"/>
+              ${img.caption ? `<div class="gallery-caption">${img.caption}</div>` : ''}
+            </div>`).join('')}
+        </div>
+        ${images.length > 1 ? `
+          <div class="gallery-nav prev" id="galleryPrev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="gallery-nav next" id="galleryNext"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        ` : ''}
+      `;
+
+      if (images.length <= 1) return;
+
+      let current = 0;
+      const track = document.getElementById('galleryTrack');
+      const dotsWrap = document.createElement('div');
+      dotsWrap.className = 'gallery-dots';
+      dotsWrap.innerHTML = images.map((_, i) => `<span data-i="${i}"></span>`).join('');
+      carouselEl.closest('.container').appendChild(dotsWrap);
+
+      function goTo(i) {
+        current = (i + images.length) % images.length;
+        track.style.transform = `translateX(-${current * 100}%)`;
+        dotsWrap.querySelectorAll('span').forEach((dot, idx) => dot.classList.toggle('active', idx === current));
+      }
+      goTo(0);
+
+      document.getElementById('galleryPrev').addEventListener('click', () => goTo(current - 1));
+      document.getElementById('galleryNext').addEventListener('click', () => goTo(current + 1));
+      dotsWrap.querySelectorAll('span').forEach(dot => dot.addEventListener('click', () => goTo(Number(dot.dataset.i))));
+
+      let autoplay = setInterval(() => goTo(current + 1), 6000);
+      carouselEl.addEventListener('mouseenter', () => clearInterval(autoplay));
+      carouselEl.addEventListener('mouseleave', () => { autoplay = setInterval(() => goTo(current + 1), 6000); });
+    })
+    .catch(() => {
+      document.getElementById('galleryCarousel').innerHTML = '<div class="empty-gallery">No se pudo cargar la galería.</div>';
     });
 </script>
 
