@@ -592,6 +592,10 @@
       color: var(--gold);
       margin-top: 6px;
     }
+    .event-row .date.range {
+      font-size: 1.9rem;
+      white-space: nowrap;
+    }
 
     .event-row .info .tag {
       font-size: 10px;
@@ -1073,7 +1077,7 @@
       const eventListEl = document.getElementById('eventList');
       const today = new Date(); today.setHours(0,0,0,0);
       events = events
-        .filter(ev => new Date(ev.date + 'T00:00:00') >= today)
+        .filter(ev => new Date((ev.endDate || ev.date) + 'T00:00:00') >= today)
         .sort((a, b) => new Date(a.date) - new Date(b.date));
 
       if (!events.length) {
@@ -1081,11 +1085,22 @@
         return;
       }
 
+      function dateBoxHtml(ev) {
+        const start = new Date(ev.date + 'T00:00:00');
+        if (!ev.endDate || ev.endDate === ev.date) {
+          return `<div class="date">${start.getDate()}<span>${MONTHS_ES[start.getMonth()]}</span></div>`;
+        }
+        const end = new Date(ev.endDate + 'T00:00:00');
+        if (start.getMonth() === end.getMonth() && start.getFullYear() === end.getFullYear()) {
+          return `<div class="date range">${start.getDate()}–${end.getDate()}<span>${MONTHS_ES[start.getMonth()]}</span></div>`;
+        }
+        return `<div class="date range">${start.getDate()} ${MONTHS_ES[start.getMonth()].slice(0,3)}<span>al ${end.getDate()} ${MONTHS_ES[end.getMonth()].slice(0,3)}</span></div>`;
+      }
+
       eventListEl.innerHTML = events.map(ev => {
-        const d = new Date(ev.date + 'T00:00:00');
         return `
         <div class="event-row">
-          <div class="date">${d.getDate()}<span>${MONTHS_ES[d.getMonth()]}</span></div>
+          ${dateBoxHtml(ev)}
           <div class="info">
             <div class="tag">${ev.tag}</div>
             <h3>${ev.title}</h3>
