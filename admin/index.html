@@ -521,6 +521,36 @@
       border-radius: 20px;
     }
 
+    .post-filter { display: flex; gap: 8px; margin: 14px 0 18px; }
+    .filter-btn {
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--mid);
+      background: transparent;
+      border: 1px solid var(--line);
+      padding: 6px 14px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.2s;
+    }
+    .filter-btn:hover { border-color: var(--gold); color: var(--navy); }
+    .filter-btn.active { background: var(--navy); color: var(--cream); border-color: var(--navy); }
+
+    .status-badge {
+      display: inline-block;
+      font-size: 9.5px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 2px 9px;
+      border-radius: 12px;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+    .status-badge.draft { background: rgba(192,57,43,0.1); color: #b3261e; border: 1px solid rgba(192,57,43,0.3); }
+    .status-badge.published { background: rgba(31,157,77,0.1); color: #1a8442; border: 1px solid rgba(31,157,77,0.3); }
+
     @media (max-width: 900px) {
       .dashboard { grid-template-columns: 1fr; }
       .sidebar { flex-direction: row; align-items: center; padding: 16px 20px; overflow-x: auto; }
@@ -688,6 +718,7 @@
 
     <div class="row-actions">
       <button class="btn btn-line" id="cancelEdit">Cancelar</button>
+      <button class="btn btn-line" id="saveDraft">Guardar borrador</button>
       <button class="btn btn-gold" id="publish">Publicar</button>
     </div>
   </div>
@@ -695,10 +726,15 @@
   <!-- POST LIST -->
   <div class="panel">
     <div class="dash-section-head">
-      <h2>Artículos publicados</h2>
+      <h2>Artículos</h2>
       <span class="count-pill" id="pillPosts">0</span>
     </div>
-    <p class="hint">Edita o elimina artículos existentes.</p>
+    <p class="hint">Edita, publica o elimina artículos existentes.</p>
+    <div class="post-filter" id="postFilter">
+      <button type="button" class="filter-btn active" data-filter="all">Todos</button>
+      <button type="button" class="filter-btn" data-filter="published">Publicados</button>
+      <button type="button" class="filter-btn" data-filter="draft">Borradores</button>
+    </div>
     <div class="post-list" id="postList">
       <div class="empty">Cargando artículos...</div>
     </div>
@@ -835,6 +871,7 @@
   const SESSION_KEY = 'cristorey_session_token';
 
   const $ = (sel) => document.querySelector(sel);
+  const $$ = (sel) => Array.from(document.querySelectorAll(sel));
   const statusEl = $('#status');
   const tokenStatusEl = $('#tokenStatus');
   const postListEl = $('#postList');
@@ -845,6 +882,7 @@
   let posts = [];
   let postsSha = null;
   let editingSlug = null;
+  let postFilter = 'all';
   let events = [];
   let eventsSha = null;
   let editingEventId = null;
@@ -998,26 +1036,44 @@
   }
 
   function renderList() {
+    const published = posts.filter(p => p.status !== 'draft');
     const statPostsEl = $('#statPosts');
-    if (statPostsEl) statPostsEl.textContent = posts.length;
+    if (statPostsEl) statPostsEl.textContent = published.length;
     const pillPostsEl = $('#pillPosts');
     if (pillPostsEl) pillPostsEl.textContent = posts.length;
+
     if (!posts.length) {
       postListEl.innerHTML = '<div class="empty">Aún no hay artículos. Crea el primero.</div>';
       return;
     }
-    const sorted = posts.slice().sort((a, b) => new Date(b.date) - new Date(a.date));
-    postListEl.innerHTML = sorted.map(p => `
+
+    const filtered = posts.filter(p => {
+      if (postFilter === 'published') return p.status !== 'draft';
+      if (postFilter === 'draft') return p.status === 'draft';
+      return true;
+    });
+
+    if (!filtered.length) {
+      postListEl.innerHTML = '<div class="empty">No hay artículos en esta categoría.</div>';
+      return;
+    }
+
+    const sorted = filtered.slice().sort((a, b) => new Date(b.date) - new Date(a.date));
+    postListEl.innerHTML = sorted.map(p => {
+      const isDraft = p.status === 'draft';
+      return `
       <div class="post-row">
         <div class="meta">
-          <div class="title">${p.title}</div>
+          <div class="title">${p.title}<span class="status-badge ${isDraft ? 'draft' : 'published'}">${isDraft ? 'Borrador' : 'Publicado'}</span></div>
           <div class="sub">${p.category} · ${p.date}</div>
         </div>
         <div class="actions">
           <button data-edit="${p.slug}">Editar</button>
+          ${isDraft ? `<button data-publish-draft="${p.slug}">Publicar</button>` : ''}
           <button class="danger" data-delete="${p.slug}">Eliminar</button>
         </div>
-      </div>`).join('');
+      </div>`;
+    }).join('');
   }
 
   function openEditor(post) {
@@ -1068,7 +1124,7 @@
     return `../assets/blog/images/${filename}`;
   }
 
-  async function publish() {
+  async function savePost(status) {
     if (!token) { showStatus('Inicia sesión con la contraseña primero.', 'err'); return; }
 
     const title = $('#f-title').value.trim();
@@ -1096,7 +1152,7 @@
         cover = await uploadImage(file, slug);
       }
 
-      const newPost = { id: slug, slug, title, category, author, date, cover, excerpt, content };
+      const newPost = { id: slug, slug, title, category, author, date, cover, excerpt, content, status };
 
       if (editingSlug) {
         posts = posts.map(p => p.slug === editingSlug ? newPost : p);
@@ -1108,9 +1164,23 @@
         posts.push(newPost);
       }
 
-      await savePosts(editingSlug ? `Editar artículo: ${title}` : `Publicar artículo: ${title}`);
-      showToast('¡Publicado! El artículo ya aparece en la Revista.', 'ok');
+      const isDraft = status === 'draft';
+      await savePosts(`${isDraft ? 'Guardar borrador' : 'Publicar artículo'}: ${title}`);
+      showToast(isDraft ? 'Borrador guardado.' : '¡Publicado! El artículo ya aparece en la Revista.', 'ok');
       closeEditor();
+      renderList();
+    } catch (e) {
+      showToast('Error al guardar: ' + e.message, 'err');
+    }
+  }
+
+  async function publishDraft(slug) {
+    const post = posts.find(p => p.slug === slug);
+    if (!post) return;
+    try {
+      posts = posts.map(p => p.slug === slug ? { ...p, status: 'published' } : p);
+      await savePosts(`Publicar artículo: ${post.title}`);
+      showToast('¡Publicado! El artículo ya aparece en la Revista.', 'ok');
       renderList();
     } catch (e) {
       showToast('Error al publicar: ' + e.message, 'err');
@@ -1396,14 +1466,25 @@
   });
   $('#newPost').addEventListener('click', () => openEditor(null));
   $('#cancelEdit').addEventListener('click', closeEditor);
-  $('#publish').addEventListener('click', publish);
+  $('#publish').addEventListener('click', () => savePost('published'));
+  $('#saveDraft').addEventListener('click', () => savePost('draft'));
   $('#refresh').addEventListener('click', () => loadPosts().catch(e => showStatus(e.message, 'err')));
+
+  $('#postFilter').addEventListener('click', (e) => {
+    const btn = e.target.closest('.filter-btn');
+    if (!btn) return;
+    postFilter = btn.dataset.filter;
+    $$('#postFilter .filter-btn').forEach(b => b.classList.toggle('active', b === btn));
+    renderList();
+  });
 
   postListEl.addEventListener('click', (e) => {
     const editSlug = e.target.dataset.edit;
     const delSlug = e.target.dataset.delete;
+    const pubSlug = e.target.dataset.publishDraft;
     if (editSlug) openEditor(posts.find(p => p.slug === editSlug));
     if (delSlug) deletePost(delSlug);
+    if (pubSlug) publishDraft(pubSlug);
   });
 
   $('#newEvent').addEventListener('click', () => openEventEditor(null));

@@ -193,7 +193,7 @@
   fetch('../assets/blog/posts.json')
     .then(r => r.json())
     .then(posts => {
-      const post = posts.find(p => p.slug === slug);
+      const post = posts.find(p => p.slug === slug && p.status !== 'draft');
       if (!post) {
         root.innerHTML = `
           <div class="not-found">
