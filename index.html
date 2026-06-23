@@ -604,6 +604,19 @@
       color: var(--gold);
       margin-bottom: 8px;
     }
+    .event-row .info .tag .duration {
+      display: inline-block;
+      margin-left: 12px;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: none;
+      color: var(--mid);
+      background: var(--paper);
+      border: 1px solid var(--line);
+      padding: 2px 9px;
+      border-radius: 20px;
+      vertical-align: middle;
+    }
     .event-row .info h3 {
       font-weight: 600;
       font-size: 1.4rem;
@@ -1097,12 +1110,20 @@
         return `<div class="date range">${start.getDate()} ${MONTHS_ES[start.getMonth()].slice(0,3)}<span>al ${end.getDate()} ${MONTHS_ES[end.getMonth()].slice(0,3)}</span></div>`;
       }
 
+      function durationLabel(ev) {
+        if (!ev.endDate || ev.endDate === ev.date) return '';
+        const start = new Date(ev.date + 'T00:00:00');
+        const end = new Date(ev.endDate + 'T00:00:00');
+        const days = Math.round((end - start) / 86400000) + 1;
+        return `<span class="duration">Dura ${days} día${days === 1 ? '' : 's'}</span>`;
+      }
+
       eventListEl.innerHTML = events.map(ev => {
         return `
         <div class="event-row">
           ${dateBoxHtml(ev)}
           <div class="info">
-            <div class="tag">${ev.tag}</div>
+            <div class="tag">${ev.tag}${durationLabel(ev)}</div>
             <h3>${ev.title}</h3>
             <p>${ev.description}</p>
           </div>
