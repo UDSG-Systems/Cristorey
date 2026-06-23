@@ -443,6 +443,84 @@
 
     [hidden] { display: none !important; }
 
+    /* ── CTA BANNER ── */
+    .cta-banner {
+      background: linear-gradient(120deg, var(--navy), var(--navy2));
+      color: var(--cream);
+      border-radius: 6px;
+      padding: 36px 40px;
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 28px;
+      flex-wrap: wrap;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-banner::after {
+      content: '';
+      position: absolute;
+      top: -40%; right: -8%;
+      width: 280px; height: 280px;
+      background: radial-gradient(circle, rgba(227,205,151,0.18), transparent 70%);
+    }
+    .cta-banner .cta-text { position: relative; z-index: 1; }
+    .cta-banner .cta-label {
+      font-size: 10.5px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--gold2);
+      margin-bottom: 8px;
+    }
+    .cta-banner h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 600;
+      font-size: 1.6rem;
+      color: var(--cream);
+      margin-bottom: 6px;
+    }
+    .cta-banner p { font-size: 13.5px; color: rgba(248,243,231,0.7); max-width: 420px; }
+    .cta-banner .cta-action { position: relative; z-index: 1; flex-shrink: 0; display: flex; gap: 12px; }
+    .cta-banner .btn-gold {
+      box-shadow: 0 10px 26px rgba(177,147,74,0.35);
+    }
+    .cta-banner .btn-line {
+      border-color: rgba(248,243,231,0.35);
+      color: var(--cream);
+    }
+    .cta-banner .btn-line:hover { background: rgba(248,243,231,0.1); }
+
+    .cta-upload-fields {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      gap: 16px;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      flex: 1;
+    }
+    .cta-upload-fields .field { margin-bottom: 0; min-width: 200px; flex: 1; }
+    .cta-upload-fields .field label { color: var(--gold2); }
+    .cta-upload-fields .field input { background: rgba(248,243,231,0.92); }
+
+    .dash-section-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 4px;
+    }
+    .dash-section-head .count-pill {
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gold);
+      background: rgba(177,147,74,0.1);
+      border: 1px solid rgba(177,147,74,0.3);
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+
     @media (max-width: 900px) {
       .dashboard { grid-template-columns: 1fr; }
       .sidebar { flex-direction: row; align-items: center; padding: 16px 20px; overflow-x: auto; }
@@ -540,6 +618,19 @@
   <!-- TAB: POSTS -->
   <div class="tab-view active" id="viewPosts">
 
+  <!-- CTA BANNER -->
+  <div class="cta-banner">
+    <div class="cta-text">
+      <div class="cta-label">Revista</div>
+      <h2>Comparte algo nuevo con la comunidad</h2>
+      <p>Escribe una reflexión, noticia o testimonio y publícalo directamente en la Revista del sitio.</p>
+    </div>
+    <div class="cta-action">
+      <button class="btn btn-gold" id="newPost">+ Publicar nuevo artículo</button>
+      <button class="btn btn-line" id="refresh">Actualizar lista</button>
+    </div>
+  </div>
+
   <!-- EDITOR -->
   <div class="panel" id="editorPanel" hidden>
     <h2 id="editorTitle">Nuevo artículo</h2>
@@ -603,12 +694,11 @@
 
   <!-- POST LIST -->
   <div class="panel">
-    <h2>Artículos publicados</h2>
-    <p class="hint">Edita o elimina artículos existentes, o crea uno nuevo.</p>
-    <div class="row-actions" style="justify-content:flex-start; margin-top:0; margin-bottom:24px;">
-      <button class="btn btn-gold" id="newPost">+ Nuevo artículo</button>
-      <button class="btn btn-line" id="refresh">Actualizar lista</button>
+    <div class="dash-section-head">
+      <h2>Artículos publicados</h2>
+      <span class="count-pill" id="pillPosts">0</span>
     </div>
+    <p class="hint">Edita o elimina artículos existentes.</p>
     <div class="post-list" id="postList">
       <div class="empty">Cargando artículos...</div>
     </div>
@@ -618,6 +708,19 @@
 
   <!-- TAB: EVENTS -->
   <div class="tab-view" id="viewEvents">
+
+  <!-- CTA BANNER -->
+  <div class="cta-banner">
+    <div class="cta-text">
+      <div class="cta-label">Eventos y anuncios</div>
+      <h2>Anuncia tu próximo evento</h2>
+      <p>Publica fechas, catequesis, celebraciones o campañas para que aparezcan en la portada del sitio.</p>
+    </div>
+    <div class="cta-action">
+      <button class="btn btn-gold" id="newEvent">+ Publicar nuevo evento</button>
+      <button class="btn btn-line" id="refreshEvents">Actualizar lista</button>
+    </div>
+  </div>
 
   <!-- EVENT EDITOR -->
   <div class="panel" id="eventEditorPanel" hidden>
@@ -653,12 +756,11 @@
 
   <!-- EVENT LIST -->
   <div class="panel">
-    <h2>Eventos y anuncios</h2>
-    <p class="hint">Edita o elimina eventos existentes, o crea uno nuevo. Aparecen en la portada del sitio.</p>
-    <div class="row-actions" style="justify-content:flex-start; margin-top:0; margin-bottom:24px;">
-      <button class="btn btn-gold" id="newEvent">+ Nuevo evento</button>
-      <button class="btn btn-line" id="refreshEvents">Actualizar lista</button>
+    <div class="dash-section-head">
+      <h2>Eventos publicados</h2>
+      <span class="count-pill" id="pillEvents">0</span>
     </div>
+    <p class="hint">Edita o elimina eventos existentes. Aparecen en la portada del sitio.</p>
     <div class="post-list" id="eventList">
       <div class="empty">Cargando eventos...</div>
     </div>
@@ -669,11 +771,14 @@
   <!-- TAB: GALLERY -->
   <div class="tab-view" id="viewGallery">
 
-  <!-- GALLERY UPLOAD -->
-  <div class="panel">
-    <h2>Galería de fotos</h2>
-    <p class="hint">Sube fotos para mostrarlas en el carrusel de la página principal.</p>
-    <div class="field-row">
+  <!-- CTA BANNER -->
+  <div class="cta-banner">
+    <div class="cta-text">
+      <div class="cta-label">Galería</div>
+      <h2>Sube una nueva foto</h2>
+      <p>Las fotos publicadas aparecen en el carrusel de la página principal.</p>
+    </div>
+    <div class="cta-upload-fields">
       <div class="field">
         <label>Foto</label>
         <input type="file" id="gal-file" accept="image/*"/>
@@ -683,7 +788,7 @@
         <input type="text" id="gal-caption" placeholder="Ej. Fiesta patronal 2026"/>
       </div>
     </div>
-    <div class="row-actions" style="justify-content:flex-start; margin-top:0;">
+    <div class="cta-action">
       <button class="btn btn-gold" id="uploadGalleryImage">Subir foto</button>
       <button class="btn btn-line" id="refreshGallery">Actualizar lista</button>
     </div>
@@ -691,7 +796,10 @@
 
   <!-- GALLERY LIST -->
   <div class="panel">
-    <h2>Fotos publicadas</h2>
+    <div class="dash-section-head">
+      <h2>Fotos publicadas</h2>
+      <span class="count-pill" id="pillGallery">0</span>
+    </div>
     <p class="hint">Elimina fotos de la galería del sitio.</p>
     <div class="post-list" id="galleryList">
       <div class="empty">Cargando galería...</div>
@@ -892,6 +1000,8 @@
   function renderList() {
     const statPostsEl = $('#statPosts');
     if (statPostsEl) statPostsEl.textContent = posts.length;
+    const pillPostsEl = $('#pillPosts');
+    if (pillPostsEl) pillPostsEl.textContent = posts.length;
     if (!posts.length) {
       postListEl.innerHTML = '<div class="empty">Aún no hay artículos. Crea el primero.</div>';
       return;
@@ -1055,6 +1165,8 @@
   function renderEventList() {
     const statEventsEl = $('#statEvents');
     if (statEventsEl) statEventsEl.textContent = events.length;
+    const pillEventsEl = $('#pillEvents');
+    if (pillEventsEl) pillEventsEl.textContent = events.length;
     if (!events.length) {
       eventListEl.innerHTML = '<div class="empty">Aún no hay eventos. Crea el primero.</div>';
       return;
@@ -1167,6 +1279,8 @@
   function renderGalleryList() {
     const statGalleryEl = $('#statGallery');
     if (statGalleryEl) statGalleryEl.textContent = gallery.length;
+    const pillGalleryEl = $('#pillGallery');
+    if (pillGalleryEl) pillGalleryEl.textContent = gallery.length;
     if (!gallery.length) {
       galleryListEl.innerHTML = '<div class="empty">Aún no hay fotos. Sube la primera.</div>';
       return;
