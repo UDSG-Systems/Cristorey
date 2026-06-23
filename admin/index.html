@@ -772,13 +772,18 @@
 
     <div class="field-row">
       <div class="field">
-        <label>Fecha</label>
+        <label>Fecha de inicio</label>
         <input type="date" id="ev-date"/>
       </div>
       <div class="field">
-        <label>Categoría / Etiqueta</label>
-        <input type="text" id="ev-tag" placeholder="Ej. Catequesis, Comunidad, Solidaridad"/>
+        <label>Fecha final (opcional, si dura varios días)</label>
+        <input type="date" id="ev-end-date"/>
       </div>
+    </div>
+
+    <div class="field">
+      <label>Categoría / Etiqueta</label>
+      <input type="text" id="ev-tag" placeholder="Ej. Catequesis, Comunidad, Solidaridad"/>
     </div>
 
     <div class="field">
@@ -1279,17 +1284,20 @@
       return;
     }
     const sorted = events.slice().sort((a, b) => new Date(a.date) - new Date(b.date));
-    eventListEl.innerHTML = sorted.map(ev => `
+    eventListEl.innerHTML = sorted.map(ev => {
+      const dateLabel = (ev.endDate && ev.endDate !== ev.date) ? `${ev.date} al ${ev.endDate}` : ev.date;
+      return `
       <div class="post-row">
         <div class="meta">
           <div class="title">${ev.title}</div>
-          <div class="sub">${ev.tag} · ${ev.date}</div>
+          <div class="sub">${ev.tag} · ${dateLabel}</div>
         </div>
         <div class="actions">
           <button data-edit-event="${ev.id}">Editar</button>
           <button class="danger" data-delete-event="${ev.id}">Eliminar</button>
         </div>
-      </div>`).join('');
+      </div>`;
+    }).join('');
   }
 
   function openEventEditor(ev) {
@@ -1298,6 +1306,7 @@
     $('#ev-title').value = ev ? ev.title : '';
     $('#ev-tag').value = ev ? ev.tag : '';
     $('#ev-date').value = ev ? ev.date : new Date().toISOString().slice(0, 10);
+    $('#ev-end-date').value = ev ? (ev.endDate || '') : '';
     $('#ev-description').value = ev ? ev.description : '';
     $('#eventEditorPanel').hidden = false;
     $('#eventEditorPanel').scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -1314,6 +1323,7 @@
     const title = $('#ev-title').value.trim();
     const tag = $('#ev-tag').value.trim();
     const date = $('#ev-date').value || new Date().toISOString().slice(0, 10);
+    const endDate = $('#ev-end-date').value || '';
     const description = $('#ev-description').value.trim();
 
     if (!title || !tag || !description) {
@@ -1321,12 +1331,17 @@
       return;
     }
 
+    if (endDate && endDate < date) {
+      showToast('La fecha final no puede ser anterior a la fecha de inicio.', 'err');
+      return;
+    }
+
     try {
       if (editingEventId) {
-        events = events.map(ev => ev.id === editingEventId ? { ...ev, title, tag, date, description } : ev);
+        events = events.map(ev => ev.id === editingEventId ? { ...ev, title, tag, date, endDate, description } : ev);
       } else {
         const id = Date.now().toString();
-        events.push({ id, date, tag, title, description });
+        events.push({ id, date, endDate, tag, title, description });
       }
 
       await saveEvents(editingEventId ? `Editar evento: ${title}` : `Publicar evento: ${title}`);
