@@ -550,6 +550,7 @@
     }
     .status-badge.draft { background: rgba(192,57,43,0.1); color: #b3261e; border: 1px solid rgba(192,57,43,0.3); }
     .status-badge.published { background: rgba(31,157,77,0.1); color: #1a8442; border: 1px solid rgba(31,157,77,0.3); }
+    .status-badge.trash { background: rgba(120,120,120,0.1); color: #5a5a5a; border: 1px solid rgba(120,120,120,0.3); }
 
     @media (max-width: 900px) {
       .dashboard { grid-template-columns: 1fr; }
@@ -734,6 +735,7 @@
       <button type="button" class="filter-btn active" data-filter="all">Todos</button>
       <button type="button" class="filter-btn" data-filter="published">Publicados</button>
       <button type="button" class="filter-btn" data-filter="draft">Borradores</button>
+      <button type="button" class="filter-btn" data-filter="trash">Papelera</button>
     </div>
     <div class="post-list" id="postList">
       <div class="empty">Cargando artículos...</div>
@@ -1036,11 +1038,12 @@
   }
 
   function renderList() {
-    const published = posts.filter(p => p.status !== 'draft');
+    const active = posts.filter(p => p.status !== 'trash');
+    const published = active.filter(p => p.status !== 'draft');
     const statPostsEl = $('#statPosts');
     if (statPostsEl) statPostsEl.textContent = published.length;
     const pillPostsEl = $('#pillPosts');
-    if (pillPostsEl) pillPostsEl.textContent = posts.length;
+    if (pillPostsEl) pillPostsEl.textContent = active.length;
 
     if (!posts.length) {
       postListEl.innerHTML = '<div class="empty">Aún no hay artículos. Crea el primero.</div>';
@@ -1048,29 +1051,38 @@
     }
 
     const filtered = posts.filter(p => {
-      if (postFilter === 'published') return p.status !== 'draft';
+      if (postFilter === 'published') return p.status !== 'draft' && p.status !== 'trash';
       if (postFilter === 'draft') return p.status === 'draft';
-      return true;
+      if (postFilter === 'trash') return p.status === 'trash';
+      return p.status !== 'trash';
     });
 
     if (!filtered.length) {
-      postListEl.innerHTML = '<div class="empty">No hay artículos en esta categoría.</div>';
+      postListEl.innerHTML = `<div class="empty">${postFilter === 'trash' ? 'La papelera está vacía.' : 'No hay artículos en esta categoría.'}</div>`;
       return;
     }
 
     const sorted = filtered.slice().sort((a, b) => new Date(b.date) - new Date(a.date));
     postListEl.innerHTML = sorted.map(p => {
       const isDraft = p.status === 'draft';
+      const isTrash = p.status === 'trash';
+      const badgeClass = isTrash ? 'trash' : (isDraft ? 'draft' : 'published');
+      const badgeLabel = isTrash ? 'En papelera' : (isDraft ? 'Borrador' : 'Publicado');
       return `
       <div class="post-row">
         <div class="meta">
-          <div class="title">${p.title}<span class="status-badge ${isDraft ? 'draft' : 'published'}">${isDraft ? 'Borrador' : 'Publicado'}</span></div>
+          <div class="title">${p.title}<span class="status-badge ${badgeClass}">${badgeLabel}</span></div>
           <div class="sub">${p.category} · ${p.date}</div>
         </div>
         <div class="actions">
-          <button data-edit="${p.slug}">Editar</button>
-          ${isDraft ? `<button data-publish-draft="${p.slug}">Publicar</button>` : ''}
-          <button class="danger" data-delete="${p.slug}">Eliminar</button>
+          ${isTrash ? `
+            <button data-restore="${p.slug}">Restaurar</button>
+            <button class="danger" data-delete-forever="${p.slug}">Eliminar definitivamente</button>
+          ` : `
+            <button data-edit="${p.slug}">Editar</button>
+            ${isDraft ? `<button data-publish-draft="${p.slug}">Publicar</button>` : ''}
+            <button class="danger" data-delete="${p.slug}">Eliminar</button>
+          `}
         </div>
       </div>`;
     }).join('');
@@ -1188,11 +1200,36 @@
   }
 
   async function deletePost(slug) {
-    if (!confirm('¿Eliminar este artículo? Esta acción no se puede deshacer.')) return;
+    if (!confirm('¿Mover este artículo a la papelera? Podrás restaurarlo más adelante.')) return;
+    try {
+      const post = posts.find(p => p.slug === slug);
+      posts = posts.map(p => p.slug === slug ? { ...p, prevStatus: p.status || 'published', status: 'trash' } : p);
+      await savePosts(`Mover a papelera: ${post ? post.title : slug}`);
+      showToast('Artículo movido a la papelera.', 'ok');
+      renderList();
+    } catch (e) {
+      showToast('Error al eliminar: ' + e.message, 'err');
+    }
+  }
+
+  async function restorePost(slug) {
+    try {
+      const post = posts.find(p => p.slug === slug);
+      posts = posts.map(p => p.slug === slug ? { ...p, status: p.prevStatus || 'draft', prevStatus: undefined } : p);
+      await savePosts(`Restaurar artículo: ${post ? post.title : slug}`);
+      showToast('Artículo restaurado.', 'ok');
+      renderList();
+    } catch (e) {
+      showToast('Error al restaurar: ' + e.message, 'err');
+    }
+  }
+
+  async function deletePostForever(slug) {
+    if (!confirm('¿Eliminar permanentemente este artículo? Esta acción no se puede deshacer.')) return;
     try {
       posts = posts.filter(p => p.slug !== slug);
-      await savePosts(`Eliminar artículo: ${slug}`);
-      showToast('Artículo eliminado.', 'ok');
+      await savePosts(`Eliminar definitivamente: ${slug}`);
+      showToast('Artículo eliminado permanentemente.', 'ok');
       renderList();
     } catch (e) {
       showToast('Error al eliminar: ' + e.message, 'err');
@@ -1482,9 +1519,13 @@
     const editSlug = e.target.dataset.edit;
     const delSlug = e.target.dataset.delete;
     const pubSlug = e.target.dataset.publishDraft;
+    const restoreSlug = e.target.dataset.restore;
+    const delForeverSlug = e.target.dataset.deleteForever;
     if (editSlug) openEditor(posts.find(p => p.slug === editSlug));
     if (delSlug) deletePost(delSlug);
     if (pubSlug) publishDraft(pubSlug);
+    if (restoreSlug) restorePost(restoreSlug);
+    if (delForeverSlug) deletePostForever(delForeverSlug);
   });
 
   $('#newEvent').addEventListener('click', () => openEventEditor(null));
