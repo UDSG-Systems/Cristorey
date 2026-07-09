@@ -136,7 +136,7 @@
     nav.main-nav {
       display: flex;
       align-items: center;
-      gap: 38px;
+      gap: 26px;
     }
 
     nav.main-nav a {
@@ -408,10 +408,10 @@
 
     .schedule-row {
       display: grid;
-      grid-template-columns: 140px 1fr auto;
+      grid-template-columns: 160px 1fr auto;
       align-items: center;
       gap: 32px;
-      padding: 32px 0;
+      padding: 28px 0;
       border-bottom: 1px solid rgba(248,243,231,0.1);
     }
 
@@ -420,27 +420,102 @@
     .schedule-row .day {
       font-family: 'Cormorant Garamond', serif;
       font-weight: 600;
-      font-size: 1.7rem;
+      font-size: 1.55rem;
+      line-height: 1.2;
     }
 
     .schedule-row .note {
-      font-size: 13px;
+      font-size: 12.5px;
       letter-spacing: 0.06em;
       color: rgba(248,243,231,0.5);
     }
 
     .schedule-row .times {
       display: flex;
-      gap: 28px;
+      gap: 22px;
       justify-content: flex-end;
       flex-wrap: wrap;
     }
 
     .schedule-row .times span {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 1.4rem;
+      font-size: 1.35rem;
       color: var(--gold2);
       letter-spacing: 0.04em;
+    }
+
+    .schedule-divider {
+      max-width: 760px;
+      margin: 48px auto 8px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .schedule-divider .lbl {
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold2);
+      white-space: nowrap;
+    }
+    .schedule-divider::before, .schedule-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(248,243,231,0.12);
+    }
+
+    .vida-grid {
+      max-width: 760px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+    }
+    .vida-row {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      padding: 18px 20px 18px 0;
+      border-bottom: 1px solid rgba(248,243,231,0.08);
+    }
+    .vida-row:nth-child(even) { padding-left: 24px; border-left: 1px solid rgba(248,243,231,0.08); }
+    .vida-row .v-act {
+      font-size: 13px;
+      font-weight: 500;
+      color: rgba(248,243,231,0.9);
+    }
+    .vida-row .v-time {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      color: var(--gold2);
+    }
+
+    .oficina-grid {
+      max-width: 760px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      padding-top: 4px;
+    }
+    .oficina-card {
+      border: 1px solid rgba(248,243,231,0.12);
+      border-radius: 4px;
+      padding: 22px 24px;
+    }
+    .oficina-card .o-day {
+      font-size: 10px;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--gold2);
+      margin-bottom: 10px;
+    }
+    .oficina-card .o-time {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      color: rgba(248,243,231,0.85);
+      line-height: 1.7;
     }
 
     /* ── MINISTRIES (numbered minimal grid) ── */
@@ -791,6 +866,9 @@
       .schedule-row .times { justify-content: flex-start; }
       .event-row { grid-template-columns: 80px 1fr; }
       .event-row .arrow { display: none; }
+      .vida-grid { grid-template-columns: 1fr; }
+      .vida-row:nth-child(even) { padding-left: 0; border-left: none; }
+      .oficina-grid { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 600px) {
@@ -815,16 +893,14 @@
     </span>
   </a>
   <nav class="main-nav">
-    <a href="#nosotros">Nosotros</a>
     <a href="#horarios">Horarios</a>
     <a href="#ministerios">Ministerios</a>
-    <a href="#galeria">Galería</a>
     <a href="#eventos">Eventos</a>
     <a href="blog/index.html">Revista</a>
     <a href="https://nichoscristorey.com/" target="_blank" rel="noopener">Nichos Cristo Rey</a>
     <a href="#contacto">Contacto</a>
   </nav>
-  <a class="btn btn-gold" href="#horarios">Horarios de Misa</a>
+  <a class="btn btn-gold" href="#horarios">Ver Horarios</a>
 </header>
 
 <!-- HERO -->
@@ -896,23 +972,80 @@
       <h2>Horario de <em>Misas</em></h2>
       <p>Las confesiones están disponibles 30 minutos antes de cada misa.</p>
     </div>
+
     <div class="schedule-list reveal">
       <div class="schedule-row">
-        <div class="day">Lunes<br/>a Viernes</div>
-        <div class="note">Misa diaria y vespertina</div>
-        <div class="times"><span>7:00 AM</span><span>7:00 PM</span></div>
-      </div>
-      <div class="schedule-row">
-        <div class="day">Sábado</div>
-        <div class="note">Misa diaria · Vigilia dominical</div>
-        <div class="times"><span>8:00 AM</span><span>6:00 PM</span></div>
+        <div class="day">Lunes<br/>a Sábado</div>
+        <div class="note">Misa matutina · mediodía · vespertina</div>
+        <div class="times"><span>7:00 AM</span><span>12:00 PM</span><span>6:00 PM</span></div>
       </div>
       <div class="schedule-row">
         <div class="day">Domingo</div>
         <div class="note">Misas dominicales</div>
-        <div class="times"><span>8:00</span><span>10:00</span><span>12:00</span><span>6:00 PM</span></div>
+        <div class="times"><span>10:00 AM</span><span>12:00 PM</span><span>1:30 PM</span><span>6:00 PM</span><span>7:15 PM</span></div>
+      </div>
+      <div class="schedule-row">
+        <div class="day">Divina<br/>Providencia</div>
+        <div class="note">Día 1° de cada mes</div>
+        <div class="times"><span>12:00 PM</span></div>
+      </div>
+      <div class="schedule-row">
+        <div class="day">Misa en<br/>los Nichos</div>
+        <div class="note">2do. Lunes de cada mes</div>
+        <div class="times"><span>4:30 PM</span></div>
       </div>
     </div>
+
+    <!-- VIDA PARROQUIAL -->
+    <div class="schedule-divider reveal"><span class="lbl">Vida Parroquial</span></div>
+    <div class="vida-grid reveal">
+      <div class="vida-row">
+        <span class="v-act">Asamblea de Oración — Miércoles</span>
+        <span class="v-time">5:00 PM</span>
+      </div>
+      <div class="vida-row">
+        <span class="v-act">Hora Santa — Jueves</span>
+        <span class="v-time">5:00 PM</span>
+      </div>
+      <div class="vida-row">
+        <span class="v-act">Formación — Martes</span>
+        <span class="v-time">7:45 AM – 8:30 AM</span>
+      </div>
+      <div class="vida-row">
+        <span class="v-act">Universitarios y Profesionistas — Miércoles</span>
+        <span class="v-time">7:00 PM – 8:00 PM</span>
+      </div>
+      <div class="vida-row">
+        <span class="v-act">Formación — Viernes</span>
+        <span class="v-time">4:00 PM – 5:00 PM</span>
+      </div>
+      <div class="vida-row">
+        <span class="v-act">Grupo de Esposos — Jueves</span>
+        <span class="v-time">7:00 PM</span>
+      </div>
+      <div class="vida-row">
+        <span class="v-act">Pláticas para Bautizos — Lunes y Jueves</span>
+        <span class="v-time">Lun 5:00 PM · Jue 6:00 PM</span>
+      </div>
+      <div class="vida-row">
+        <span class="v-act">Hakuna Jóvenes — Martes</span>
+        <span class="v-time">6:30 PM</span>
+      </div>
+    </div>
+
+    <!-- OFICINA -->
+    <div class="schedule-divider reveal"><span class="lbl">Horario de Oficina</span></div>
+    <div class="oficina-grid reveal">
+      <div class="oficina-card">
+        <div class="o-day">Martes a Sábado</div>
+        <div class="o-time">9:00 AM – 1:00 PM<br/>4:00 PM – 7:00 PM</div>
+      </div>
+      <div class="oficina-card">
+        <div class="o-day">Domingos</div>
+        <div class="o-time">10:00 AM – 1:00 PM</div>
+      </div>
+    </div>
+
   </div>
 </section>
 
