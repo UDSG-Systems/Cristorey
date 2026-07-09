@@ -135,7 +135,8 @@
     .flip-front { background: var(--white); justify-content: flex-end; }
     .flip-back { background: var(--navy); transform: rotateY(180deg); justify-content: center; }
     .flip-front .f-num { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 10rem; font-weight: 600; line-height: 1; color: rgba(177,147,74,0.08); position: absolute; top: -12px; right: 20px; }
-    .flip-front .f-icon { font-size: 1.8rem; margin-bottom: 12px; position: relative; z-index: 1; }
+    .flip-front .f-icon { width: 32px; height: 32px; margin-bottom: 14px; position: relative; z-index: 1; color: var(--gold); }
+    .flip-front .f-icon svg { width: 100%; height: 100%; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
     .flip-front h3 { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 1.35rem; color: var(--navy); position: relative; z-index: 1; margin-bottom: 8px; }
     .flip-front .f-tag { font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); position: relative; z-index: 1; }
     .flip-back .b-label { font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold2); margin-bottom: 14px; }
@@ -278,7 +279,7 @@
         <div class="flip-inner">
           <div class="flip-front">
             <span class="f-num">I</span>
-            <div class="f-icon">✦</div>
+            <div class="f-icon"><svg viewBox="0 0 24 24"><path d="M12 2C8 8 5 11 5 15a7 7 0 0014 0c0-4-3-7-7-13z"/></svg></div>
             <h3>Bautismo</h3>
             <span class="f-tag">Sacramento</span>
           </div>
@@ -295,7 +296,7 @@
         <div class="flip-inner">
           <div class="flip-front">
             <span class="f-num">II</span>
-            <div class="f-icon">✦</div>
+            <div class="f-icon"><svg viewBox="0 0 24 24"><circle cx="8" cy="12" r="4"/><circle cx="16" cy="12" r="4"/></svg></div>
             <h3>Matrimonio</h3>
             <span class="f-tag">Sacramento</span>
           </div>
@@ -312,7 +313,7 @@
         <div class="flip-inner">
           <div class="flip-front">
             <span class="f-num">III</span>
-            <div class="f-icon">✦</div>
+            <div class="f-icon"><svg viewBox="0 0 24 24"><path d="M12 3v14M8 17h8M6 21h12"/><circle cx="12" cy="3" r="1.5" fill="currentColor" stroke="none"/></svg></div>
             <h3>Primera Comunión</h3>
             <span class="f-tag">Catequesis</span>
           </div>
@@ -329,7 +330,7 @@
         <div class="flip-inner">
           <div class="flip-front">
             <span class="f-num">IV</span>
-            <div class="f-icon">✦</div>
+            <div class="f-icon"><svg viewBox="0 0 24 24"><path d="M12 2c-1 3-4 5-4 9a4 4 0 008 0c0-4-3-6-4-9z"/><path d="M9 17s0 4 3 5c3-1 3-5 3-5"/></svg></div>
             <h3>Confirmación</h3>
             <span class="f-tag">Sacramento</span>
           </div>
@@ -346,7 +347,7 @@
         <div class="flip-inner">
           <div class="flip-front">
             <span class="f-num">V</span>
-            <div class="f-icon">✦</div>
+            <div class="f-icon"><svg viewBox="0 0 24 24"><path d="M12 22V12m0 0L8 8m4 4l4-4"/><circle cx="12" cy="5" r="3"/></svg></div>
             <h3>Confesión</h3>
             <span class="f-tag">Sacramento</span>
           </div>
@@ -363,7 +364,7 @@
         <div class="flip-inner">
           <div class="flip-front">
             <span class="f-num">VI</span>
-            <div class="f-icon">✦</div>
+            <div class="f-icon"><svg viewBox="0 0 24 24"><path d="M12 2v6M9 5h6"/><path d="M7 10c0 0-3 2-3 6a8 8 0 0016 0c0-4-3-6-3-6"/><path d="M9 18s1 2 3 2 3-2 3-2"/></svg></div>
             <h3>Unción</h3>
             <span class="f-tag">Sacramento · Pastoral</span>
           </div>
@@ -380,7 +381,7 @@
         <div class="flip-inner">
           <div class="flip-front">
             <span class="f-num">VII</span>
-            <div class="f-icon">🔥</div>
+            <div class="f-icon"><svg viewBox="0 0 24 24"><path d="M12 2c0 6-6 8-6 14a6 6 0 0012 0c0-3-2-5-2-8-2 2-2 4-3 5-1-3 1-7-1-11z"/></svg></div>
             <h3>Pastoral Juvenil · Hakuna</h3>
             <span class="f-tag">Jóvenes · Martes 6:30 PM</span>
           </div>
@@ -397,7 +398,7 @@
         <div class="flip-inner">
           <div class="flip-front">
             <span class="f-num">VIII</span>
-            <div class="f-icon">🌾</div>
+            <div class="f-icon"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div>
             <h3>Cáritas Parroquial</h3>
             <span class="f-tag">Solidaridad</span>
           </div>
@@ -414,7 +415,7 @@
         <div class="flip-inner">
           <div class="flip-front">
             <span class="f-num">IX</span>
-            <div class="f-icon">🎵</div>
+            <div class="f-icon"><svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div>
             <h3>Coros Parroquiales</h3>
             <span class="f-tag">Liturgia · Música</span>
           </div>
@@ -431,7 +432,7 @@
         <div class="flip-inner">
           <div class="flip-front">
             <span class="f-num">X</span>
-            <div class="f-icon">💍</div>
+            <div class="f-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div>
             <h3>Grupo de Esposos</h3>
             <span class="f-tag">Familia · Jueves 7:00 PM</span>
           </div>
@@ -448,7 +449,7 @@
         <div class="flip-inner">
           <div class="flip-front">
             <span class="f-num">XI</span>
-            <div class="f-icon">📖</div>
+            <div class="f-icon"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg></div>
             <h3>Universitarios y Profesionistas</h3>
             <span class="f-tag">Formación · Miércoles 7:00 PM</span>
           </div>
@@ -465,7 +466,7 @@
         <div class="flip-inner">
           <div class="flip-front">
             <span class="f-num">XII</span>
-            <div class="f-icon">🙏</div>
+            <div class="f-icon"><svg viewBox="0 0 24 24"><path d="M18 2l-6 9-6-9"/><path d="M12 11v10"/><path d="M6 15l6 2 6-2"/></svg></div>
             <h3>Asamblea de Oración</h3>
             <span class="f-tag">Oración · Miércoles 5:00 PM</span>
           </div>
