@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Eventos — Parroquia Cristo Rey</title>
+  <meta name="description" content="Eventos, celebraciones y anuncios de la Parroquia Cristo Rey en Culiacán."/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=Jost:wght@200;300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy: #142b46; --navy2: #08111f; --black: #050c18;
+      --gold: #b1934a; --gold2: #e3cd97;
+      --cream: #f8f3e7; --paper: #efe6d2; --ink: #1a2230;
+      --mid: #8a8175; --line: rgba(177,147,74,0.22); --white: #ffffff;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Jost', sans-serif; font-weight: 300; color: var(--ink); background: var(--navy2); overflow-x: hidden; }
+    img { max-width: 100%; display: block; }
+    a { text-decoration: none; }
+
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.8s ease, transform 0.8s ease; }
+    .reveal.in { opacity: 1; transform: none; }
+
+    /* HEADER */
+    header { position: fixed; top: 0; left: 0; right: 0; z-index: 999; display: flex; align-items: center; justify-content: space-between; padding: 26px 56px; transition: background 0.4s, padding 0.4s, border-color 0.4s; border-bottom: 1px solid transparent; }
+    header.solid { background: rgba(8,17,31,0.95); backdrop-filter: blur(10px); padding: 16px 56px; border-color: rgba(177,147,74,0.15); }
+    .brand { display: flex; align-items: center; gap: 14px; color: var(--white); }
+    .brand-logo { width: 46px; height: 46px; border-radius: 50%; background: var(--white); display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; padding: 3px; box-shadow: 0 4px 18px rgba(0,0,0,0.3); }
+    .brand-logo img { width: 100%; height: 100%; object-fit: contain; }
+    .brand-text { display: flex; flex-direction: column; line-height: 1.25; }
+    .brand-text .name { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 21px; letter-spacing: 0.04em; }
+    .brand-text .sub { font-size: 9px; letter-spacing: 0.32em; text-transform: uppercase; color: var(--gold2); }
+    .menu-btn { display: flex; flex-direction: column; justify-content: center; gap: 6px; background: none; border: none; cursor: pointer; padding: 6px; z-index: 1001; color: var(--white); }
+    .menu-btn span { display: block; height: 1.5px; background: currentColor; transition: width 0.4s, transform 0.4s, opacity 0.3s; }
+    .menu-btn span:nth-child(1) { width: 30px; }
+    .menu-btn span:nth-child(2) { width: 20px; }
+    .menu-btn span:nth-child(3) { width: 26px; }
+    .menu-btn.open span:nth-child(1) { width: 26px; transform: translateY(7.5px) rotate(45deg); }
+    .menu-btn.open span:nth-child(2) { opacity: 0; width: 0; }
+    .menu-btn.open span:nth-child(3) { width: 26px; transform: translateY(-7.5px) rotate(-45deg); }
+
+    /* NAV */
+    .nav-overlay { position: fixed; inset: 0; z-index: 1000; display: grid; grid-template-columns: 1fr 400px; pointer-events: none; overflow: hidden; }
+    .nav-panel-left { background: var(--black); display: flex; flex-direction: column; justify-content: center; padding: 100px 72px 80px; transform: translateX(-100%); transition: transform 0.72s cubic-bezier(0.76,0,0.24,1); }
+    .nav-panel-right { position: relative; overflow: hidden; transform: translateX(100%); transition: transform 0.72s cubic-bezier(0.76,0,0.24,1) 0.06s; }
+    .nav-panel-right::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, #0d1e36 0%, #1a3875 40%, #b1934a 80%, #e8a020 100%); z-index: 0; }
+    .nav-panel-right-inner { position: relative; z-index: 1; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; padding: 48px 44px; }
+    .nav-overlay.open { pointer-events: all; }
+    .nav-overlay.open .nav-panel-left { transform: translateX(0); }
+    .nav-overlay.open .nav-panel-right { transform: translateX(0); }
+    .nav-links { list-style: none; }
+    .nav-links li { opacity: 0; transform: translateY(24px); transition: opacity 0.5s ease, transform 0.5s ease; }
+    .nav-overlay.open .nav-links li:nth-child(1) { opacity:1; transform:none; transition-delay:0.30s; }
+    .nav-overlay.open .nav-links li:nth-child(2) { opacity:1; transform:none; transition-delay:0.38s; }
+    .nav-overlay.open .nav-links li:nth-child(3) { opacity:1; transform:none; transition-delay:0.46s; }
+    .nav-overlay.open .nav-links li:nth-child(4) { opacity:1; transform:none; transition-delay:0.54s; }
+    .nav-overlay.open .nav-links li:nth-child(5) { opacity:1; transform:none; transition-delay:0.62s; }
+    .nav-overlay.open .nav-links li:nth-child(6) { opacity:1; transform:none; transition-delay:0.70s; }
+    .nav-links a { display: block; font-family: 'Cormorant Garamond', serif; font-size: clamp(2.8rem, 5.5vw, 4.4rem); font-weight: 600; line-height: 1.1; color: rgba(248,243,231,0.18); padding: 10px 0; letter-spacing: 0.02em; transition: color 0.3s, letter-spacing 0.4s; }
+    .nav-links a:hover { color: var(--cream); letter-spacing: 0.06em; }
+    .nav-links a.active-page { color: var(--gold2); }
+    .nav-links a span { display: inline-block; position: relative; }
+    .nav-links a span::after { content: ''; position: absolute; left: 0; bottom: -2px; width: 0; height: 1px; background: var(--gold); transition: width 0.4s; }
+    .nav-links a:hover span::after { width: 100%; }
+    .nav-bottom { margin-top: 48px; padding-top: 28px; border-top: 1px solid rgba(177,147,74,0.2); display: flex; gap: 40px; opacity: 0; transition: opacity 0.5s ease 0.75s; }
+    .nav-overlay.open .nav-bottom { opacity: 1; }
+    .nav-bottom-item { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(248,243,231,0.35); line-height: 1.8; }
+    .nav-bottom-item strong { display: block; color: rgba(248,243,231,0.65); font-weight: 500; margin-bottom: 4px; }
+    .nav-event-badge { display: inline-block; background: var(--gold); color: var(--white); font-size: 9px; font-weight: 600; letter-spacing: 0.24em; text-transform: uppercase; padding: 5px 12px; margin-bottom: 20px; opacity: 0; transform: translateY(16px); transition: opacity 0.5s ease 0.6s, transform 0.5s ease 0.6s; }
+    .nav-event-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.4rem, 4vw, 3.6rem); font-weight: 600; line-height: 1.1; color: var(--white); margin-bottom: 16px; opacity: 0; transform: translateY(16px); transition: opacity 0.5s ease 0.68s, transform 0.5s ease 0.68s; }
+    .nav-event-meta { font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.58); margin-bottom: 28px; line-height: 1.9; opacity: 0; transform: translateY(12px); transition: opacity 0.5s ease 0.74s, transform 0.5s ease 0.74s; }
+    .nav-event-cta { display: inline-flex; align-items: center; gap: 10px; font-size: 10px; font-weight: 600; letter-spacing: 0.24em; text-transform: uppercase; color: var(--cream); border: 1px solid rgba(255,255,255,0.35); padding: 14px 26px; opacity: 0; transform: translateY(12px); transition: opacity 0.5s ease 0.80s, transform 0.5s ease 0.80s, background 0.3s, border-color 0.3s; }
+    .nav-event-cta:hover { background: var(--gold); border-color: var(--gold); }
+    .nav-overlay.open .nav-event-badge,.nav-overlay.open .nav-event-title,.nav-overlay.open .nav-event-meta,.nav-overlay.open .nav-event-cta { opacity: 1; transform: none; }
+    .nav-event-deco { position: absolute; top: 0; right: 0; width: 70%; height: 100%; background: radial-gradient(ellipse at top right, rgba(255,255,255,0.06) 0%, transparent 60%); pointer-events: none; }
+    .nav-event-number { position: absolute; top: 40px; right: 36px; font-family: 'Cormorant Garamond', serif; font-size: 9rem; font-weight: 600; line-height: 1; color: rgba(255,255,255,0.04); pointer-events: none; letter-spacing: -0.04em; }
+
+    /* HERO */
+    .page-hero { background: var(--navy2); min-height: 58vh; display: flex; align-items: flex-end; padding: 0 56px 80px; position: relative; overflow: hidden; }
+    .page-hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 30% 70%, rgba(177,147,74,0.07) 0%, transparent 60%); }
+    .hero-ticker {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 3px; background: linear-gradient(90deg, var(--gold), var(--gold2), var(--gold));
+      background-size: 200% 100%; animation: shimmer 3s ease-in-out infinite;
+    }
+    @keyframes shimmer { 0%,100% { background-position: 0% 0%; } 50% { background-position: 100% 0%; } }
+    .page-hero-content { position: relative; z-index: 2; }
+    .page-hero-eyebrow { display: block; font-size: 10px; letter-spacing: 0.5em; text-transform: uppercase; color: var(--gold2); margin-bottom: 20px; animation: fadeUp 0.9s ease 0.2s both; }
+    .page-hero h1 { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: clamp(4.5rem, 12vw, 10rem); line-height: 0.9; color: var(--white); letter-spacing: -0.02em; animation: fadeUp 0.9s ease 0.4s both; }
+    .page-hero h1 em { font-style: italic; color: var(--gold2); font-weight: 300; }
+    @keyframes fadeUp { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:none; } }
+
+    /* FILTER BAR */
+    .filter-bar {
+      background: var(--black); padding: 20px 56px;
+      display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+      position: sticky; top: 72px; z-index: 100;
+      border-bottom: 1px solid rgba(177,147,74,0.1);
+    }
+    .filter-label { font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(248,243,231,0.35); margin-right: 8px; }
+    .filter-btn {
+      font-size: 9px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase;
+      color: rgba(248,243,231,0.45); background: rgba(255,255,255,0.03); border: 1px solid rgba(177,147,74,0.1);
+      padding: 7px 16px; border-radius: 20px; cursor: pointer;
+      transition: all 0.2s;
+    }
+    .filter-btn:hover, .filter-btn.active { background: var(--gold); color: var(--white); border-color: var(--gold); }
+
+    /* EVENTS SECTION */
+    .events-sec { padding: 80px 56px 120px; }
+    .container { max-width: 1180px; margin: 0 auto; }
+
+    /* ── FEATURED EVENT: Cinematic Banner ── */
+    .event-featured {
+      display: grid; grid-template-columns: 280px 1fr;
+      background: linear-gradient(110deg, var(--black) 0%, var(--navy2) 60%, #0e2444 100%);
+      border: 1px solid rgba(177,147,74,0.2);
+      margin-bottom: 40px; position: relative; overflow: hidden;
+      transition: border-color 0.3s, box-shadow 0.3s;
+      text-decoration: none; display: grid;
+    }
+    .event-featured:hover { border-color: rgba(177,147,74,0.5); box-shadow: 0 24px 60px rgba(0,0,0,0.4); }
+    .event-featured::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 80% 50%, rgba(177,147,74,0.07) 0%, transparent 60%);
+    }
+    .ef-date-col {
+      padding: 60px 40px; display: flex; flex-direction: column; justify-content: center;
+      border-right: 1px solid rgba(177,147,74,0.15); position: relative; z-index: 1; flex-shrink: 0;
+    }
+    .ef-big-num { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: clamp(5rem, 9vw, 7.5rem); color: var(--gold2); line-height: 1; }
+    .ef-month { font-size: 9px; letter-spacing: 0.35em; text-transform: uppercase; color: var(--gold); margin-top: 8px; }
+    .ef-year { font-size: 9px; letter-spacing: 0.2em; color: rgba(248,243,231,0.25); margin-top: 4px; }
+    .ef-body { padding: 60px 56px; display: flex; flex-direction: column; justify-content: center; position: relative; z-index: 1; }
+    .ef-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+    .ef-tag { font-size: 9px; font-weight: 500; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold2); background: rgba(227,205,151,0.1); border: 1px solid rgba(227,205,151,0.2); padding: 4px 12px; border-radius: 20px; }
+    .ef-badge { font-size: 9px; letter-spacing: 0.12em; color: rgba(248,243,231,0.35); border: 1px solid rgba(248,243,231,0.12); padding: 4px 10px; border-radius: 20px; }
+    .ef-title { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: clamp(2.2rem, 4vw, 3.6rem); color: var(--cream); line-height: 1.15; margin-bottom: 16px; }
+    .ef-desc { font-size: 14px; line-height: 1.9; color: rgba(248,243,231,0.5); max-width: 520px; margin-bottom: 28px; }
+    .ef-cta { display: inline-flex; align-items: center; gap: 8px; font-size: 9px; font-weight: 600; letter-spacing: 0.24em; text-transform: uppercase; color: var(--gold); }
+    .ef-cta svg { transition: transform 0.2s; }
+    .event-featured:hover .ef-cta svg { transform: translateX(4px); }
+    .ef-deco-num { position: absolute; right: 24px; bottom: 0; font-family: 'Cormorant Garamond', serif; font-size: 16rem; font-weight: 600; color: rgba(177,147,74,0.04); line-height: 1; pointer-events: none; letter-spacing: -0.05em; }
+    .featured-label { font-size: 9px; letter-spacing: 0.35em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; display: block; }
+
+    /* ── EVENTS GRID: Alternating styles ── */
+    .events-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+
+    /* Style A: Vertical with colored header band */
+    .ev-card-a {
+      background: rgba(255,255,255,0.02); border: 1px solid rgba(177,147,74,0.1);
+      display: flex; flex-direction: column; position: relative; overflow: hidden;
+      transition: border-color 0.3s, transform 0.3s, background 0.3s;
+      text-decoration: none; cursor: pointer;
+    }
+    .ev-card-a:hover { border-color: rgba(177,147,74,0.3); transform: translateY(-4px); background: rgba(177,147,74,0.03); }
+    .ev-card-a .band { height: 4px; background: linear-gradient(90deg, var(--gold), var(--gold2)); }
+    .ev-card-a .band.community { background: linear-gradient(90deg, #2a5fa5, #4a80c5); }
+    .ev-card-a .band.catequesis { background: linear-gradient(90deg, #1a7a4a, #2ea567); }
+    .ev-card-a .band.solidaridad { background: linear-gradient(90deg, #8a2a2a, #c44a4a); }
+    .ev-card-a-body { padding: 28px 28px 24px; flex: 1; display: flex; flex-direction: column; }
+    .ev-card-a .ev-date-row { display: flex; align-items: flex-end; gap: 12px; margin-bottom: 16px; }
+    .ev-card-a .ev-big-day { font-family: 'Cormorant Garamond', serif; font-size: 4rem; font-weight: 600; line-height: 1; color: var(--gold2); }
+    .ev-card-a .ev-date-info { display: flex; flex-direction: column; gap: 2px; padding-bottom: 6px; }
+    .ev-card-a .ev-month { font-size: 9px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold); font-weight: 500; }
+    .ev-card-a .ev-day-range { font-size: 9px; color: rgba(248,243,231,0.3); letter-spacing: 0.1em; }
+    .ev-card-a h3 { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 1.35rem; color: var(--cream); margin-bottom: 10px; line-height: 1.25; }
+    .ev-card-a p { font-size: 12.5px; line-height: 1.85; color: rgba(248,243,231,0.45); flex: 1; }
+    .ev-card-a .ev-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 20px; padding-top: 16px; border-top: 1px solid rgba(177,147,74,0.1); }
+    .ev-tag-pill { font-size: 8.5px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; padding: 4px 11px; border-radius: 20px; border: 1px solid rgba(227,205,151,0.2); color: var(--gold2); background: rgba(227,205,151,0.07); }
+    .ev-arrow-sm { color: var(--gold); opacity: 0.6; transition: opacity 0.2s, transform 0.2s; }
+    .ev-card-a:hover .ev-arrow-sm { opacity: 1; transform: translateX(3px); }
+
+    /* Style B: Horizontal (spans 2 cols) */
+    .ev-card-b {
+      grid-column: span 2; display: grid; grid-template-columns: 180px 1fr;
+      background: rgba(20,43,70,0.5); border: 1px solid rgba(177,147,74,0.12);
+      transition: border-color 0.3s, box-shadow 0.3s;
+      text-decoration: none;
+    }
+    .ev-card-b:hover { border-color: rgba(177,147,74,0.3); box-shadow: 0 12px 40px rgba(0,0,0,0.25); }
+    .ev-card-b .ev-b-date { padding: 40px 32px; border-right: 1px solid rgba(177,147,74,0.1); display: flex; flex-direction: column; justify-content: center; flex-shrink: 0; }
+    .ev-card-b .ev-b-big { font-family: 'Cormorant Garamond', serif; font-size: 4.5rem; font-weight: 600; line-height: 1; color: var(--gold2); }
+    .ev-card-b .ev-b-month { font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-top: 8px; }
+    .ev-card-b .ev-b-body { padding: 40px 40px; display: flex; flex-direction: column; justify-content: center; }
+    .ev-card-b h3 { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 1.5rem; color: var(--cream); margin-bottom: 10px; }
+    .ev-card-b p { font-size: 13px; line-height: 1.85; color: rgba(248,243,231,0.45); margin-bottom: 16px; }
+    .ev-card-b .ev-b-meta { display: flex; gap: 10px; align-items: center; }
+
+    /* Empty state */
+    .empty-state { text-align: center; padding: 100px 24px; }
+    .empty-state .e-icon { font-size: 4rem; margin-bottom: 24px; opacity: 0.3; }
+    .empty-state h3 { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 2rem; color: var(--cream); margin-bottom: 14px; }
+    .empty-state p { font-size: 14px; color: rgba(248,243,231,0.4); max-width: 360px; margin: 0 auto; line-height: 1.9; }
+
+    /* FOOTER */
+    footer { background: var(--black); color: rgba(248,243,231,0.55); padding: 72px 56px 32px; text-align: center; border-top: 1px solid rgba(177,147,74,0.08); }
+    .footer-logo { width: 52px; height: 52px; border-radius: 50%; background: var(--white); margin: 0 auto 18px; display: flex; align-items: center; justify-content: center; padding: 4px; }
+    .footer-logo img { width: 100%; height: 100%; object-fit: contain; }
+    footer .fname { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 20px; color: var(--cream); margin-bottom: 6px; }
+    footer .ftag { font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 28px; }
+    .footer-nav { display: flex; gap: 28px; justify-content: center; flex-wrap: wrap; margin-bottom: 36px; }
+    .footer-nav a { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(248,243,231,0.5); transition: color 0.2s; }
+    .footer-nav a:hover { color: var(--gold2); }
+    footer .copy { font-size: 10px; color: rgba(248,243,231,0.2); padding-top: 24px; border-top: 1px solid rgba(248,243,231,0.06); }
+
+    @media (max-width: 1024px) { .events-grid { grid-template-columns: repeat(2, 1fr); } .ev-card-b { grid-column: span 2; } }
+    @media (max-width: 860px) {
+      header { padding: 20px 24px; } header.solid { padding: 14px 24px; }
+      .page-hero { padding: 0 24px 64px; }
+      .filter-bar { padding: 16px 24px; top: 60px; }
+      .events-sec { padding: 56px 24px 80px; }
+      .event-featured { grid-template-columns: 1fr; }
+      .ef-date-col { border-right: none; border-bottom: 1px solid rgba(177,147,74,0.15); padding: 40px 32px 32px; }
+      .ef-body { padding: 32px 32px 40px; }
+      .events-grid { grid-template-columns: 1fr; }
+      .ev-card-b { grid-column: span 1; grid-template-columns: 1fr; }
+      .ev-card-b .ev-b-date { border-right: none; border-bottom: 1px solid rgba(177,147,74,0.1); padding: 28px 28px 20px; }
+      .ev-card-b .ev-b-body { padding: 24px 28px 32px; }
+      .nav-overlay { grid-template-columns: 1fr; } .nav-panel-right { display: none; }
+      .nav-panel-left { padding: 100px 36px 70px; }
+      footer { padding: 56px 24px 28px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header id="header">
+  <a class="brand" href="index.html">
+    <span class="brand-logo"><img src="assets/logo.png" alt="Parroquia Cristo Rey"/></span>
+    <span class="brand-text">
+      <span class="name">Cristo Rey</span>
+      <span class="sub">Iglesia Católica</span>
+    </span>
+  </a>
+  <button class="menu-btn" id="menuBtn" aria-label="Abrir menú" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<!-- NAV OVERLAY -->
+<div class="nav-overlay" id="navOverlay" role="dialog" aria-label="Navegación principal" aria-hidden="true">
+  <div class="nav-panel-left">
+    <ul class="nav-links">
+      <li><a href="nosotros.html"><span>Nosotros</span></a></li>
+      <li><a href="horarios.html"><span>Horarios</span></a></li>
+      <li><a href="ministerios.html"><span>Ministerios</span></a></li>
+      <li><a href="eventos.html" class="active-page"><span>Eventos</span></a></li>
+      <li><a href="blog/index.html"><span>Revista</span></a></li>
+      <li><a href="contacto.html"><span>Contacto</span></a></li>
+    </ul>
+    <div class="nav-bottom">
+      <div class="nav-bottom-item"><strong>Dirección</strong>Parroquia Cristo Rey<br>Culiacán, Sinaloa</div>
+      <div class="nav-bottom-item"><strong>Horario de oficina</strong>Mar – Sáb · 9:00 – 13:00</div>
+    </div>
+  </div>
+  <div class="nav-panel-right">
+    <div class="nav-event-deco"></div>
+    <div class="nav-event-number">26</div>
+    <div class="nav-panel-right-inner">
+      <span class="nav-event-badge">Inscripciones abiertas</span>
+      <div class="nav-event-title">Verano<br>con el Rey</div>
+      <div class="nav-event-meta">Talleres · Arte · Ciencia · Deporte<br>20 – 24 de Julio · 9:00 A.M. – 12:00 P.M.<br>Niños 6–12 años · $70 por día</div>
+      <a class="nav-event-cta" href="eventos.html">Ver evento <svg width="14" height="10" viewBox="0 0 14 10" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 5h12M8 1l5 4-5 4"/></svg></a>
+    </div>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="page-hero">
+  <div class="hero-ticker"></div>
+  <div class="page-hero-content">
+    <span class="page-hero-eyebrow">Próximamente · Parroquia Cristo Rey</span>
+    <h1>Eventos<br/><em>&amp; Anuncios</em></h1>
+  </div>
+</section>
+
+<!-- FILTER BAR -->
+<div class="filter-bar" id="filterBar">
+  <span class="filter-label">Filtrar:</span>
+  <button class="filter-btn active" data-filter="all">Todos</button>
+  <!-- Dynamic filter buttons added via JS -->
+</div>
+
+<!-- EVENTS SECTION -->
+<section class="events-sec">
+  <div class="container">
+    <div id="eventsFeatured"></div>
+    <div id="eventsGrid" class="events-grid"></div>
+    <div id="emptyState" class="empty-state" style="display:none;">
+      <div class="e-icon">✦</div>
+      <h3>Sin eventos próximos</h3>
+      <p>No hay eventos programados en este momento. Vuelve pronto o contáctanos para más información.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo"><img src="assets/logo.png" alt="Parroquia Cristo Rey"/></div>
+  <div class="fname">Parroquia Cristo Rey</div>
+  <div class="ftag">Iglesia Católica · Culiacán</div>
+  <div class="footer-nav">
+    <a href="nosotros.html">Nosotros</a>
+    <a href="horarios.html">Horarios</a>
+    <a href="ministerios.html">Ministerios</a>
+    <a href="eventos.html">Eventos</a>
+    <a href="blog/index.html">Revista</a>
+    <a href="contacto.html">Contacto</a>
+  </div>
+  <div class="copy">© 2026 Parroquia Cristo Rey. Todos los derechos reservados.</div>
+</footer>
+
+<script>
+  const header = document.getElementById('header');
+  const onScroll = () => header.classList.toggle('solid', window.scrollY > 60);
+  window.addEventListener('scroll', onScroll); onScroll();
+
+  (function() {
+    const btn = document.getElementById('menuBtn');
+    const overlay = document.getElementById('navOverlay');
+    function openNav() { overlay.classList.add('open'); overlay.setAttribute('aria-hidden','false'); btn.classList.add('open'); btn.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; }
+    function closeNav() { overlay.classList.remove('open'); overlay.setAttribute('aria-hidden','true'); btn.classList.remove('open'); btn.setAttribute('aria-expanded','false'); document.body.style.overflow=''; }
+    btn.addEventListener('click', () => overlay.classList.contains('open') ? closeNav() : openNav());
+    overlay.querySelectorAll('a').forEach(a => a.addEventListener('click', closeNav));
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeNav(); });
+  })();
+
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver(entries => { entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); }); }, { threshold: 0.08 });
+  reveals.forEach(el => io.observe(el));
+
+  // ── EVENTS ──
+  const MONTHS = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  const TODAY = '2026-07-09';
+
+  const tagColorMap = {
+    'Talleres': '',
+    'Misa Especial': 'community',
+    'Concierto · Kermés': '',
+    'Catequesis': 'catequesis',
+    'Comunidad': 'community',
+    'Solidaridad': 'solidaridad',
+  };
+
+  function bandClass(tag) {
+    return tagColorMap[tag] || '';
+  }
+
+  function parseDate(s) { return new Date(s + 'T00:00:00'); }
+
+  function dateDisplay(ev) {
+    const start = parseDate(ev.date);
+    if (!ev.endDate || ev.endDate === ev.date) {
+      return { big: start.getDate(), month: MONTHS[start.getMonth()], sub: null };
+    }
+    const end = parseDate(ev.endDate);
+    if (start.getMonth() === end.getMonth()) {
+      return { big: `${start.getDate()}–${end.getDate()}`, month: MONTHS[start.getMonth()], sub: `${end.getDate() - start.getDate() + 1} días` };
+    }
+    return { big: `${start.getDate()}`, month: MONTHS[start.getMonth()], sub: `al ${end.getDate()} ${MONTHS[end.getMonth()]}` };
+  }
+
+  function durationDays(ev) {
+    if (!ev.endDate || ev.endDate === ev.date) return null;
+    const d = Math.round((parseDate(ev.endDate) - parseDate(ev.date)) / 86400000) + 1;
+    return `${d} días`;
+  }
+
+  function renderFeatured(ev) {
+    const d = dateDisplay(ev);
+    const dur = durationDays(ev);
+    return `
+    <div style="margin-bottom:40px;">
+      <span class="featured-label reveal">Próximo evento destacado</span>
+      <a class="event-featured reveal" href="#">
+        <div class="ef-date-col">
+          <div class="ef-big-num">${d.big}</div>
+          <div class="ef-month">${d.month}</div>
+          <div class="ef-year">2026</div>
+        </div>
+        <div class="ef-body">
+          <div class="ef-tags">
+            <span class="ef-tag">${ev.tag}</span>
+            ${dur ? `<span class="ef-badge">${dur}</span>` : ''}
+          </div>
+          <div class="ef-title">${ev.title}</div>
+          <div class="ef-desc">${ev.description}</div>
+          <span class="ef-cta">Ver detalles <svg width="16" height="12" viewBox="0 0 16 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 6h14M9 1l6 5-6 5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </div>
+        <div class="ef-deco-num">${typeof d.big === 'number' ? d.big : d.big.toString().split('–')[0]}</div>
+      </a>
+    </div>`;
+  }
+
+  function renderCardA(ev, i) {
+    const d = dateDisplay(ev);
+    const band = bandClass(ev.tag);
+    return `
+    <div class="ev-card-a" data-tag="${ev.tag}">
+      <div class="band ${band}"></div>
+      <div class="ev-card-a-body">
+        <div class="ev-date-row">
+          <div class="ev-big-day">${d.big}</div>
+          <div class="ev-date-info">
+            <span class="ev-month">${d.month}</span>
+            ${d.sub ? `<span class="ev-day-range">${d.sub}</span>` : ''}
+          </div>
+        </div>
+        <h3>${ev.title}</h3>
+        <p>${ev.description}</p>
+        <div class="ev-footer">
+          <span class="ev-tag-pill">${ev.tag}</span>
+          <svg class="ev-arrow-sm" width="16" height="12" viewBox="0 0 16 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 6h14M9 1l6 5-6 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  function renderCardB(ev) {
+    const d = dateDisplay(ev);
+    const dur = durationDays(ev);
+    return `
+    <div class="ev-card-b" data-tag="${ev.tag}">
+      <div class="ev-b-date">
+        <div class="ev-b-big">${d.big}</div>
+        <div class="ev-b-month">${d.month}</div>
+      </div>
+      <div class="ev-b-body">
+        <h3>${ev.title}</h3>
+        <p>${ev.description}</p>
+        <div class="ev-b-meta">
+          <span class="ev-tag-pill">${ev.tag}</span>
+          ${dur ? `<span class="ev-tag-pill" style="border-color:rgba(248,243,231,0.12);color:rgba(248,243,231,0.35);">${dur}</span>` : ''}
+        </div>
+      </div>
+    </div>`;
+  }
+
+  fetch('assets/events.json')
+    .then(r => r.json())
+    .then(events => {
+      const upcoming = events
+        .filter(ev => (ev.endDate || ev.date) >= TODAY)
+        .sort((a, b) => new Date(a.date) - new Date(b.date));
+
+      if (!upcoming.length) {
+        document.getElementById('emptyState').style.display = 'block';
+        return;
+      }
+
+      // Build filter buttons
+      const tags = [...new Set(upcoming.map(e => e.tag))];
+      const filterBar = document.getElementById('filterBar');
+      tags.forEach(tag => {
+        const btn = document.createElement('button');
+        btn.className = 'filter-btn';
+        btn.dataset.filter = tag;
+        btn.textContent = tag;
+        filterBar.appendChild(btn);
+      });
+
+      // Filter logic
+      function renderAll(activeFilter) {
+        const filtered = activeFilter === 'all' ? upcoming : upcoming.filter(e => e.tag === activeFilter);
+        if (!filtered.length) {
+          document.getElementById('eventsFeatured').innerHTML = '';
+          document.getElementById('eventsGrid').innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:48px 0;color:rgba(248,243,231,0.4);font-size:14px;">Sin eventos en esta categoría.</div>';
+          return;
+        }
+
+        const [featured, ...rest] = filtered;
+        document.getElementById('eventsFeatured').innerHTML = renderFeatured(featured);
+
+        // Alternating: B then A then B…
+        let html = '';
+        let i = 0;
+        for (const ev of rest) {
+          if (i % 4 === 1) html += renderCardB(ev); // every 2nd item is wide
+          else html += renderCardA(ev, i);
+          i++;
+        }
+        document.getElementById('eventsGrid').innerHTML = html || '';
+
+        // Re-observe reveals
+        document.querySelectorAll('.reveal:not(.in)').forEach(el => io.observe(el));
+      }
+
+      renderAll('all');
+
+      filterBar.addEventListener('click', e => {
+        const btn = e.target.closest('.filter-btn');
+        if (!btn) return;
+        filterBar.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderAll(btn.dataset.filter);
+      });
+    })
+    .catch(() => {
+      document.getElementById('emptyState').style.display = 'block';
+    });
+</script>
+</body>
+</html>

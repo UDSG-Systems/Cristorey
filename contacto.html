@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contacto — Parroquia Cristo Rey</title>
+  <meta name="description" content="Visítanos, escríbenos o llámanos. Parroquia Cristo Rey en Culiacán, Sinaloa."/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=Jost:wght@200;300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy: #142b46; --navy2: #08111f; --black: #050c18;
+      --gold: #b1934a; --gold2: #e3cd97;
+      --cream: #f8f3e7; --paper: #efe6d2; --ink: #1a2230;
+      --mid: #8a8175; --line: rgba(177,147,74,0.22); --white: #ffffff;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Jost', sans-serif; font-weight: 300; color: var(--ink); background: var(--cream); overflow-x: hidden; }
+    img { max-width: 100%; display: block; }
+    a { text-decoration: none; }
+
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.85s ease, transform 0.85s ease; }
+    .reveal.in { opacity: 1; transform: none; }
+    .reveal-left { opacity: 0; transform: translateX(-40px); transition: opacity 0.85s ease, transform 0.85s ease; }
+    .reveal-right { opacity: 0; transform: translateX(40px); transition: opacity 0.85s ease, transform 0.85s ease; }
+    .reveal-left.in, .reveal-right.in { opacity: 1; transform: none; }
+
+    /* HEADER */
+    header { position: fixed; top: 0; left: 0; right: 0; z-index: 999; display: flex; align-items: center; justify-content: space-between; padding: 26px 56px; transition: background 0.4s, padding 0.4s, border-color 0.4s; border-bottom: 1px solid transparent; }
+    header.solid { background: rgba(248,243,231,0.95); backdrop-filter: blur(10px); padding: 16px 56px; border-color: var(--line); box-shadow: 0 8px 30px rgba(20,43,70,0.05); }
+    .brand { display: flex; align-items: center; gap: 14px; color: var(--white); transition: color 0.4s; }
+    header.solid .brand { color: var(--navy); }
+    .brand-logo { width: 46px; height: 46px; border-radius: 50%; background: var(--white); display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; padding: 3px; box-shadow: 0 4px 18px rgba(0,0,0,0.18); }
+    .brand-logo img { width: 100%; height: 100%; object-fit: contain; }
+    .brand-text { display: flex; flex-direction: column; line-height: 1.25; }
+    .brand-text .name { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 21px; letter-spacing: 0.04em; }
+    .brand-text .sub { font-size: 9px; letter-spacing: 0.32em; text-transform: uppercase; color: var(--gold2); }
+    header.solid .brand-text .sub { color: var(--gold); }
+    .menu-btn { display: flex; flex-direction: column; justify-content: center; gap: 6px; background: none; border: none; cursor: pointer; padding: 6px; z-index: 1001; color: var(--white); transition: color 0.4s; }
+    header.solid .menu-btn { color: var(--navy); }
+    .menu-btn span { display: block; height: 1.5px; background: currentColor; transition: width 0.4s, transform 0.4s, opacity 0.3s; }
+    .menu-btn span:nth-child(1) { width: 30px; }
+    .menu-btn span:nth-child(2) { width: 20px; }
+    .menu-btn span:nth-child(3) { width: 26px; }
+    .menu-btn.open span:nth-child(1) { width: 26px; transform: translateY(7.5px) rotate(45deg); }
+    .menu-btn.open span:nth-child(2) { opacity: 0; width: 0; }
+    .menu-btn.open span:nth-child(3) { width: 26px; transform: translateY(-7.5px) rotate(-45deg); }
+
+    /* NAV */
+    .nav-overlay { position: fixed; inset: 0; z-index: 1000; display: grid; grid-template-columns: 1fr 400px; pointer-events: none; overflow: hidden; }
+    .nav-panel-left { background: var(--black); display: flex; flex-direction: column; justify-content: center; padding: 100px 72px 80px; transform: translateX(-100%); transition: transform 0.72s cubic-bezier(0.76,0,0.24,1); }
+    .nav-panel-right { position: relative; overflow: hidden; transform: translateX(100%); transition: transform 0.72s cubic-bezier(0.76,0,0.24,1) 0.06s; }
+    .nav-panel-right::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, #0d1e36 0%, #1a3875 40%, #b1934a 80%, #e8a020 100%); z-index: 0; }
+    .nav-panel-right-inner { position: relative; z-index: 1; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; padding: 48px 44px; }
+    .nav-overlay.open { pointer-events: all; }
+    .nav-overlay.open .nav-panel-left { transform: translateX(0); }
+    .nav-overlay.open .nav-panel-right { transform: translateX(0); }
+    .nav-links { list-style: none; }
+    .nav-links li { opacity: 0; transform: translateY(24px); transition: opacity 0.5s ease, transform 0.5s ease; }
+    .nav-overlay.open .nav-links li:nth-child(1) { opacity:1; transform:none; transition-delay:0.30s; }
+    .nav-overlay.open .nav-links li:nth-child(2) { opacity:1; transform:none; transition-delay:0.38s; }
+    .nav-overlay.open .nav-links li:nth-child(3) { opacity:1; transform:none; transition-delay:0.46s; }
+    .nav-overlay.open .nav-links li:nth-child(4) { opacity:1; transform:none; transition-delay:0.54s; }
+    .nav-overlay.open .nav-links li:nth-child(5) { opacity:1; transform:none; transition-delay:0.62s; }
+    .nav-overlay.open .nav-links li:nth-child(6) { opacity:1; transform:none; transition-delay:0.70s; }
+    .nav-links a { display: block; font-family: 'Cormorant Garamond', serif; font-size: clamp(2.8rem, 5.5vw, 4.4rem); font-weight: 600; line-height: 1.1; color: rgba(248,243,231,0.18); padding: 10px 0; letter-spacing: 0.02em; transition: color 0.3s, letter-spacing 0.4s; }
+    .nav-links a:hover { color: var(--cream); letter-spacing: 0.06em; }
+    .nav-links a.active-page { color: var(--gold2); }
+    .nav-links a span { display: inline-block; position: relative; }
+    .nav-links a span::after { content: ''; position: absolute; left: 0; bottom: -2px; width: 0; height: 1px; background: var(--gold); transition: width 0.4s; }
+    .nav-links a:hover span::after { width: 100%; }
+    .nav-bottom { margin-top: 48px; padding-top: 28px; border-top: 1px solid rgba(177,147,74,0.2); display: flex; gap: 40px; opacity: 0; transition: opacity 0.5s ease 0.75s; }
+    .nav-overlay.open .nav-bottom { opacity: 1; }
+    .nav-bottom-item { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(248,243,231,0.35); line-height: 1.8; }
+    .nav-bottom-item strong { display: block; color: rgba(248,243,231,0.65); font-weight: 500; margin-bottom: 4px; }
+    .nav-event-badge { display: inline-block; background: var(--gold); color: var(--white); font-size: 9px; font-weight: 600; letter-spacing: 0.24em; text-transform: uppercase; padding: 5px 12px; margin-bottom: 20px; opacity: 0; transform: translateY(16px); transition: opacity 0.5s ease 0.6s, transform 0.5s ease 0.6s; }
+    .nav-event-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.4rem, 4vw, 3.6rem); font-weight: 600; line-height: 1.1; color: var(--white); margin-bottom: 16px; opacity: 0; transform: translateY(16px); transition: opacity 0.5s ease 0.68s, transform 0.5s ease 0.68s; }
+    .nav-event-meta { font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.58); margin-bottom: 28px; line-height: 1.9; opacity: 0; transform: translateY(12px); transition: opacity 0.5s ease 0.74s, transform 0.5s ease 0.74s; }
+    .nav-event-cta { display: inline-flex; align-items: center; gap: 10px; font-size: 10px; font-weight: 600; letter-spacing: 0.24em; text-transform: uppercase; color: var(--cream); border: 1px solid rgba(255,255,255,0.35); padding: 14px 26px; opacity: 0; transform: translateY(12px); transition: opacity 0.5s ease 0.80s, transform 0.5s ease 0.80s, background 0.3s, border-color 0.3s; }
+    .nav-event-cta:hover { background: var(--gold); border-color: var(--gold); }
+    .nav-overlay.open .nav-event-badge,.nav-overlay.open .nav-event-title,.nav-overlay.open .nav-event-meta,.nav-overlay.open .nav-event-cta { opacity:1; transform:none; }
+    .nav-event-deco { position: absolute; top: 0; right: 0; width: 70%; height: 100%; background: radial-gradient(ellipse at top right, rgba(255,255,255,0.06) 0%, transparent 60%); pointer-events: none; }
+    .nav-event-number { position: absolute; top: 40px; right: 36px; font-family: 'Cormorant Garamond', serif; font-size: 9rem; font-weight: 600; line-height: 1; color: rgba(255,255,255,0.04); pointer-events: none; letter-spacing: -0.04em; }
+
+    /* HERO */
+    .page-hero { background: var(--navy); min-height: 52vh; display: flex; align-items: center; padding: 140px 56px 80px; position: relative; overflow: hidden; }
+    .page-hero::before { content: ''; position: absolute; inset: 0; background: url('assets/hero.jpeg') center 60% / cover no-repeat; opacity: 0.15; }
+    .page-hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(8,17,31,0.9) 0%, rgba(8,17,31,0.3) 100%); }
+    .page-hero-content { position: relative; z-index: 2; }
+    .page-hero-eyebrow { display: block; font-size: 10px; letter-spacing: 0.5em; text-transform: uppercase; color: var(--gold2); margin-bottom: 20px; animation: fadeUp 0.9s ease 0.2s both; }
+    .page-hero h1 { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: clamp(4rem, 10vw, 8rem); line-height: 0.95; color: var(--white); animation: fadeUp 0.9s ease 0.4s both; }
+    .page-hero h1 em { font-style: italic; color: var(--gold2); font-weight: 300; }
+    .page-hero-sub { font-size: 16px; color: rgba(248,243,231,0.55); max-width: 420px; margin-top: 24px; line-height: 1.85; animation: fadeUp 0.9s ease 0.6s both; }
+    @keyframes fadeUp { from { opacity:0; transform: translateY(24px); } to { opacity:1; transform:none; } }
+
+    /* MAIN SPLIT */
+    .contact-section { padding: 0; display: grid; grid-template-columns: 1fr 1fr; min-height: 80vh; }
+
+    /* LEFT: Info + Map */
+    .contact-left { background: var(--navy2); display: flex; flex-direction: column; }
+    .contact-info-panel { padding: 80px 64px; flex: 1; }
+    .contact-info-panel .label { font-size: 10px; letter-spacing: 0.4em; text-transform: uppercase; color: var(--gold2); margin-bottom: 20px; display: block; }
+    .contact-info-panel h2 { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: clamp(2rem, 3.5vw, 3rem); color: var(--cream); line-height: 1.15; margin-bottom: 48px; }
+    .contact-info-panel h2 em { font-style: italic; color: var(--gold2); }
+    .contact-rows { display: flex; flex-direction: column; gap: 32px; }
+    .contact-row { display: flex; gap: 18px; align-items: flex-start; }
+    .contact-row .c-icon { width: 40px; height: 40px; border: 1px solid rgba(177,147,74,0.3); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--gold2); }
+    .contact-row .c-icon svg { width: 16px; height: 16px; }
+    .contact-row .c-label { font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
+    .contact-row .c-value { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; color: var(--cream); line-height: 1.65; }
+    .contact-row .c-value a { color: var(--cream); border-bottom: 1px solid rgba(248,243,231,0.2); transition: color 0.2s, border-color 0.2s; }
+    .contact-row .c-value a:hover { color: var(--gold2); border-color: var(--gold2); }
+    .socials { display: flex; gap: 14px; margin-top: 40px; padding-top: 36px; border-top: 1px solid rgba(177,147,74,0.15); }
+    .social-link { width: 40px; height: 40px; border: 1px solid rgba(177,147,74,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: rgba(248,243,231,0.5); transition: all 0.2s; }
+    .social-link:hover { background: var(--gold); border-color: var(--gold); color: var(--white); }
+    .social-link svg { width: 16px; height: 16px; }
+    .map-wrap { flex-shrink: 0; }
+    .map-wrap iframe { width: 100%; height: 360px; border: 0; display: block; filter: sepia(0.2) brightness(0.85) saturate(0.7); }
+
+    /* RIGHT: Form */
+    .contact-form-panel { background: var(--cream); padding: 80px 64px; display: flex; flex-direction: column; justify-content: center; }
+    .contact-form-panel .label { font-size: 10px; letter-spacing: 0.4em; text-transform: uppercase; color: var(--gold); margin-bottom: 20px; display: block; }
+    .contact-form-panel h2 { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: clamp(1.9rem, 3vw, 2.8rem); color: var(--navy); line-height: 1.15; margin-bottom: 8px; }
+    .contact-form-panel h2 em { font-style: italic; color: var(--gold); }
+    .contact-form-panel .sub { font-size: 14px; color: var(--mid); margin-bottom: 40px; line-height: 1.8; }
+    form { display: flex; flex-direction: column; gap: 20px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .field { display: flex; flex-direction: column; gap: 6px; }
+    .field label { font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--mid); font-weight: 500; }
+    .field input, .field select, .field textarea {
+      font-family: 'Jost', sans-serif; font-size: 14px; font-weight: 300;
+      color: var(--ink); background: var(--white);
+      border: 1px solid var(--line); border-radius: 2px;
+      padding: 14px 16px; outline: none; width: 100%;
+      transition: border-color 0.25s, box-shadow 0.25s;
+    }
+    .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(177,147,74,0.08); }
+    .field textarea { resize: vertical; min-height: 120px; }
+    .field select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238a8175' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 16px center; }
+    .btn-submit { display: inline-flex; align-items: center; gap: 10px; justify-content: center; font-family: 'Jost', sans-serif; font-size: 10px; font-weight: 600; letter-spacing: 0.24em; text-transform: uppercase; background: var(--navy); color: var(--cream); border: none; padding: 17px 36px; border-radius: 2px; cursor: pointer; transition: background 0.25s, transform 0.25s; }
+    .btn-submit:hover { background: var(--gold); transform: translateY(-2px); }
+    .form-note { font-size: 11px; color: var(--mid); margin-top: 4px; }
+    .form-success { display: none; text-align: center; padding: 40px 24px; }
+    .form-success .s-icon { font-size: 3rem; margin-bottom: 16px; }
+    .form-success h3 { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 1.8rem; color: var(--navy); margin-bottom: 10px; }
+    .form-success p { font-size: 14px; color: var(--mid); line-height: 1.8; }
+
+    /* NICHOS LINK */
+    .nichos-sec { background: var(--paper); padding: 80px 56px; }
+    .nichos-inner { max-width: 900px; margin: 0 auto; display: grid; grid-template-columns: 1fr auto; gap: 40px; align-items: center; }
+    .nichos-text .label { font-size: 10px; letter-spacing: 0.4em; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; display: block; }
+    .nichos-text h2 { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: clamp(1.8rem, 3vw, 2.6rem); color: var(--navy); margin-bottom: 12px; }
+    .nichos-text h2 em { font-style: italic; color: var(--gold); }
+    .nichos-text p { font-size: 14px; color: var(--mid); line-height: 1.9; max-width: 480px; }
+    .btn-line { display: inline-block; font-size: 10px; font-weight: 600; letter-spacing: 0.24em; text-transform: uppercase; padding: 14px 30px; border: 1px solid var(--gold); color: var(--navy); border-radius: 2px; transition: all 0.25s; white-space: nowrap; }
+    .btn-line:hover { background: var(--navy); color: var(--cream); border-color: var(--navy); }
+
+    /* FOOTER */
+    footer { background: var(--navy2); color: rgba(248,243,231,0.55); padding: 72px 56px 32px; text-align: center; }
+    .footer-logo { width: 52px; height: 52px; border-radius: 50%; background: var(--white); margin: 0 auto 18px; display: flex; align-items: center; justify-content: center; padding: 4px; }
+    .footer-logo img { width: 100%; height: 100%; object-fit: contain; }
+    footer .fname { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 20px; color: var(--cream); margin-bottom: 6px; }
+    footer .ftag { font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 28px; }
+    .footer-nav { display: flex; gap: 28px; justify-content: center; flex-wrap: wrap; margin-bottom: 36px; }
+    .footer-nav a { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(248,243,231,0.5); transition: color 0.2s; }
+    .footer-nav a:hover { color: var(--gold2); }
+    footer .copy { font-size: 10px; color: rgba(248,243,231,0.22); padding-top: 24px; border-top: 1px solid rgba(248,243,231,0.07); }
+
+    @media (max-width: 1024px) { .contact-section { grid-template-columns: 1fr; } .contact-left { order: 2; } .contact-form-panel { order: 1; } }
+    @media (max-width: 860px) {
+      header { padding: 20px 24px; } header.solid { padding: 14px 24px; }
+      .page-hero { padding: 120px 24px 64px; }
+      .contact-info-panel, .contact-form-panel { padding: 56px 24px; }
+      .nichos-sec { padding: 64px 24px; }
+      .nichos-inner { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .nav-overlay { grid-template-columns: 1fr; } .nav-panel-right { display: none; }
+      .nav-panel-left { padding: 100px 36px 70px; }
+      footer { padding: 56px 24px 28px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header id="header">
+  <a class="brand" href="index.html">
+    <span class="brand-logo"><img src="assets/logo.png" alt="Parroquia Cristo Rey"/></span>
+    <span class="brand-text">
+      <span class="name">Cristo Rey</span>
+      <span class="sub">Iglesia Católica</span>
+    </span>
+  </a>
+  <button class="menu-btn" id="menuBtn" aria-label="Abrir menú" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<!-- NAV OVERLAY -->
+<div class="nav-overlay" id="navOverlay" role="dialog" aria-label="Navegación principal" aria-hidden="true">
+  <div class="nav-panel-left">
+    <ul class="nav-links">
+      <li><a href="nosotros.html"><span>Nosotros</span></a></li>
+      <li><a href="horarios.html"><span>Horarios</span></a></li>
+      <li><a href="ministerios.html"><span>Ministerios</span></a></li>
+      <li><a href="eventos.html"><span>Eventos</span></a></li>
+      <li><a href="blog/index.html"><span>Revista</span></a></li>
+      <li><a href="contacto.html" class="active-page"><span>Contacto</span></a></li>
+    </ul>
+    <div class="nav-bottom">
+      <div class="nav-bottom-item"><strong>Dirección</strong>Parroquia Cristo Rey<br>Culiacán, Sinaloa</div>
+      <div class="nav-bottom-item"><strong>Horario de oficina</strong>Mar – Sáb · 9:00 – 13:00</div>
+    </div>
+  </div>
+  <div class="nav-panel-right">
+    <div class="nav-event-deco"></div>
+    <div class="nav-event-number">26</div>
+    <div class="nav-panel-right-inner">
+      <span class="nav-event-badge">Inscripciones abiertas</span>
+      <div class="nav-event-title">Verano<br>con el Rey</div>
+      <div class="nav-event-meta">Talleres · Arte · Ciencia · Deporte<br>20 – 24 de Julio · 9:00 A.M. – 12:00 P.M.<br>Niños 6–12 años · $70 por día</div>
+      <a class="nav-event-cta" href="eventos.html">Ver evento <svg width="14" height="10" viewBox="0 0 14 10" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 5h12M8 1l5 4-5 4"/></svg></a>
+    </div>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="page-hero">
+  <div class="page-hero-content">
+    <span class="page-hero-eyebrow">Visítanos · Escríbenos · Llámanos</span>
+    <h1>Estamos<br/><em>aquí para ti</em></h1>
+    <p class="page-hero-sub">Nuestra puerta siempre está abierta. Sea cual sea tu pregunta, necesidad o intención, estamos listos para acompañarte.</p>
+  </div>
+</section>
+
+<!-- CONTACT SPLIT -->
+<div class="contact-section">
+
+  <!-- LEFT: Info + Map -->
+  <div class="contact-left">
+    <div class="contact-info-panel reveal-left">
+      <span class="label">Información de contacto</span>
+      <h2>Te esperamos<br/>con las <em>puertas abiertas</em></h2>
+      <div class="contact-rows">
+        <div class="contact-row">
+          <span class="c-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 12-9 12S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span>
+          <div>
+            <div class="c-label">Dirección</div>
+            <div class="c-value">Parroquia Cristo Rey<br/>Blvrd Pedro Anaya 2304, Burócrata<br/>80030 Culiacán Rosales, Sin., México</div>
+          </div>
+        </div>
+        <div class="contact-row">
+          <span class="c-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.81.36 1.6.69 2.34a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.74-1.27a2 2 0 0 1 2.11-.45c.74.33 1.53.56 2.34.69A2 2 0 0 1 22 16.92z"/></svg></span>
+          <div>
+            <div class="c-label">Teléfono</div>
+            <div class="c-value"><a href="tel:+10000000000">+1 (000) 000-0000</a></div>
+          </div>
+        </div>
+        <div class="contact-row">
+          <span class="c-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 7L2 7" stroke-linecap="round"/></svg></span>
+          <div>
+            <div class="c-label">Correo electrónico</div>
+            <div class="c-value"><a href="mailto:contacto@parroquiacristorey.org">contacto@parroquiacristorey.org</a></div>
+          </div>
+        </div>
+        <div class="contact-row">
+          <span class="c-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2" stroke-linecap="round"/></svg></span>
+          <div>
+            <div class="c-label">Horario de oficina</div>
+            <div class="c-value">Mar – Sáb: 9:00–13:00 y 16:00–19:00<br/>Domingos: 10:00–13:00</div>
+          </div>
+        </div>
+      </div>
+      <div class="socials">
+        <a class="social-link" href="#" aria-label="Facebook">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+        </a>
+        <a class="social-link" href="#" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+        </a>
+        <a class="social-link" href="#" aria-label="WhatsApp">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+        </a>
+        <a class="social-link" href="https://nichoscristorey.com/" target="_blank" rel="noopener" aria-label="Nichos Cristo Rey">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="map-wrap">
+      <iframe src="https://www.google.com/maps?cid=12292436622713515068&output=embed" loading="lazy" title="Mapa Parroquia Cristo Rey"></iframe>
+    </div>
+  </div>
+
+  <!-- RIGHT: Form -->
+  <div class="contact-form-panel reveal-right">
+    <span class="label">Escríbenos</span>
+    <h2>Cuéntanos<br/><em>en qué podemos ayudarte</em></h2>
+    <p class="sub">Responderemos a la brevedad posible. Para asuntos urgentes, llámanos directamente.</p>
+
+    <form id="contactForm" novalidate>
+      <div class="form-row">
+        <div class="field">
+          <label for="nombre">Nombre</label>
+          <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" required/>
+        </div>
+        <div class="field">
+          <label for="apellido">Apellido</label>
+          <input type="text" id="apellido" name="apellido" placeholder="Tu apellido"/>
+        </div>
+      </div>
+      <div class="field">
+        <label for="email">Correo electrónico</label>
+        <input type="email" id="email" name="email" placeholder="tucorreo@ejemplo.com" required/>
+      </div>
+      <div class="field">
+        <label for="asunto">Asunto</label>
+        <select id="asunto" name="asunto">
+          <option value="">Selecciona un tema…</option>
+          <option>Información general</option>
+          <option>Bautismo</option>
+          <option>Matrimonio</option>
+          <option>Primera Comunión / Confirmación</option>
+          <option>Unción de Enfermos</option>
+          <option>Ministerios y grupos</option>
+          <option>Eventos</option>
+          <option>Otro</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="mensaje">Mensaje</label>
+        <textarea id="mensaje" name="mensaje" placeholder="Cuéntanos en qué podemos ayudarte…" required></textarea>
+      </div>
+      <div>
+        <button type="submit" class="btn-submit">
+          Enviar mensaje
+          <svg width="16" height="12" viewBox="0 0 16 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 6h14M9 1l6 5-6 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="form-note" style="margin-top:12px;">Tu mensaje se enviará a nuestra parroquia. No compartimos tu información.</div>
+      </div>
+    </form>
+
+    <div class="form-success" id="formSuccess">
+      <div class="s-icon">✦</div>
+      <h3>¡Mensaje enviado!</h3>
+      <p>Gracias por contactarnos. Te responderemos a la brevedad posible. Que Cristo Rey te bendiga.</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- NICHOS -->
+<section class="nichos-sec">
+  <div class="container">
+    <div class="nichos-inner reveal">
+      <div class="nichos-text">
+        <span class="label">Servicio parroquial</span>
+        <h2>Nichos <em>Cristo Rey</em></h2>
+        <p>Contamos con una capilla de nichos para el descanso digno de nuestros difuntos. Un espacio sagrado de memoria y oración.</p>
+      </div>
+      <a class="btn-line" href="https://nichoscristorey.com/" target="_blank" rel="noopener">Visitar sitio web</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo"><img src="assets/logo.png" alt="Parroquia Cristo Rey"/></div>
+  <div class="fname">Parroquia Cristo Rey</div>
+  <div class="ftag">Iglesia Católica · Culiacán</div>
+  <div class="footer-nav">
+    <a href="nosotros.html">Nosotros</a>
+    <a href="horarios.html">Horarios</a>
+    <a href="ministerios.html">Ministerios</a>
+    <a href="eventos.html">Eventos</a>
+    <a href="blog/index.html">Revista</a>
+    <a href="contacto.html">Contacto</a>
+  </div>
+  <div class="copy">© 2026 Parroquia Cristo Rey. Todos los derechos reservados.</div>
+</footer>
+
+<script>
+  const header = document.getElementById('header');
+  const onScroll = () => header.classList.toggle('solid', window.scrollY > 60);
+  window.addEventListener('scroll', onScroll); onScroll();
+
+  (function() {
+    const btn = document.getElementById('menuBtn');
+    const overlay = document.getElementById('navOverlay');
+    function openNav() { overlay.classList.add('open'); overlay.setAttribute('aria-hidden','false'); btn.classList.add('open'); btn.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; }
+    function closeNav() { overlay.classList.remove('open'); overlay.setAttribute('aria-hidden','true'); btn.classList.remove('open'); btn.setAttribute('aria-expanded','false'); document.body.style.overflow=''; }
+    btn.addEventListener('click', () => overlay.classList.contains('open') ? closeNav() : openNav());
+    overlay.querySelectorAll('a').forEach(a => a.addEventListener('click', closeNav));
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeNav(); });
+  })();
+
+  const reveals = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
+  const io = new IntersectionObserver(entries => { entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); }); }, { threshold: 0.08 });
+  reveals.forEach(el => io.observe(el));
+
+  // Form: mailto fallback
+  document.getElementById('contactForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const nombre = document.getElementById('nombre').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const asunto = document.getElementById('asunto').value;
+    const mensaje = document.getElementById('mensaje').value.trim();
+    if (!nombre || !email || !mensaje) { alert('Por favor completa los campos requeridos.'); return; }
+    const body = encodeURIComponent(`Nombre: ${nombre}\nCorreo: ${email}\nAsunto: ${asunto}\n\n${mensaje}`);
+    const subj = encodeURIComponent(`Mensaje de ${nombre} — Parroquia Cristo Rey`);
+    window.location.href = `mailto:contacto@parroquiacristorey.org?subject=${subj}&body=${body}`;
+    document.getElementById('contactForm').style.display = 'none';
+    document.getElementById('formSuccess').style.display = 'block';
+  });
+</script>
+</body>
+</html>

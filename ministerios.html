@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ministerios — Parroquia Cristo Rey</title>
+  <meta name="description" content="Descubre los ministerios, grupos pastorales y sacramentos de la Parroquia Cristo Rey."/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=Jost:wght@200;300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy: #142b46; --navy2: #08111f; --black: #050c18;
+      --gold: #b1934a; --gold2: #e3cd97;
+      --cream: #f8f3e7; --paper: #efe6d2; --ink: #1a2230;
+      --mid: #8a8175; --line: rgba(177,147,74,0.22); --white: #ffffff;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Jost', sans-serif; font-weight: 300; color: var(--ink); background: var(--cream); overflow-x: hidden; }
+    img { max-width: 100%; display: block; }
+    a { text-decoration: none; }
+
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.85s ease, transform 0.85s ease; }
+    .reveal.in { opacity: 1; transform: none; }
+
+    /* HEADER */
+    header { position: fixed; top: 0; left: 0; right: 0; z-index: 999; display: flex; align-items: center; justify-content: space-between; padding: 26px 56px; transition: background 0.4s, padding 0.4s, border-color 0.4s; border-bottom: 1px solid transparent; }
+    header.solid { background: rgba(248,243,231,0.95); backdrop-filter: blur(10px); padding: 16px 56px; border-color: var(--line); box-shadow: 0 8px 30px rgba(20,43,70,0.05); }
+    .brand { display: flex; align-items: center; gap: 14px; color: var(--white); transition: color 0.4s; }
+    header.solid .brand { color: var(--navy); }
+    .brand-logo { width: 46px; height: 46px; border-radius: 50%; background: var(--white); display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; padding: 3px; box-shadow: 0 4px 18px rgba(0,0,0,0.18); }
+    .brand-logo img { width: 100%; height: 100%; object-fit: contain; }
+    .brand-text { display: flex; flex-direction: column; line-height: 1.25; }
+    .brand-text .name { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 21px; letter-spacing: 0.04em; }
+    .brand-text .sub { font-size: 9px; letter-spacing: 0.32em; text-transform: uppercase; color: var(--gold2); }
+    header.solid .brand-text .sub { color: var(--gold); }
+    .menu-btn { display: flex; flex-direction: column; justify-content: center; gap: 6px; background: none; border: none; cursor: pointer; padding: 6px; z-index: 1001; color: var(--white); transition: color 0.4s; }
+    header.solid .menu-btn { color: var(--navy); }
+    .menu-btn span { display: block; height: 1.5px; background: currentColor; transition: width 0.4s, transform 0.4s, opacity 0.3s; }
+    .menu-btn span:nth-child(1) { width: 30px; }
+    .menu-btn span:nth-child(2) { width: 20px; }
+    .menu-btn span:nth-child(3) { width: 26px; }
+    .menu-btn.open span:nth-child(1) { width: 26px; transform: translateY(7.5px) rotate(45deg); }
+    .menu-btn.open span:nth-child(2) { opacity: 0; width: 0; }
+    .menu-btn.open span:nth-child(3) { width: 26px; transform: translateY(-7.5px) rotate(-45deg); }
+
+    /* NAV */
+    .nav-overlay { position: fixed; inset: 0; z-index: 1000; display: grid; grid-template-columns: 1fr 400px; pointer-events: none; overflow: hidden; }
+    .nav-panel-left { background: var(--black); display: flex; flex-direction: column; justify-content: center; padding: 100px 72px 80px; transform: translateX(-100%); transition: transform 0.72s cubic-bezier(0.76,0,0.24,1); }
+    .nav-panel-right { position: relative; overflow: hidden; transform: translateX(100%); transition: transform 0.72s cubic-bezier(0.76,0,0.24,1) 0.06s; }
+    .nav-panel-right::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, #0d1e36 0%, #1a3875 40%, #b1934a 80%, #e8a020 100%); z-index: 0; }
+    .nav-panel-right-inner { position: relative; z-index: 1; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; padding: 48px 44px; }
+    .nav-overlay.open { pointer-events: all; }
+    .nav-overlay.open .nav-panel-left { transform: translateX(0); }
+    .nav-overlay.open .nav-panel-right { transform: translateX(0); }
+    .nav-links { list-style: none; }
+    .nav-links li { opacity: 0; transform: translateY(24px); transition: opacity 0.5s ease, transform 0.5s ease; }
+    .nav-overlay.open .nav-links li:nth-child(1) { opacity:1; transform:none; transition-delay:0.30s; }
+    .nav-overlay.open .nav-links li:nth-child(2) { opacity:1; transform:none; transition-delay:0.38s; }
+    .nav-overlay.open .nav-links li:nth-child(3) { opacity:1; transform:none; transition-delay:0.46s; }
+    .nav-overlay.open .nav-links li:nth-child(4) { opacity:1; transform:none; transition-delay:0.54s; }
+    .nav-overlay.open .nav-links li:nth-child(5) { opacity:1; transform:none; transition-delay:0.62s; }
+    .nav-overlay.open .nav-links li:nth-child(6) { opacity:1; transform:none; transition-delay:0.70s; }
+    .nav-links a { display: block; font-family: 'Cormorant Garamond', serif; font-size: clamp(2.8rem, 5.5vw, 4.4rem); font-weight: 600; line-height: 1.1; color: rgba(248,243,231,0.18); padding: 10px 0; letter-spacing: 0.02em; transition: color 0.3s, letter-spacing 0.4s; }
+    .nav-links a:hover { color: var(--cream); letter-spacing: 0.06em; }
+    .nav-links a.active-page { color: var(--gold2); }
+    .nav-links a span { display: inline-block; position: relative; }
+    .nav-links a span::after { content: ''; position: absolute; left: 0; bottom: -2px; width: 0; height: 1px; background: var(--gold); transition: width 0.4s; }
+    .nav-links a:hover span::after { width: 100%; }
+    .nav-bottom { margin-top: 48px; padding-top: 28px; border-top: 1px solid rgba(177,147,74,0.2); display: flex; gap: 40px; opacity: 0; transition: opacity 0.5s ease 0.75s; }
+    .nav-overlay.open .nav-bottom { opacity: 1; }
+    .nav-bottom-item { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(248,243,231,0.35); line-height: 1.8; }
+    .nav-bottom-item strong { display: block; color: rgba(248,243,231,0.65); font-weight: 500; margin-bottom: 4px; }
+    .nav-event-badge { display: inline-block; background: var(--gold); color: var(--white); font-size: 9px; font-weight: 600; letter-spacing: 0.24em; text-transform: uppercase; padding: 5px 12px; margin-bottom: 20px; opacity: 0; transform: translateY(16px); transition: opacity 0.5s ease 0.6s, transform 0.5s ease 0.6s; }
+    .nav-event-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.4rem, 4vw, 3.6rem); font-weight: 600; line-height: 1.1; color: var(--white); margin-bottom: 16px; opacity: 0; transform: translateY(16px); transition: opacity 0.5s ease 0.68s, transform 0.5s ease 0.68s; }
+    .nav-event-meta { font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.58); margin-bottom: 28px; line-height: 1.9; opacity: 0; transform: translateY(12px); transition: opacity 0.5s ease 0.74s, transform 0.5s ease 0.74s; }
+    .nav-event-cta { display: inline-flex; align-items: center; gap: 10px; font-size: 10px; font-weight: 600; letter-spacing: 0.24em; text-transform: uppercase; color: var(--cream); border: 1px solid rgba(255,255,255,0.35); padding: 14px 26px; opacity: 0; transform: translateY(12px); transition: opacity 0.5s ease 0.80s, transform 0.5s ease 0.80s, background 0.3s, border-color 0.3s; }
+    .nav-event-cta:hover { background: var(--gold); border-color: var(--gold); }
+    .nav-overlay.open .nav-event-badge, .nav-overlay.open .nav-event-title, .nav-overlay.open .nav-event-meta, .nav-overlay.open .nav-event-cta { opacity: 1; transform: none; }
+    .nav-event-deco { position: absolute; top: 0; right: 0; width: 70%; height: 100%; background: radial-gradient(ellipse at top right, rgba(255,255,255,0.06) 0%, transparent 60%); pointer-events: none; }
+    .nav-event-number { position: absolute; top: 40px; right: 36px; font-family: 'Cormorant Garamond', serif; font-size: 9rem; font-weight: 600; line-height: 1; color: rgba(255,255,255,0.04); pointer-events: none; letter-spacing: -0.04em; }
+
+    /* MANIFESTO HERO */
+    .manifesto {
+      background: var(--black); min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 160px 56px 100px;
+      position: relative; overflow: hidden;
+    }
+    .manifesto::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 70% 50%, rgba(177,147,74,0.06) 0%, transparent 65%); }
+    .manifesto-deco {
+      position: absolute; right: -40px; top: 50%; transform: translateY(-50%);
+      font-family: 'Cormorant Garamond', serif; font-size: 28rem; font-weight: 600; line-height: 1;
+      color: rgba(177,147,74,0.03); pointer-events: none; letter-spacing: -0.06em; white-space: nowrap;
+    }
+    .manifesto-tag { font-size: 10px; letter-spacing: 0.5em; text-transform: uppercase; color: var(--gold); margin-bottom: 40px; animation: fadeUp 0.9s ease 0.3s both; }
+    .manifesto h1 {
+      font-family: 'Cormorant Garamond', serif; font-weight: 600;
+      font-size: clamp(3.6rem, 9vw, 8rem); line-height: 1; color: var(--cream);
+      max-width: 760px; position: relative; z-index: 1;
+      animation: fadeUp 0.9s ease 0.5s both;
+    }
+    .manifesto h1 em { font-style: italic; color: var(--gold2); }
+    .manifesto h1 strong { font-weight: 600; display: block; font-size: 0.55em; font-family: 'Jost', sans-serif; font-weight: 200; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(248,243,231,0.35); margin-top: 24px; }
+    .manifesto-count {
+      position: absolute; right: 56px; bottom: 80px;
+      font-family: 'Cormorant Garamond', serif; font-size: 12rem; font-weight: 600; line-height: 1;
+      color: var(--gold); opacity: 0.08; pointer-events: none; letter-spacing: -0.04em;
+      animation: fadeUp 1s ease 0.7s both;
+    }
+    @keyframes fadeUp { from { opacity:0; transform: translateY(28px); } to { opacity:1; transform:none; } }
+
+    /* GRID */
+    .container { max-width: 1180px; margin: 0 auto; }
+    .ministries-sec { background: var(--cream); padding: 100px 56px; }
+    .ministries-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; margin-bottom: 72px; }
+    .ministries-head .left .label { font-size: 10px; letter-spacing: 0.4em; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; display: block; }
+    .ministries-head .left h2 { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: clamp(2.4rem, 5vw, 3.6rem); color: var(--navy); line-height: 1.1; }
+    .ministries-head .left h2 em { font-style: italic; color: var(--gold); }
+    .ministries-head .right { font-size: 14px; color: var(--mid); max-width: 320px; line-height: 1.85; flex-shrink: 0; }
+
+    /* FLIP CARD GRID */
+    .ministry-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .flip-card { height: 300px; perspective: 1000px; cursor: pointer; }
+    .flip-inner {
+      position: relative; width: 100%; height: 100%;
+      transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .flip-card:hover .flip-inner, .flip-card:focus-within .flip-inner { transform: rotateY(180deg); }
+    .flip-front, .flip-back {
+      position: absolute; inset: 0;
+      backface-visibility: hidden; -webkit-backface-visibility: hidden;
+      border: 1px solid var(--line); padding: 36px 28px;
+      display: flex; flex-direction: column;
+    }
+    .flip-front { background: var(--white); justify-content: flex-end; }
+    .flip-back { background: var(--navy); transform: rotateY(180deg); justify-content: center; }
+    .flip-front .f-num { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 10rem; font-weight: 600; line-height: 1; color: rgba(177,147,74,0.08); position: absolute; top: -12px; right: 20px; }
+    .flip-front .f-icon { font-size: 1.8rem; margin-bottom: 12px; position: relative; z-index: 1; }
+    .flip-front h3 { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 1.35rem; color: var(--navy); position: relative; z-index: 1; margin-bottom: 8px; }
+    .flip-front .f-tag { font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); position: relative; z-index: 1; }
+    .flip-back .b-label { font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold2); margin-bottom: 14px; }
+    .flip-back h3 { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 1.3rem; color: var(--cream); margin-bottom: 14px; }
+    .flip-back p { font-size: 13px; line-height: 1.85; color: rgba(248,243,231,0.6); }
+    .flip-back .b-more { display: inline-flex; align-items: center; gap: 6px; margin-top: 20px; font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); }
+    /* Large card spanning 2 cols */
+    .flip-card.wide { grid-column: span 2; }
+    .flip-card.wide .flip-front { background: linear-gradient(135deg, var(--navy) 0%, var(--navy2) 100%); }
+    .flip-card.wide .flip-front h3 { color: var(--cream); font-size: 1.6rem; }
+    .flip-card.wide .flip-front .f-tag { color: var(--gold2); }
+    .flip-card.wide .flip-front .f-num { color: rgba(177,147,74,0.05); font-size: 12rem; }
+
+    /* FEATURED SECTION */
+    .featured-sec { background: var(--paper); padding: 100px 56px; }
+    .featured-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+    .featured-text .label { font-size: 10px; letter-spacing: 0.4em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; display: block; }
+    .featured-text h2 { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: clamp(2.2rem, 4.5vw, 3.4rem); color: var(--navy); line-height: 1.15; margin-bottom: 24px; }
+    .featured-text h2 em { font-style: italic; color: var(--gold); }
+    .featured-text p { font-size: 15px; line-height: 2; color: var(--mid); margin-bottom: 20px; }
+    .featured-visual { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .feat-tile {
+      aspect-ratio: 1; background: var(--navy); padding: 28px 24px;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      position: relative; overflow: hidden;
+    }
+    .feat-tile:first-child { grid-column: span 2; aspect-ratio: 2/1; }
+    .feat-tile::before { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(5,12,24,0.85) 0%, transparent 60%); }
+    .feat-tile .ft-num { position: absolute; top: 16px; right: 20px; font-family: 'Cormorant Garamond', serif; font-size: 4.5rem; font-weight: 600; color: rgba(177,147,74,0.15); line-height: 1; }
+    .feat-tile .ft-title { position: relative; z-index: 1; font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 1.2rem; color: var(--cream); }
+    .feat-tile .ft-sub { position: relative; z-index: 1; font-size: 11px; color: rgba(248,243,231,0.45); margin-top: 4px; }
+
+    /* CTA */
+    .cta-sec { background: var(--navy2); padding: 130px 56px; text-align: center; position: relative; overflow: hidden; }
+    .cta-sec::before { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 700px; height: 700px; border-radius: 50%; background: radial-gradient(circle, rgba(177,147,74,0.07) 0%, transparent 65%); }
+    .cta-tag { font-size: 10px; letter-spacing: 0.4em; text-transform: uppercase; color: var(--gold2); margin-bottom: 28px; position: relative; z-index: 1; }
+    .cta-h { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: clamp(3rem, 7vw, 5.5rem); color: var(--cream); line-height: 1.1; margin-bottom: 24px; position: relative; z-index: 1; }
+    .cta-h em { font-style: italic; color: var(--gold2); }
+    .cta-p { font-size: 15px; color: rgba(248,243,231,0.5); max-width: 440px; margin: 0 auto 40px; line-height: 1.9; position: relative; z-index: 1; }
+    .btn { display: inline-block; font-size: 10px; font-weight: 600; letter-spacing: 0.24em; text-transform: uppercase; padding: 15px 34px; border: 1px solid transparent; border-radius: 2px; transition: all 0.25s; }
+    .btn-gold { background: var(--gold); color: var(--white); border-color: var(--gold); }
+    .btn-gold:hover { background: transparent; color: var(--gold); }
+    .btn-outline { border-color: rgba(248,243,231,0.3); color: var(--cream); margin-left: 12px; }
+    .btn-outline:hover { border-color: var(--gold2); background: rgba(248,243,231,0.05); }
+
+    /* FOOTER */
+    footer { background: var(--navy2); color: rgba(248,243,231,0.55); padding: 72px 56px 32px; text-align: center; border-top: 1px solid rgba(177,147,74,0.1); }
+    .footer-logo { width: 52px; height: 52px; border-radius: 50%; background: var(--white); margin: 0 auto 18px; display: flex; align-items: center; justify-content: center; padding: 4px; }
+    .footer-logo img { width: 100%; height: 100%; object-fit: contain; }
+    footer .fname { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 20px; color: var(--cream); margin-bottom: 6px; }
+    footer .ftag { font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 28px; }
+    .footer-nav { display: flex; gap: 28px; justify-content: center; flex-wrap: wrap; margin-bottom: 36px; }
+    .footer-nav a { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(248,243,231,0.5); transition: color 0.2s; }
+    .footer-nav a:hover { color: var(--gold2); }
+    footer .copy { font-size: 10px; color: rgba(248,243,231,0.22); padding-top: 24px; border-top: 1px solid rgba(248,243,231,0.07); }
+
+    @media (max-width: 1024px) { .ministry-grid { grid-template-columns: repeat(2, 1fr); } .flip-card.wide { grid-column: span 2; } }
+    @media (max-width: 860px) {
+      header { padding: 20px 24px; } header.solid { padding: 14px 24px; }
+      .manifesto { padding: 140px 24px 80px; } .manifesto-deco { display: none; } .manifesto-count { display: none; }
+      .ministries-sec, .featured-sec, .cta-sec { padding: 72px 24px; }
+      .ministries-head { flex-direction: column; align-items: flex-start; }
+      .featured-inner { grid-template-columns: 1fr; gap: 48px; }
+      .nav-overlay { grid-template-columns: 1fr; } .nav-panel-right { display: none; }
+      .nav-panel-left { padding: 100px 36px 70px; }
+      footer { padding: 56px 24px 28px; }
+    }
+    @media (max-width: 600px) { .ministry-grid { grid-template-columns: 1fr; } .flip-card.wide { grid-column: span 1; } .featured-visual { grid-template-columns: 1fr; } .feat-tile:first-child { grid-column: span 1; aspect-ratio: 3/2; } }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header id="header">
+  <a class="brand" href="index.html">
+    <span class="brand-logo"><img src="assets/logo.png" alt="Parroquia Cristo Rey"/></span>
+    <span class="brand-text">
+      <span class="name">Cristo Rey</span>
+      <span class="sub">Iglesia Católica</span>
+    </span>
+  </a>
+  <button class="menu-btn" id="menuBtn" aria-label="Abrir menú" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<!-- NAV OVERLAY -->
+<div class="nav-overlay" id="navOverlay" role="dialog" aria-label="Navegación principal" aria-hidden="true">
+  <div class="nav-panel-left">
+    <ul class="nav-links">
+      <li><a href="nosotros.html"><span>Nosotros</span></a></li>
+      <li><a href="horarios.html"><span>Horarios</span></a></li>
+      <li><a href="ministerios.html" class="active-page"><span>Ministerios</span></a></li>
+      <li><a href="eventos.html"><span>Eventos</span></a></li>
+      <li><a href="blog/index.html"><span>Revista</span></a></li>
+      <li><a href="contacto.html"><span>Contacto</span></a></li>
+    </ul>
+    <div class="nav-bottom">
+      <div class="nav-bottom-item"><strong>Dirección</strong>Parroquia Cristo Rey<br>Culiacán, Sinaloa</div>
+      <div class="nav-bottom-item"><strong>Horario de oficina</strong>Mar – Sáb · 9:00 – 13:00</div>
+    </div>
+  </div>
+  <div class="nav-panel-right">
+    <div class="nav-event-deco"></div>
+    <div class="nav-event-number">26</div>
+    <div class="nav-panel-right-inner">
+      <span class="nav-event-badge">Inscripciones abiertas</span>
+      <div class="nav-event-title">Verano<br>con el Rey</div>
+      <div class="nav-event-meta">Talleres · Arte · Ciencia · Deporte<br>20 – 24 de Julio · 9:00 A.M. – 12:00 P.M.<br>Niños 6–12 años · $70 por día</div>
+      <a class="nav-event-cta" href="eventos.html">Ver evento <svg width="14" height="10" viewBox="0 0 14 10" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 5h12M8 1l5 4-5 4"/></svg></a>
+    </div>
+  </div>
+</div>
+
+<!-- MANIFESTO HERO -->
+<section class="manifesto">
+  <div class="manifesto-deco">SERVIR</div>
+  <div class="manifesto-tag">Ministerios · Parroquia Cristo Rey</div>
+  <h1>
+    Cada uno<br/>al servicio<br/><em>del otro</em>
+    <strong>12+ grupos pastorales · 7 sacramentos · un mismo llamado</strong>
+  </h1>
+  <div class="manifesto-count">12</div>
+</section>
+
+<!-- MINISTRY GRID -->
+<section class="ministries-sec">
+  <div class="container">
+    <div class="ministries-head reveal">
+      <div class="left">
+        <span class="label">Nuestra vida parroquial</span>
+        <h2>Encuentra tu<br/><em>lugar en la misión</em></h2>
+      </div>
+      <div class="right">Pasa el cursor sobre cada tarjeta para conocer más. Cada ministerio es un llamado a vivir el Evangelio.</div>
+    </div>
+    <div class="ministry-grid reveal">
+
+      <!-- SACRAMENTOS -->
+      <div class="flip-card">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <span class="f-num">I</span>
+            <div class="f-icon">✦</div>
+            <h3>Bautismo</h3>
+            <span class="f-tag">Sacramento</span>
+          </div>
+          <div class="flip-back">
+            <span class="b-label">Sacramento</span>
+            <h3>Bautismo</h3>
+            <p>Preparación e inscripción para el bautismo de niños y adultos. Pláticas los Lunes y Jueves.</p>
+            <span class="b-more">Más información →</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <span class="f-num">II</span>
+            <div class="f-icon">✦</div>
+            <h3>Matrimonio</h3>
+            <span class="f-tag">Sacramento</span>
+          </div>
+          <div class="flip-back">
+            <span class="b-label">Sacramento</span>
+            <h3>Matrimonio</h3>
+            <p>Cursos prematrimoniales y acompañamiento pastoral para parejas en preparación al matrimonio.</p>
+            <span class="b-more">Inscripción en oficina →</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <span class="f-num">III</span>
+            <div class="f-icon">✦</div>
+            <h3>Primera Comunión</h3>
+            <span class="f-tag">Catequesis</span>
+          </div>
+          <div class="flip-back">
+            <span class="b-label">Catequesis</span>
+            <h3>Primera Comunión</h3>
+            <p>Catequesis para niños y jóvenes que se preparan para recibir la Eucaristía por primera vez.</p>
+            <span class="b-more">Inscripciones abiertas →</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <span class="f-num">IV</span>
+            <div class="f-icon">✦</div>
+            <h3>Confirmación</h3>
+            <span class="f-tag">Sacramento</span>
+          </div>
+          <div class="flip-back">
+            <span class="b-label">Sacramento</span>
+            <h3>Confirmación</h3>
+            <p>Formación profunda para jóvenes que desean recibir el don del Espíritu Santo en la Confirmación.</p>
+            <span class="b-more">Pregunta en oficina →</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <span class="f-num">V</span>
+            <div class="f-icon">✦</div>
+            <h3>Confesión</h3>
+            <span class="f-tag">Sacramento</span>
+          </div>
+          <div class="flip-back">
+            <span class="b-label">Sacramento</span>
+            <h3>Reconciliación</h3>
+            <p>30 minutos antes de cada misa o por cita previa. El perdón de Dios siempre está disponible.</p>
+            <span class="b-more">Sin cita o por teléfono →</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <span class="f-num">VI</span>
+            <div class="f-icon">✦</div>
+            <h3>Unción</h3>
+            <span class="f-tag">Sacramento · Pastoral</span>
+          </div>
+          <div class="flip-back">
+            <span class="b-label">Pastoral de Enfermos</span>
+            <h3>Unción de Enfermos</h3>
+            <p>Acompañamiento espiritual a enfermos y sus familias. Llamar a la oficina parroquial.</p>
+            <span class="b-more">Llamar a la parroquia →</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card wide">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <span class="f-num">VII</span>
+            <div class="f-icon">🔥</div>
+            <h3>Pastoral Juvenil · Hakuna</h3>
+            <span class="f-tag">Jóvenes · Martes 6:30 PM</span>
+          </div>
+          <div class="flip-back">
+            <span class="b-label">Jóvenes</span>
+            <h3>Pastoral Juvenil</h3>
+            <p>Encuentro, formación y crecimiento espiritual para jóvenes. El grupo Hakuna se reúne cada martes a las 6:30 PM. Un espacio para vivir la fe con autenticidad y profundidad.</p>
+            <span class="b-more">Martes a las 6:30 PM →</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <span class="f-num">VIII</span>
+            <div class="f-icon">🌾</div>
+            <h3>Cáritas Parroquial</h3>
+            <span class="f-tag">Solidaridad</span>
+          </div>
+          <div class="flip-back">
+            <span class="b-label">Solidaridad</span>
+            <h3>Cáritas</h3>
+            <p>Acción social, despensa y campañas solidarias. Servimos a las familias en situación de necesidad de nuestra comunidad.</p>
+            <span class="b-more">Únete como voluntario →</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <span class="f-num">IX</span>
+            <div class="f-icon">🎵</div>
+            <h3>Coros Parroquiales</h3>
+            <span class="f-tag">Liturgia · Música</span>
+          </div>
+          <div class="flip-back">
+            <span class="b-label">Liturgia</span>
+            <h3>Ministerio de Música</h3>
+            <p>Los coros de Cristo Rey elevan la alabanza en cada misa. Si tienes talento musical, eres bienvenido.</p>
+            <span class="b-more">Habla con el párroco →</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <span class="f-num">X</span>
+            <div class="f-icon">💍</div>
+            <h3>Grupo de Esposos</h3>
+            <span class="f-tag">Familia · Jueves 7:00 PM</span>
+          </div>
+          <div class="flip-back">
+            <span class="b-label">Pastoral Familiar</span>
+            <h3>Grupo de Esposos</h3>
+            <p>Formación y comunidad para matrimonios. Se reúnen cada jueves a las 7:00 PM para crecer juntos en la fe.</p>
+            <span class="b-more">Jueves 7:00 PM →</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card wide">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <span class="f-num">XI</span>
+            <div class="f-icon">📖</div>
+            <h3>Universitarios y Profesionistas</h3>
+            <span class="f-tag">Formación · Miércoles 7:00 PM</span>
+          </div>
+          <div class="flip-back">
+            <span class="b-label">Formación</span>
+            <h3>Universitarios y Profesionistas</h3>
+            <p>Espacio de encuentro y diálogo para jóvenes adultos que desean profundizar su fe desde la vida profesional. Cada miércoles de 7:00 a 8:00 PM.</p>
+            <span class="b-more">Miércoles 7:00 PM →</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <span class="f-num">XII</span>
+            <div class="f-icon">🙏</div>
+            <h3>Asamblea de Oración</h3>
+            <span class="f-tag">Oración · Miércoles 5:00 PM</span>
+          </div>
+          <div class="flip-back">
+            <span class="b-label">Vida Espiritual</span>
+            <h3>Asamblea de Oración</h3>
+            <p>Momento comunitario de oración los miércoles a las 5 PM. La Hora Santa los jueves a las 5 PM.</p>
+            <span class="b-more">Todos bienvenidos →</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FEATURED -->
+<section class="featured-sec">
+  <div class="container">
+    <div class="featured-inner reveal">
+      <div class="featured-text">
+        <span class="label">Destacado</span>
+        <h2>Verano con<br/><em>el Rey</em> 2026</h2>
+        <p>Talleres de verano — Arte, Ciencia y Deporte. Para niños de 6 a 12 años del 20 al 24 de julio. Una semana de aprendizaje, fe y comunidad.</p>
+        <p>Horario: 9:00 A.M. a 12:00 P.M. · Costo por día: $70</p>
+        <a class="btn btn-gold" href="eventos.html" style="margin-top:16px;">Ver todos los eventos</a>
+      </div>
+      <div class="featured-visual">
+        <div class="feat-tile" style="background: linear-gradient(135deg, var(--navy) 0%, #1a3875 100%);">
+          <span class="ft-num">20</span>
+          <div class="ft-title">Verano con el Rey</div>
+          <div class="ft-sub">Julio 20–24 · $70/día</div>
+        </div>
+        <div class="feat-tile" style="background: linear-gradient(135deg, #1a3875 0%, var(--navy2) 100%);">
+          <span class="ft-num">6</span>
+          <div class="ft-title">Arte y Ciencia</div>
+          <div class="ft-sub">Niños 6–12 años</div>
+        </div>
+        <div class="feat-tile" style="background: linear-gradient(135deg, var(--navy2) 0%, #0a1828 100%);">
+          <span class="ft-num">9</span>
+          <div class="ft-title">9 AM – 12 PM</div>
+          <div class="ft-sub">Lun a Vie</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-sec">
+  <div class="container reveal" style="text-align:center;">
+    <div class="cta-tag">Únete a la misión</div>
+    <h2 class="cta-h">¿Sientes el<br/><em>llamado</em>?</h2>
+    <p class="cta-p">Cada ministerio es una puerta. Sea cual sea tu talento, tu tiempo o tu historia — hay un lugar para ti en Cristo Rey.</p>
+    <div>
+      <a class="btn btn-gold" href="contacto.html">Contáctanos</a>
+      <a class="btn btn-outline" href="horarios.html">Ver horarios</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo"><img src="assets/logo.png" alt="Parroquia Cristo Rey"/></div>
+  <div class="fname">Parroquia Cristo Rey</div>
+  <div class="ftag">Iglesia Católica · Culiacán</div>
+  <div class="footer-nav">
+    <a href="nosotros.html">Nosotros</a>
+    <a href="horarios.html">Horarios</a>
+    <a href="ministerios.html">Ministerios</a>
+    <a href="eventos.html">Eventos</a>
+    <a href="blog/index.html">Revista</a>
+    <a href="contacto.html">Contacto</a>
+  </div>
+  <div class="copy">© 2026 Parroquia Cristo Rey. Todos los derechos reservados.</div>
+</footer>
+
+<script>
+  const header = document.getElementById('header');
+  const onScroll = () => header.classList.toggle('solid', window.scrollY > 60);
+  window.addEventListener('scroll', onScroll); onScroll();
+
+  (function() {
+    const btn = document.getElementById('menuBtn');
+    const overlay = document.getElementById('navOverlay');
+    function openNav() { overlay.classList.add('open'); overlay.setAttribute('aria-hidden','false'); btn.classList.add('open'); btn.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; }
+    function closeNav() { overlay.classList.remove('open'); overlay.setAttribute('aria-hidden','true'); btn.classList.remove('open'); btn.setAttribute('aria-expanded','false'); document.body.style.overflow=''; }
+    btn.addEventListener('click', () => overlay.classList.contains('open') ? closeNav() : openNav());
+    overlay.querySelectorAll('a').forEach(a => a.addEventListener('click', closeNav));
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeNav(); });
+  })();
+
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver(entries => { entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); }); }, { threshold: 0.08 });
+  reveals.forEach(el => io.observe(el));
+</script>
+</body>
+</html>
