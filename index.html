@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Parroquia Cristo Rey</title>
   <meta name="description" content="Parroquia Cristo Rey — Iglesia Católica en Culiacán, Sinaloa. Horarios de misas, sacramentos, ministerios y eventos."/>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=Jost:wght@200;300;400;500;600&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -15,7 +15,7 @@
       --mid: #8a8175; --line: rgba(177,147,74,0.22); --white: #ffffff;
     }
     html { scroll-behavior: smooth; }
-    body { font-family: 'Jost', sans-serif; font-weight: 300; color: var(--ink); background: var(--cream); overflow-x: hidden; }
+    body { font-family: 'Inter', sans-serif; font-weight: 300; color: var(--ink); background: var(--cream); overflow-x: hidden; }
     h1, h2, h3, h4 { font-family: 'Cormorant Garamond', serif; }
     img { max-width: 100%; display: block; }
     a { text-decoration: none; }
@@ -29,7 +29,7 @@
 
     /* HEADER */
     header {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 999;
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1001;
       display: flex; align-items: center; justify-content: space-between;
       padding: 26px 56px;
       transition: background 0.4s, padding 0.4s, border-color 0.4s, box-shadow 0.4s;
@@ -205,6 +205,50 @@
       footer { padding: 60px 24px 28px; }
     }
     @media (max-width: 580px) { .hero h1 { font-size: clamp(3.6rem, 12vw, 5.5rem); } }
+    .nav-mobile-event {
+      display: none;
+    }
+    @media (max-width: 860px) {
+      .nav-mobile-event {
+        display: block;
+        margin-top: 32px;
+        padding: 20px 24px;
+        background: linear-gradient(135deg, #0d1e36, #1a3875);
+        border: 1px solid rgba(177,147,74,0.3);
+        border-radius: 4px;
+        text-decoration: none;
+        opacity: 0;
+        transition: opacity 0.5s ease 0.78s;
+      }
+      .nav-overlay.open .nav-mobile-event { opacity: 1; }
+      .nav-mobile-event-badge {
+        display: inline-block;
+        background: #b1934a;
+        color: #fff;
+        font-size: 9px;
+        font-weight: 600;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        padding: 4px 10px;
+        margin-bottom: 10px;
+      }
+      .nav-mobile-event-title {
+        display: block;
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: #f8f3e7;
+        line-height: 1.2;
+        margin-bottom: 8px;
+      }
+      .nav-mobile-event-sub {
+        display: block;
+        font-size: 11px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: rgba(248,243,231,0.55);
+      }
+    }
   </style>
 </head>
 <body>
@@ -240,6 +284,11 @@
       <div class="nav-bottom-item"><strong>Dirección</strong>Parroquia Cristo Rey<br>Culiacán, Sinaloa</div>
       <div class="nav-bottom-item"><strong>Horario de oficina</strong>Mar – Sáb · 9:00 – 13:00</div>
     </div>
+    <a class="nav-mobile-event" href="eventos.html">
+      <span class="nav-mobile-event-badge">Inscripciones abiertas</span>
+      <span class="nav-mobile-event-title">Verano con el Rey</span>
+      <span class="nav-mobile-event-sub">20–24 Jul · Arte · Ciencia · Deporte · $70/día</span>
+    </a>
   </div>
   <div class="nav-panel-right">
     <div class="nav-event-deco"></div>
