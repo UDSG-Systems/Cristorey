@@ -438,7 +438,7 @@
     </div>`;
   }
 
-  fetch('assets/events.json')
+  fetch('../assets/events.json')
     .then(r => r.json())
     .then(events => {
       const upcoming = events
