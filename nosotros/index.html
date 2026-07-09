@@ -84,7 +84,7 @@
       content: ''; position: absolute; inset: 0;
       background: linear-gradient(135deg, #0d1e36 0%, #1a3875 40%, #b1934a 80%, #e8a020 100%); z-index: 0;
     }
-    .nav-panel-right-inner { position: relative; z-index: 1; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; padding: 48px 44px; }
+    .nav-panel-right-inner { position: relative; z-index: 1; min-height: 100%; display: flex; flex-direction: column; justify-content: flex-end; padding: 120px 44px 56px; }
     .nav-overlay.open { pointer-events: all; }
     .nav-overlay.open .nav-panel-left { transform: translateX(0); }
     .nav-overlay.open .nav-panel-right { transform: translateX(0); }
@@ -316,7 +316,7 @@
       .team-grid { grid-template-columns: 1fr 1fr; }
       .nav-overlay { grid-template-columns: 1fr; }
       .nav-panel-right { display: none; }
-      .nav-panel-left { padding: 100px 36px 70px; }
+      .nav-panel-left { padding: 100px 36px 56px; overflow-y: auto; justify-content: flex-start; }
       footer { padding: 60px 24px 28px; }
     }
     @media (max-width: 580px) {
