@@ -139,38 +139,7 @@
 
     header.solid .brand-text .sub { color: var(--gold); }
 
-    nav.main-nav {
-      display: flex;
-      align-items: center;
-      gap: 26px;
-    }
-
-    nav.main-nav a {
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      text-decoration: none;
-      color: rgba(255,255,255,0.85);
-      position: relative;
-      padding-bottom: 6px;
-      transition: color 0.3s;
-    }
-
-    header.solid nav.main-nav a { color: var(--ink); opacity: 0.65; }
-
-    nav.main-nav a::after {
-      content: '';
-      position: absolute;
-      left: 0; right: 100%; bottom: 0;
-      height: 1px;
-      background: var(--gold);
-      transition: right 0.3s ease;
-    }
-
-    nav.main-nav a:hover { color: var(--gold2); }
-    header.solid nav.main-nav a:hover { color: var(--navy); opacity: 1; }
-    nav.main-nav a:hover::after { right: 0; }
+    nav.main-nav { display: none; }
 
     .btn {
       font-size: 10px;
@@ -912,148 +881,231 @@
       border-top: 1px solid rgba(248,243,231,0.08);
     }
 
-    /* ── MEGA MENU ── */
-    .nav-has-mega { position: static; }
-    .nav-has-mega > a { display: flex; align-items: center; gap: 5px; }
-    .nav-has-mega > a::before { content: ''; display: none; }
-    .nav-has-mega > a .caret { width: 10px; height: 10px; transition: transform 0.3s; }
-    .mega-menu {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      background: rgba(5,12,24,0.98);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      z-index: 997;
-      padding: 110px 56px 64px;
-      display: none;
-      border-bottom: 1px solid rgba(177,147,74,0.2);
+    /* ── SCROLL PROGRESS BAR ── */
+    #scrollBar { position:fixed; top:0; left:0; height:3px; background:linear-gradient(90deg,var(--gold),var(--gold2)); width:0%; z-index:1002; transition:width 0.1s linear; }
+
+    /* ── HAMBURGER BUTTON (always visible) ── */
+    .menu-btn {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 6px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 6px;
+      z-index: 1001;
+      position: relative;
+      color: var(--white);
+      transition: color 0.4s;
     }
-    .mega-menu.open { display: block; }
-    .mega-inner {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 340px 1fr;
-      gap: 64px;
-      align-items: start;
-    }
-    /* Featured event card */
-    .mega-event {
-      background: var(--navy2);
-      border: 1px solid rgba(177,147,74,0.25);
-      border-radius: 4px;
-      overflow: hidden;
-      text-decoration: none;
-      color: var(--cream);
+    header.solid .menu-btn { color: var(--navy); }
+    .menu-btn span {
       display: block;
-      transition: transform 0.3s, box-shadow 0.3s;
+      height: 1.5px;
+      background: currentColor;
+      transition: width 0.4s ease, transform 0.4s ease, opacity 0.3s ease;
     }
-    .mega-event:hover { transform: translateY(-4px); box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
-    .mega-event-img {
-      aspect-ratio: 4/3;
-      background: linear-gradient(135deg, #1a3a6b, #b1934a);
-      background-size: cover;
-      background-position: center;
+    .menu-btn span:nth-child(1) { width: 30px; }
+    .menu-btn span:nth-child(2) { width: 20px; }
+    .menu-btn span:nth-child(3) { width: 26px; }
+    .menu-btn.open span:nth-child(1) { width: 26px; transform: translateY(7.5px) rotate(45deg); }
+    .menu-btn.open span:nth-child(2) { opacity: 0; width: 0; }
+    .menu-btn.open span:nth-child(3) { width: 26px; transform: translateY(-7.5px) rotate(-45deg); }
+
+    /* ── FULL-SCREEN NAV OVERLAY ── */
+    .nav-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    /* Left panel - links */
+    .nav-panel-left {
+      background: var(--black);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 100px 72px 80px;
+      transform: translateX(-100%);
+      transition: transform 0.72s cubic-bezier(0.76,0,0.24,1);
+    }
+
+    /* Right panel - featured event */
+    .nav-panel-right {
+      position: relative;
+      overflow: hidden;
+      transform: translateX(100%);
+      transition: transform 0.72s cubic-bezier(0.76,0,0.24,1) 0.06s;
+    }
+    .nav-panel-right::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #0d1e36 0%, #1a3875 40%, #b1934a 80%, #e8a020 100%);
+      z-index: 0;
+    }
+    .nav-panel-right-inner {
+      position: relative;
+      z-index: 1;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 48px 44px;
+    }
+
+    .nav-overlay.open { pointer-events: all; }
+    .nav-overlay.open .nav-panel-left { transform: translateX(0); }
+    .nav-overlay.open .nav-panel-right { transform: translateX(0); }
+
+    /* Nav links */
+    .nav-links { list-style: none; }
+    .nav-links li {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .nav-overlay.open .nav-links li:nth-child(1) { opacity:1; transform:none; transition-delay:0.30s; }
+    .nav-overlay.open .nav-links li:nth-child(2) { opacity:1; transform:none; transition-delay:0.38s; }
+    .nav-overlay.open .nav-links li:nth-child(3) { opacity:1; transform:none; transition-delay:0.46s; }
+    .nav-overlay.open .nav-links li:nth-child(4) { opacity:1; transform:none; transition-delay:0.54s; }
+    .nav-overlay.open .nav-links li:nth-child(5) { opacity:1; transform:none; transition-delay:0.62s; }
+    .nav-overlay.open .nav-links li:nth-child(6) { opacity:1; transform:none; transition-delay:0.70s; }
+
+    .nav-links a {
+      display: block;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.8rem, 5.5vw, 4.4rem);
+      font-weight: 600;
+      line-height: 1.1;
+      color: rgba(248,243,231,0.18);
+      text-decoration: none;
+      padding: 10px 0;
+      letter-spacing: 0.02em;
+      transition: color 0.3s, letter-spacing 0.4s;
       position: relative;
     }
-    .mega-event-img .event-badge {
+    .nav-links a:hover { color: var(--cream); letter-spacing: 0.06em; }
+    .nav-links a span {
+      display: inline-block;
+      position: relative;
+    }
+    .nav-links a span::after {
+      content: '';
       position: absolute;
-      top: 14px; left: 14px;
+      left: 0; bottom: -2px;
+      width: 0; height: 1px;
+      background: var(--gold);
+      transition: width 0.4s ease;
+    }
+    .nav-links a:hover span::after { width: 100%; }
+
+    /* Nav bottom strip */
+    .nav-bottom {
+      margin-top: 48px;
+      padding-top: 28px;
+      border-top: 1px solid rgba(177,147,74,0.2);
+      display: flex;
+      gap: 40px;
+      opacity: 0;
+      transition: opacity 0.5s ease 0.75s;
+    }
+    .nav-overlay.open .nav-bottom { opacity: 1; }
+    .nav-bottom-item { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(248,243,231,0.35); line-height: 1.8; }
+    .nav-bottom-item strong { display: block; color: rgba(248,243,231,0.65); font-weight: 500; margin-bottom: 4px; }
+
+    /* Featured event (right panel) */
+    .nav-event-badge {
+      display: inline-block;
       background: var(--gold);
       color: var(--white);
       font-size: 9px;
       font-weight: 600;
-      letter-spacing: 0.22em;
+      letter-spacing: 0.24em;
       text-transform: uppercase;
-      padding: 5px 10px;
-      border-radius: 2px;
-    }
-    .mega-event-body { padding: 24px 26px 28px; }
-    .mega-event-body .tag {
-      font-size: 9px;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--gold2);
-      margin-bottom: 10px;
-    }
-    .mega-event-body h3 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.6rem;
-      font-weight: 600;
-      line-height: 1.2;
-      margin-bottom: 10px;
-      color: var(--cream);
-    }
-    .mega-event-body p {
-      font-size: 13px;
-      line-height: 1.8;
-      color: rgba(248,243,231,0.62);
+      padding: 5px 12px;
       margin-bottom: 20px;
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.5s ease 0.6s, transform 0.5s ease 0.6s;
     }
-    .mega-event-body .cta {
+    .nav-event-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.4rem, 4vw, 3.6rem);
+      font-weight: 600;
+      line-height: 1.1;
+      color: var(--white);
+      margin-bottom: 16px;
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.5s ease 0.68s, transform 0.5s ease 0.68s;
+    }
+    .nav-event-meta {
+      font-size: 12px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.58);
+      margin-bottom: 28px;
+      line-height: 1.9;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.5s ease 0.74s, transform 0.5s ease 0.74s;
+    }
+    .nav-event-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
       font-size: 10px;
       font-weight: 600;
-      letter-spacing: 0.22em;
+      letter-spacing: 0.24em;
       text-transform: uppercase;
-      color: var(--gold2);
-      border-bottom: 1px solid var(--gold);
-      padding-bottom: 3px;
-      display: inline-block;
-    }
-    /* Links columns */
-    .mega-links {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 40px 32px;
-    }
-    .mega-col-label {
-      font-size: 9px;
-      letter-spacing: 0.36em;
-      text-transform: uppercase;
-      color: rgba(248,243,231,0.35);
-      margin-bottom: 18px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid rgba(177,147,74,0.2);
-    }
-    .mega-col a {
-      display: block;
-      font-size: 14px;
-      font-weight: 400;
-      letter-spacing: 0.04em;
-      color: rgba(248,243,231,0.75);
+      color: var(--cream);
       text-decoration: none;
-      padding: 7px 0;
-      border-bottom: none;
-      transition: color 0.2s, padding-left 0.2s;
+      border: 1px solid rgba(255,255,255,0.35);
+      padding: 14px 26px;
+      transition: background 0.3s, border-color 0.3s;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.5s ease 0.80s, transform 0.5s ease 0.80s, background 0.3s, border-color 0.3s;
     }
-    .mega-col a::after { display: none; }
-    .mega-col a:hover { color: var(--gold2); padding-left: 6px; }
-    .mega-close-btn {
+    .nav-event-cta:hover { background: var(--gold); border-color: var(--gold); }
+    .nav-overlay.open .nav-event-badge,
+    .nav-overlay.open .nav-event-title,
+    .nav-overlay.open .nav-event-meta,
+    .nav-overlay.open .nav-event-cta { opacity: 1; transform: none; }
+
+    .nav-event-deco {
       position: absolute;
-      top: 22px; right: 30px;
-      background: none; border: none;
-      color: rgba(248,243,231,0.5);
-      cursor: pointer;
-      font-size: 28px;
-      line-height: 1;
-      transition: color 0.2s;
+      top: 0; right: 0;
+      width: 70%;
+      height: 100%;
+      background: radial-gradient(ellipse at top right, rgba(255,255,255,0.06) 0%, transparent 60%);
+      pointer-events: none;
     }
-    .mega-close-btn:hover { color: var(--cream); }
-    @media (max-width: 1024px) { .mega-links { grid-template-columns: repeat(2,1fr); } }
-    @media (max-width: 860px) { .mega-menu { display: none !important; } }
+    .nav-event-number {
+      position: absolute;
+      top: 40px; right: 36px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 9rem;
+      font-weight: 600;
+      line-height: 1;
+      color: rgba(255,255,255,0.04);
+      pointer-events: none;
+      letter-spacing: -0.04em;
+    }
 
-    /* ── SCROLL PROGRESS BAR ── */
-    #scrollBar { position:fixed; top:0; left:0; height:3px; background:linear-gradient(90deg,var(--gold),var(--gold2)); width:0%; z-index:1001; transition:width 0.1s linear; }
-
-    /* ── HAMBURGER / MOBILE MENU ── */
-    .nav-menu-btn { display:none; background:none; border:none; cursor:pointer; color:inherit; padding:4px; }
-    @media (max-width:860px) { .nav-menu-btn { display:flex; flex-direction:column; gap:5px; align-items:center; justify-content:center; } }
-    .nav-menu-btn span { display:block; width:24px; height:2px; background:currentColor; transition:all 0.3s; }
-    .mobile-menu { display:none; position:fixed; inset:0; background:rgba(5,12,24,0.97); z-index:998; flex-direction:column; align-items:center; justify-content:center; gap:40px; }
-    .mobile-menu.open { display:flex; }
-    .mobile-menu a { font-family:'Cormorant Garamond',serif; font-size:clamp(2rem,7vw,3.2rem); font-weight:600; color:var(--cream); text-decoration:none; letter-spacing:0.04em; transition:color 0.2s; }
-    .mobile-menu a:hover { color:var(--gold2); }
-    .mobile-close { position:absolute; top:28px; right:28px; background:none; border:none; color:var(--cream); cursor:pointer; font-size:2rem; line-height:1; }
+    @media (max-width: 860px) {
+      .nav-overlay { grid-template-columns: 1fr; }
+      .nav-panel-right { display: none; }
+      .nav-links a { font-size: clamp(2.2rem, 9vw, 3.2rem); }
+      .nav-panel-left { padding: 100px 36px 70px; }
+      .nav-bottom { flex-direction: column; gap: 20px; }
+    }
 
     /* ── STATEMENT SECTION ── */
     .statement-sec {
@@ -1108,7 +1160,6 @@
     }
 
     @media (max-width: 860px) {
-      nav.main-nav { display: none; }
       header { padding: 20px 24px; }
       header.solid { padding: 14px 24px; }
       section { padding: 88px 24px; }
@@ -1145,85 +1196,55 @@
       <span class="sub">Iglesia Católica</span>
     </span>
   </a>
-  <nav class="main-nav">
-    <a href="#horarios">Horarios</a>
-    <span class="nav-has-mega">
-      <a href="#" id="megaTrigger" aria-expanded="false" aria-haspopup="true">
-        Parroquia
-        <svg class="caret" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 1l4 4 4-4"/></svg>
-      </a>
-    </span>
-    <a href="#eventos">Eventos</a>
-    <a href="blog/index.html">Revista</a>
-    <a href="https://nichoscristorey.com/" target="_blank" rel="noopener">Nichos Cristo Rey</a>
-    <a href="#contacto">Contacto</a>
-  </nav>
-  <button class="nav-menu-btn" id="navMenuBtn" aria-label="Menú">
+  <button class="menu-btn" id="menuBtn" aria-label="Abrir menú" aria-expanded="false">
     <span></span><span></span><span></span>
   </button>
-  <a class="btn btn-gold" href="#horarios">Ver Horarios</a>
 </header>
 
-<!-- MEGA MENU -->
-<div class="mega-menu" id="megaMenu" role="dialog" aria-label="Menú parroquia">
-  <button class="mega-close-btn" id="megaClose" aria-label="Cerrar menú">&#215;</button>
-  <div class="mega-inner">
+<!-- FULL-SCREEN NAV OVERLAY -->
+<div class="nav-overlay" id="navOverlay" role="dialog" aria-label="Navegación principal" aria-hidden="true">
 
-    <!-- Featured event card -->
-    <a class="mega-event" href="#eventos">
-      <div class="mega-event-img" id="megaEventImg" style="background:linear-gradient(135deg,#1a3875 0%,#b1934a 50%,#e8a020 100%);">
-        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;text-align:center;padding:20px;">
-          <div style="font-family:'Cormorant Garamond',serif;font-size:2.4rem;font-weight:600;color:#fff;line-height:1;text-shadow:0 2px 12px rgba(0,0,0,0.4);">Verano</div>
-          <div style="font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:400;letter-spacing:0.22em;text-transform:uppercase;color:rgba(255,255,255,0.85);">con el Rey</div>
-          <div style="width:40px;height:1px;background:rgba(255,255,255,0.5);margin:6px 0;"></div>
-          <div style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.75);">Arte · Ciencia · Deporte</div>
-        </div>
-        <span class="event-badge">Inscripciones abiertas</span>
+  <!-- Left: links -->
+  <div class="nav-panel-left">
+    <ul class="nav-links">
+      <li><a href="#nosotros"><span>Nosotros</span></a></li>
+      <li><a href="#horarios"><span>Horarios</span></a></li>
+      <li><a href="#ministerios"><span>Ministerios</span></a></li>
+      <li><a href="#eventos"><span>Eventos</span></a></li>
+      <li><a href="blog/index.html"><span>Revista</span></a></li>
+      <li><a href="#contacto"><span>Contacto</span></a></li>
+    </ul>
+    <div class="nav-bottom">
+      <div class="nav-bottom-item">
+        <strong>Dirección</strong>
+        Parroquia Cristo Rey<br>Guadalajara, Jalisco
       </div>
-      <div class="mega-event-body">
-        <div class="tag">Talleres · Verano 2026</div>
-        <h3>Verano con el Rey</h3>
-        <p>Arte, Ciencia y Deporte para niños de 6 a 12 años.<br>20 – 24 de Julio · 9:00 A.M. a 12:00 P.M.<br>Costo por día: $70</p>
-        <span class="cta">Registrarse →</span>
-      </div>
-    </a>
-
-    <!-- Link columns -->
-    <div class="mega-links">
-      <div class="mega-col">
-        <div class="mega-col-label">Nuestra Parroquia</div>
-        <a href="#nosotros">Quiénes somos</a>
-        <a href="#ministerios">Ministerios</a>
-        <a href="blog/index.html">Revista parroquial</a>
-        <a href="#galeria">Galería</a>
-      </div>
-      <div class="mega-col">
-        <div class="mega-col-label">Sacramentos &amp; Formación</div>
-        <a href="#horarios">Horarios de Misa</a>
-        <a href="#horarios">Confesiones</a>
-        <a href="#horarios">Catequesis</a>
-        <a href="#ministerios">Grupo de jóvenes</a>
-      </div>
-      <div class="mega-col">
-        <div class="mega-col-label">Información</div>
-        <a href="#eventos">Próximos eventos</a>
-        <a href="#contacto">Ubicación y contacto</a>
-        <a href="https://nichoscristorey.com/" target="_blank" rel="noopener">Nichos Cristo Rey</a>
-        <a href="admin/index.html">Panel de administración</a>
+      <div class="nav-bottom-item">
+        <strong>Horario de oficina</strong>
+        Lun – Vie · 9:00 – 14:00
       </div>
     </div>
-
   </div>
-</div>
 
-<div class="mobile-menu" id="mobileMenu">
-  <button class="mobile-close" id="mobileClose">&#215;</button>
-  <a href="#horarios">Horarios</a>
-  <a href="#ministerios">Ministerios</a>
-  <a href="#eventos">Eventos</a>
-  <a href="blog/index.html">Revista</a>
-  <a href="https://nichoscristorey.com/" target="_blank" rel="noopener">Nichos Cristo Rey</a>
-  <a href="#contacto">Contacto</a>
+  <!-- Right: featured event -->
+  <div class="nav-panel-right">
+    <div class="nav-event-deco"></div>
+    <div class="nav-event-number">26</div>
+    <div class="nav-panel-right-inner">
+      <span class="nav-event-badge">Inscripciones abiertas</span>
+      <div class="nav-event-title">Verano<br>con el Rey</div>
+      <div class="nav-event-meta">
+        Talleres · Arte · Ciencia · Deporte<br>
+        20 – 24 de Julio · 9:00 A.M. – 12:00 P.M.<br>
+        Niños 6–12 años · $70 por día
+      </div>
+      <a class="nav-event-cta" href="#eventos">
+        Ver evento
+        <svg width="14" height="10" viewBox="0 0 14 10" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 5h12M8 1l5 4-5 4"/></svg>
+      </a>
+    </div>
+  </div>
+
 </div>
 
 <!-- HERO -->
@@ -1552,48 +1573,30 @@
     heroBg.style.transform = `translateY(${window.scrollY * 0.38}px)`;
   });
 
-  // Mega menu
+  // Full-screen nav overlay
   (function() {
-    const trigger = document.getElementById('megaTrigger');
-    const megaMenu = document.getElementById('megaMenu');
-    const megaClose = document.getElementById('megaClose');
-    const caret = trigger.querySelector('.caret');
+    const btn = document.getElementById('menuBtn');
+    const overlay = document.getElementById('navOverlay');
 
-    // Try to load Verano image from gallery/events
-    fetch('assets/events.json').then(r=>r.json()).then(evs=>{
-      // no image in events.json, use the uploaded gallery or fallback gradient
-    }).catch(()=>{});
-
-    function openMega(e) {
-      if (e) e.preventDefault();
-      megaMenu.classList.add('open');
-      trigger.setAttribute('aria-expanded', 'true');
-      caret.style.transform = 'rotate(180deg)';
+    function openNav() {
+      overlay.classList.add('open');
+      overlay.setAttribute('aria-hidden', 'false');
+      btn.classList.add('open');
+      btn.setAttribute('aria-expanded', 'true');
       document.body.style.overflow = 'hidden';
     }
-    function closeMega() {
-      megaMenu.classList.remove('open');
-      trigger.setAttribute('aria-expanded', 'false');
-      caret.style.transform = '';
+    function closeNav() {
+      overlay.classList.remove('open');
+      overlay.setAttribute('aria-hidden', 'true');
+      btn.classList.remove('open');
+      btn.setAttribute('aria-expanded', 'false');
       document.body.style.overflow = '';
     }
 
-    trigger.addEventListener('click', (e) => {
-      e.preventDefault();
-      megaMenu.classList.contains('open') ? closeMega() : openMega(e);
-    });
-    megaClose.addEventListener('click', closeMega);
-    megaMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMega));
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMega(); });
+    btn.addEventListener('click', () => overlay.classList.contains('open') ? closeNav() : openNav());
+    overlay.querySelectorAll('a').forEach(a => a.addEventListener('click', closeNav));
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeNav(); });
   })();
-
-  // Mobile menu
-  const navMenuBtn = document.getElementById('navMenuBtn');
-  const mobileMenu = document.getElementById('mobileMenu');
-  const mobileClose = document.getElementById('mobileClose');
-  navMenuBtn.addEventListener('click', () => mobileMenu.classList.toggle('open'));
-  mobileClose.addEventListener('click', () => mobileMenu.classList.remove('open'));
-  mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobileMenu.classList.remove('open')));
 
   // Scroll reveal (all directions)
   const reveals = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale');
