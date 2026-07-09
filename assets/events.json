@@ -23,22 +23,44 @@
   {
     "id": "1781315027566",
     "date": "2026-06-13",
-    "tag": "Teologia",
-    "title": "Evento de prueva",
-    "description": "todos los miercoles"
+    "tag": "Teología",
+    "title": "Evento de prueba",
+    "description": "Todos los miércoles."
   },
   {
     "id": "1781315605504",
     "date": "2026-06-13",
-    "tag": "Clases",
-    "title": "Teologia",
-    "description": "Teologia"
+    "tag": "Formación",
+    "title": "Teología",
+    "description": "Clases de teología parroquial."
   },
   {
     "id": "1782245971360",
     "date": "2026-06-23",
     "tag": "Comunidad",
     "title": "Fiesta de San Juan",
-    "description": "Dura toda la semana"
+    "description": "Dura toda la semana."
+  },
+  {
+    "id": "2026071001",
+    "date": "2026-07-10",
+    "tag": "Misa Especial",
+    "title": "Santa Misa por los Enfermos",
+    "description": "Presidida por el Padre Héctor Orozco. 12:00 P.M. «Sáname, Señor, y seré sanado; sálvame y seré salvado, porque tú eres mi alabanza.» — Jer. 17:14"
+  },
+  {
+    "id": "2026071801",
+    "date": "2026-07-18",
+    "tag": "Concierto · Kermés",
+    "title": "\"Siendo una sola voz\"",
+    "description": "Concierto-Kermés pro-fondos para la remodelación del salón múltiple. Participan los coros parroquiales de Cristo Rey. 6:45 P.M. — Estacionamiento pavimentado."
+  },
+  {
+    "id": "2026072001",
+    "date": "2026-07-20",
+    "endDate": "2026-07-24",
+    "tag": "Talleres",
+    "title": "Verano con el Rey",
+    "description": "Talleres de verano — Arte, Ciencia y Deporte. Para niños de 6 a 12 años. Horario: 9:00 A.M. a 12:00 P.M. Costo por día: $70."
   }
 ]
