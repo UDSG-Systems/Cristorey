@@ -912,6 +912,136 @@
       border-top: 1px solid rgba(248,243,231,0.08);
     }
 
+    /* ── MEGA MENU ── */
+    .nav-has-mega { position: static; }
+    .nav-has-mega > a { display: flex; align-items: center; gap: 5px; }
+    .nav-has-mega > a::before { content: ''; display: none; }
+    .nav-has-mega > a .caret { width: 10px; height: 10px; transition: transform 0.3s; }
+    .mega-menu {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      background: rgba(5,12,24,0.98);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      z-index: 997;
+      padding: 110px 56px 64px;
+      display: none;
+      border-bottom: 1px solid rgba(177,147,74,0.2);
+    }
+    .mega-menu.open { display: block; }
+    .mega-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: 64px;
+      align-items: start;
+    }
+    /* Featured event card */
+    .mega-event {
+      background: var(--navy2);
+      border: 1px solid rgba(177,147,74,0.25);
+      border-radius: 4px;
+      overflow: hidden;
+      text-decoration: none;
+      color: var(--cream);
+      display: block;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .mega-event:hover { transform: translateY(-4px); box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+    .mega-event-img {
+      aspect-ratio: 4/3;
+      background: linear-gradient(135deg, #1a3a6b, #b1934a);
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+    .mega-event-img .event-badge {
+      position: absolute;
+      top: 14px; left: 14px;
+      background: var(--gold);
+      color: var(--white);
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      padding: 5px 10px;
+      border-radius: 2px;
+    }
+    .mega-event-body { padding: 24px 26px 28px; }
+    .mega-event-body .tag {
+      font-size: 9px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold2);
+      margin-bottom: 10px;
+    }
+    .mega-event-body h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      font-weight: 600;
+      line-height: 1.2;
+      margin-bottom: 10px;
+      color: var(--cream);
+    }
+    .mega-event-body p {
+      font-size: 13px;
+      line-height: 1.8;
+      color: rgba(248,243,231,0.62);
+      margin-bottom: 20px;
+    }
+    .mega-event-body .cta {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold2);
+      border-bottom: 1px solid var(--gold);
+      padding-bottom: 3px;
+      display: inline-block;
+    }
+    /* Links columns */
+    .mega-links {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px 32px;
+    }
+    .mega-col-label {
+      font-size: 9px;
+      letter-spacing: 0.36em;
+      text-transform: uppercase;
+      color: rgba(248,243,231,0.35);
+      margin-bottom: 18px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(177,147,74,0.2);
+    }
+    .mega-col a {
+      display: block;
+      font-size: 14px;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      color: rgba(248,243,231,0.75);
+      text-decoration: none;
+      padding: 7px 0;
+      border-bottom: none;
+      transition: color 0.2s, padding-left 0.2s;
+    }
+    .mega-col a::after { display: none; }
+    .mega-col a:hover { color: var(--gold2); padding-left: 6px; }
+    .mega-close-btn {
+      position: absolute;
+      top: 22px; right: 30px;
+      background: none; border: none;
+      color: rgba(248,243,231,0.5);
+      cursor: pointer;
+      font-size: 28px;
+      line-height: 1;
+      transition: color 0.2s;
+    }
+    .mega-close-btn:hover { color: var(--cream); }
+    @media (max-width: 1024px) { .mega-links { grid-template-columns: repeat(2,1fr); } }
+    @media (max-width: 860px) { .mega-menu { display: none !important; } }
+
     /* ── SCROLL PROGRESS BAR ── */
     #scrollBar { position:fixed; top:0; left:0; height:3px; background:linear-gradient(90deg,var(--gold),var(--gold2)); width:0%; z-index:1001; transition:width 0.1s linear; }
 
@@ -1017,7 +1147,12 @@
   </a>
   <nav class="main-nav">
     <a href="#horarios">Horarios</a>
-    <a href="#ministerios">Ministerios</a>
+    <span class="nav-has-mega">
+      <a href="#" id="megaTrigger" aria-expanded="false" aria-haspopup="true">
+        Parroquia
+        <svg class="caret" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 1l4 4 4-4"/></svg>
+      </a>
+    </span>
     <a href="#eventos">Eventos</a>
     <a href="blog/index.html">Revista</a>
     <a href="https://nichoscristorey.com/" target="_blank" rel="noopener">Nichos Cristo Rey</a>
@@ -1028,6 +1163,58 @@
   </button>
   <a class="btn btn-gold" href="#horarios">Ver Horarios</a>
 </header>
+
+<!-- MEGA MENU -->
+<div class="mega-menu" id="megaMenu" role="dialog" aria-label="Menú parroquia">
+  <button class="mega-close-btn" id="megaClose" aria-label="Cerrar menú">&#215;</button>
+  <div class="mega-inner">
+
+    <!-- Featured event card -->
+    <a class="mega-event" href="#eventos">
+      <div class="mega-event-img" id="megaEventImg" style="background:linear-gradient(135deg,#1a3875 0%,#b1934a 50%,#e8a020 100%);">
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;text-align:center;padding:20px;">
+          <div style="font-family:'Cormorant Garamond',serif;font-size:2.4rem;font-weight:600;color:#fff;line-height:1;text-shadow:0 2px 12px rgba(0,0,0,0.4);">Verano</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:400;letter-spacing:0.22em;text-transform:uppercase;color:rgba(255,255,255,0.85);">con el Rey</div>
+          <div style="width:40px;height:1px;background:rgba(255,255,255,0.5);margin:6px 0;"></div>
+          <div style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.75);">Arte · Ciencia · Deporte</div>
+        </div>
+        <span class="event-badge">Inscripciones abiertas</span>
+      </div>
+      <div class="mega-event-body">
+        <div class="tag">Talleres · Verano 2026</div>
+        <h3>Verano con el Rey</h3>
+        <p>Arte, Ciencia y Deporte para niños de 6 a 12 años.<br>20 – 24 de Julio · 9:00 A.M. a 12:00 P.M.<br>Costo por día: $70</p>
+        <span class="cta">Registrarse →</span>
+      </div>
+    </a>
+
+    <!-- Link columns -->
+    <div class="mega-links">
+      <div class="mega-col">
+        <div class="mega-col-label">Nuestra Parroquia</div>
+        <a href="#nosotros">Quiénes somos</a>
+        <a href="#ministerios">Ministerios</a>
+        <a href="blog/index.html">Revista parroquial</a>
+        <a href="#galeria">Galería</a>
+      </div>
+      <div class="mega-col">
+        <div class="mega-col-label">Sacramentos &amp; Formación</div>
+        <a href="#horarios">Horarios de Misa</a>
+        <a href="#horarios">Confesiones</a>
+        <a href="#horarios">Catequesis</a>
+        <a href="#ministerios">Grupo de jóvenes</a>
+      </div>
+      <div class="mega-col">
+        <div class="mega-col-label">Información</div>
+        <a href="#eventos">Próximos eventos</a>
+        <a href="#contacto">Ubicación y contacto</a>
+        <a href="https://nichoscristorey.com/" target="_blank" rel="noopener">Nichos Cristo Rey</a>
+        <a href="admin/index.html">Panel de administración</a>
+      </div>
+    </div>
+
+  </div>
+</div>
 
 <div class="mobile-menu" id="mobileMenu">
   <button class="mobile-close" id="mobileClose">&#215;</button>
@@ -1364,6 +1551,41 @@
   window.addEventListener('scroll', () => {
     heroBg.style.transform = `translateY(${window.scrollY * 0.38}px)`;
   });
+
+  // Mega menu
+  (function() {
+    const trigger = document.getElementById('megaTrigger');
+    const megaMenu = document.getElementById('megaMenu');
+    const megaClose = document.getElementById('megaClose');
+    const caret = trigger.querySelector('.caret');
+
+    // Try to load Verano image from gallery/events
+    fetch('assets/events.json').then(r=>r.json()).then(evs=>{
+      // no image in events.json, use the uploaded gallery or fallback gradient
+    }).catch(()=>{});
+
+    function openMega(e) {
+      if (e) e.preventDefault();
+      megaMenu.classList.add('open');
+      trigger.setAttribute('aria-expanded', 'true');
+      caret.style.transform = 'rotate(180deg)';
+      document.body.style.overflow = 'hidden';
+    }
+    function closeMega() {
+      megaMenu.classList.remove('open');
+      trigger.setAttribute('aria-expanded', 'false');
+      caret.style.transform = '';
+      document.body.style.overflow = '';
+    }
+
+    trigger.addEventListener('click', (e) => {
+      e.preventDefault();
+      megaMenu.classList.contains('open') ? closeMega() : openMega(e);
+    });
+    megaClose.addEventListener('click', closeMega);
+    megaMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMega));
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMega(); });
+  })();
 
   // Mobile menu
   const navMenuBtn = document.getElementById('navMenuBtn');
