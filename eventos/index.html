@@ -5,6 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Eventos — Parroquia Cristo Rey</title>
   <meta name="description" content="Eventos, celebraciones y anuncios de la Parroquia Cristo Rey en Culiacán."/>
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="../assets/logo.png"/>
+  <link rel="apple-touch-icon" href="../assets/logo.png"/>
+  <!-- Open Graph -->
+  <meta property="og:site_name" content="Parroquia Cristo Rey"/>
+  <meta property="og:locale" content="es_MX"/>
+  <meta property="og:image" content="/TNY-Media/assets/hero.jpeg"/>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -106,6 +113,34 @@
       transition: all 0.2s;
     }
     .filter-btn:hover, .filter-btn.active { background: var(--gold); color: var(--white); border-color: var(--gold); }
+
+    /* NOW BANNER */
+    .now-banner {
+      background: linear-gradient(90deg, var(--gold) 0%, #e8a020 100%);
+      padding: 20px 56px;
+      margin-bottom: 0;
+      display: none;
+    }
+    .now-banner.visible { display: block; }
+    .now-banner-inner {
+      max-width: 1180px; margin: 0 auto;
+      display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+    }
+    .now-pulse {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: #fff; flex-shrink: 0;
+      box-shadow: 0 0 0 0 rgba(255,255,255,0.7);
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(255,255,255,0.7); }
+      70% { box-shadow: 0 0 0 10px rgba(255,255,255,0); }
+      100% { box-shadow: 0 0 0 0 rgba(255,255,255,0); }
+    }
+    .now-label { font-size: 9px; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(255,255,255,0.85); }
+    .now-title { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 600; color: #fff; }
+    .now-meta { font-size: 12px; color: rgba(255,255,255,0.8); }
+    @media (max-width: 860px) { .now-banner { padding: 16px 24px; } }
 
     /* EVENTS SECTION */
     .events-sec { padding: 80px 56px 120px; }
@@ -244,7 +279,7 @@
 <div class="nav-overlay" id="navOverlay" role="dialog" aria-label="Navegación principal" aria-hidden="true">
   <div class="nav-panel-left">
     <ul class="nav-links">
-      <li><a href="../nosotros/"><span>Nosotros</span></a></li>
+      <li><a href="../nosotros/"><span>Vida Parroquial</span></a></li>
       <li><a href="../horarios/"><span>Horarios</span></a></li>
       <li><a href="../ministerios/"><span>Ministerios</span></a></li>
       <li><a href="../eventos/" class="active-page"><span>Eventos</span></a></li>
@@ -281,6 +316,16 @@
   <span class="filter-label">Filtrar:</span>
   <button class="filter-btn active" data-filter="all">Todos</button>
   <!-- Dynamic filter buttons added via JS -->
+</div>
+
+<!-- NOW BANNER -->
+<div class="now-banner" id="nowBanner">
+  <div class="now-banner-inner">
+    <span class="now-pulse"></span>
+    <span class="now-label">En este momento</span>
+    <strong class="now-title" id="nowTitle"></strong>
+    <span class="now-meta" id="nowMeta"></span>
+  </div>
 </div>
 
 <!-- EVENTS SECTION -->
@@ -333,7 +378,8 @@
 
   // ── EVENTS ──
   const MONTHS = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
-  const TODAY = '2026-07-09';
+  const _now = new Date(); const _pad = n => String(n).padStart(2,'0');
+  const TODAY = `${_now.getFullYear()}-${_pad(_now.getMonth()+1)}-${_pad(_now.getDate())}`;
 
   const tagColorMap = {
     'Talleres': '',
@@ -443,6 +489,18 @@
       const upcoming = events
         .filter(ev => (ev.endDate || ev.date) >= TODAY)
         .sort((a, b) => new Date(a.date) - new Date(b.date));
+
+      // "Happening now" detection
+      const nowEvent = events.find(ev => {
+        const start = ev.date; const end = ev.endDate || ev.date;
+        return start <= TODAY && TODAY <= end;
+      });
+      if (nowEvent) {
+        document.getElementById('nowTitle').textContent = nowEvent.title;
+        const d = dateDisplay(nowEvent);
+        document.getElementById('nowMeta').textContent = `${d.big} ${d.month}${d.sub ? ' · ' + d.sub : ''} · ${nowEvent.description.substring(0, 80)}${nowEvent.description.length > 80 ? '…' : ''}`;
+        document.getElementById('nowBanner').classList.add('visible');
+      }
 
       if (!upcoming.length) {
         document.getElementById('emptyState').style.display = 'block';

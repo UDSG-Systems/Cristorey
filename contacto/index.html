@@ -5,6 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Contacto — Parroquia Cristo Rey</title>
   <meta name="description" content="Visítanos, escríbenos o llámanos. Parroquia Cristo Rey en Culiacán, Sinaloa."/>
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="../assets/logo.png"/>
+  <link rel="apple-touch-icon" href="../assets/logo.png"/>
+  <!-- Open Graph -->
+  <meta property="og:site_name" content="Parroquia Cristo Rey"/>
+  <meta property="og:locale" content="es_MX"/>
+  <meta property="og:image" content="/TNY-Media/assets/hero.jpeg"/>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -200,7 +207,7 @@
 <div class="nav-overlay" id="navOverlay" role="dialog" aria-label="Navegación principal" aria-hidden="true">
   <div class="nav-panel-left">
     <ul class="nav-links">
-      <li><a href="../nosotros/"><span>Nosotros</span></a></li>
+      <li><a href="../nosotros/"><span>Vida Parroquial</span></a></li>
       <li><a href="../horarios/"><span>Horarios</span></a></li>
       <li><a href="../ministerios/"><span>Ministerios</span></a></li>
       <li><a href="../eventos/"><span>Eventos</span></a></li>
@@ -252,14 +259,14 @@
           <span class="c-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.81.36 1.6.69 2.34a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.74-1.27a2 2 0 0 1 2.11-.45c.74.33 1.53.56 2.34.69A2 2 0 0 1 22 16.92z"/></svg></span>
           <div>
             <div class="c-label">Teléfono</div>
-            <div class="c-value"><a href="tel:+10000000000">+1 (000) 000-0000</a></div>
+            <div class="c-value"><a href="tel:6673871732">667 387 1732</a></div>
           </div>
         </div>
         <div class="contact-row">
           <span class="c-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 7L2 7" stroke-linecap="round"/></svg></span>
           <div>
             <div class="c-label">Correo electrónico</div>
-            <div class="c-value"><a href="mailto:contacto@parroquiacristorey.org">contacto@parroquiacristorey.org</a></div>
+            <div class="c-value"><a href="mailto:contacto@cristoreyculiacan.mx">contacto@cristoreyculiacan.mx</a></div>
           </div>
         </div>
         <div class="contact-row">
@@ -406,7 +413,7 @@
     if (!nombre || !email || !mensaje) { alert('Por favor completa los campos requeridos.'); return; }
     const body = encodeURIComponent(`Nombre: ${nombre}\nCorreo: ${email}\nAsunto: ${asunto}\n\n${mensaje}`);
     const subj = encodeURIComponent(`Mensaje de ${nombre} — Parroquia Cristo Rey`);
-    window.location.href = `mailto:contacto@parroquiacristorey.org?subject=${subj}&body=${body}`;
+    window.location.href = `mailto:contacto@cristoreyculiacan.mx?subject=${subj}&body=${body}`;
     document.getElementById('contactForm').style.display = 'none';
     document.getElementById('formSuccess').style.display = 'block';
   });

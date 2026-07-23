@@ -5,6 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Parroquia Cristo Rey</title>
   <meta name="description" content="Parroquia Cristo Rey — Iglesia Católica en Culiacán, Sinaloa. Horarios de misas, sacramentos, ministerios y eventos."/>
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/TNY-Media/assets/logo.png"/>
+  <link rel="apple-touch-icon" href="/TNY-Media/assets/logo.png"/>
+  <!-- Open Graph -->
+  <meta property="og:site_name" content="Parroquia Cristo Rey"/>
+  <meta property="og:locale" content="es_MX"/>
+  <meta property="og:image" content="/TNY-Media/assets/hero.jpeg"/>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -272,7 +279,7 @@
 <div class="nav-overlay" id="navOverlay" role="dialog" aria-label="Navegación principal" aria-hidden="true">
   <div class="nav-panel-left">
     <ul class="nav-links">
-      <li><a href="nosotros/"><span>Nosotros</span></a></li>
+      <li><a href="nosotros/"><span>Vida Parroquial</span></a></li>
       <li><a href="horarios/"><span>Horarios</span></a></li>
       <li><a href="ministerios/"><span>Ministerios</span></a></li>
       <li><a href="eventos/"><span>Eventos</span></a></li>
@@ -312,7 +319,6 @@
 <section class="hero" id="inicio">
   <div class="hero-bg"></div>
   <div class="hero-content">
-    <span class="hero-eyebrow">Iglesia Católica · Culiacán, Sinaloa</span>
     <h1>Cristo Rey<em>Comunidad de fe</em></h1>
     <p>Un lugar de encuentro, oración y servicio. Te invitamos a vivir tu fe junto a nosotros.</p>
     <div class="hero-cta">
@@ -446,7 +452,8 @@
 
   // Next event
   const MONTHS = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
-  const TODAY = '2026-07-09';
+  const _n = new Date(); const _p = n => String(n).padStart(2,'0');
+  const TODAY = `${_n.getFullYear()}-${_p(_n.getMonth()+1)}-${_p(_n.getDate())}`;
   fetch('assets/events.json')
     .then(r => r.json())
     .then(events => {
@@ -455,6 +462,8 @@
         .sort((a, b) => new Date(a.date) - new Date(b.date));
       if (!upcoming.length) { document.getElementById('noEvent').style.display = 'block'; return; }
       const ev = upcoming[0];
+      // Check for "happening now"
+      const nowEvent = events.find(e => e.date <= TODAY && TODAY <= (e.endDate || e.date));
       const start = new Date(ev.date + 'T00:00:00');
       const hasRange = ev.endDate && ev.endDate !== ev.date;
       let dayStr = `${start.getDate()}`;
@@ -462,6 +471,7 @@
         const end = new Date(ev.endDate + 'T00:00:00');
         dayStr = start.getMonth() === end.getMonth() ? `${start.getDate()}–${end.getDate()}` : `${start.getDate()}`;
       }
+      const ahoraBadge = nowEvent ? ' <span style="display:inline-block;background:var(--gold);color:#fff;font-size:9px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;padding:3px 9px;border-radius:20px;vertical-align:middle;margin-left:8px;">● AHORA</span>' : '';
       const neEl = document.getElementById('nextEvent');
       neEl.style.display = 'block';
       neEl.innerHTML = `
@@ -473,7 +483,7 @@
           <div class="ne-divider"></div>
           <div class="ne-body">
             <span class="ne-tag">${ev.tag}</span>
-            <h2>${ev.title}</h2>
+            <h2>${ev.title}${ahoraBadge}</h2>
             <p class="ne-desc">${ev.description}</p>
           </div>
           <div class="ne-cta">

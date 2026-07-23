@@ -5,6 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Ministerios — Parroquia Cristo Rey</title>
   <meta name="description" content="Descubre los ministerios, grupos pastorales y sacramentos de la Parroquia Cristo Rey."/>
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="../assets/logo.png"/>
+  <link rel="apple-touch-icon" href="../assets/logo.png"/>
+  <!-- Open Graph -->
+  <meta property="og:site_name" content="Parroquia Cristo Rey"/>
+  <meta property="og:locale" content="es_MX"/>
+  <meta property="og:image" content="/TNY-Media/assets/hero.jpeg"/>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -195,6 +202,19 @@
 
     @media (max-width: 1024px) { .ministry-grid { grid-template-columns: repeat(2, 1fr); } .flip-card.wide { grid-column: span 2; } }
     @media (max-width: 860px) {
+      .flip-inner { transform: none !important; transform-style: flat; }
+      .flip-back {
+        transform: translateY(100%);
+        position: absolute; inset: auto 0 0 0;
+        height: auto;
+        transition: transform 0.4s ease;
+        border-radius: 0;
+        backface-visibility: visible; -webkit-backface-visibility: visible;
+      }
+      .flip-card.flipped .flip-back { transform: translateY(0); }
+      .flip-front { position: relative; height: 100%; backface-visibility: visible; -webkit-backface-visibility: visible; }
+    }
+    @media (max-width: 860px) {
       header { padding: 20px 24px; } header.solid { padding: 14px 24px; }
       .manifesto { padding: 140px 24px 80px; } .manifesto-deco { display: none; } .manifesto-count { display: none; }
       .ministries-sec, .featured-sec, .cta-sec { padding: 72px 24px; }
@@ -227,7 +247,7 @@
 <div class="nav-overlay" id="navOverlay" role="dialog" aria-label="Navegación principal" aria-hidden="true">
   <div class="nav-panel-left">
     <ul class="nav-links">
-      <li><a href="../nosotros/"><span>Nosotros</span></a></li>
+      <li><a href="../nosotros/"><span>Vida Parroquial</span></a></li>
       <li><a href="../horarios/"><span>Horarios</span></a></li>
       <li><a href="../ministerios/" class="active-page"><span>Ministerios</span></a></li>
       <li><a href="../eventos/"><span>Eventos</span></a></li>
@@ -388,7 +408,7 @@
           <div class="flip-back">
             <span class="b-label">Jóvenes</span>
             <h3>Pastoral Juvenil</h3>
-            <p>Encuentro, formación y crecimiento espiritual para jóvenes. El grupo Hakuna se reúne cada martes a las 6:30 PM. Un espacio para vivir la fe con autenticidad y profundidad.</p>
+            <p>Encuentro, formación y crecimiento espiritual para jóvenes. El grupo Hakuna se reúne cada martes a las 6:30 PM. Un espacio para vivir la fe con autenticidad y profundidad. Hora Santa Hakuna: Martes 6:30 P.M.</p>
             <span class="b-more">Martes a las 6:30 PM →</span>
           </div>
         </div>
@@ -397,16 +417,16 @@
       <div class="flip-card">
         <div class="flip-inner">
           <div class="flip-front">
-            <span class="f-num">VIII</span>
-            <div class="f-icon"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div>
-            <h3>Cáritas Parroquial</h3>
-            <span class="f-tag">Solidaridad</span>
+            <span class="f-num">XIII</span>
+            <div class="f-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>
+            <h3>Barro Vivo</h3>
+            <div class="f-tag">Jóvenes</div>
           </div>
           <div class="flip-back">
-            <span class="b-label">Solidaridad</span>
-            <h3>Cáritas</h3>
-            <p>Acción social, despensa y campañas solidarias. Servimos a las familias en situación de necesidad de nuestra comunidad.</p>
-            <span class="b-more">Únete como voluntario →</span>
+            <div class="b-label">Grupo Juvenil</div>
+            <h3>Barro Vivo</h3>
+            <p>El grupo de jóvenes que mueve la fe de toda la parroquia. Organizan actividades, retiros y eventos que transforman vidas.</p>
+            <span class="b-more">Únete →</span>
           </div>
         </div>
       </div>
@@ -456,7 +476,7 @@
           <div class="flip-back">
             <span class="b-label">Formación</span>
             <h3>Universitarios y Profesionistas</h3>
-            <p>Espacio de encuentro y diálogo para jóvenes adultos que desean profundizar su fe desde la vida profesional. Cada miércoles de 7:00 a 8:00 PM.</p>
+            <p>Clases de Teología para profesionales y universitarios. Martes 7:00 – 8:00 P.M.</p>
             <span class="b-more">Miércoles 7:00 PM →</span>
           </div>
         </div>
@@ -473,7 +493,7 @@
           <div class="flip-back">
             <span class="b-label">Vida Espiritual</span>
             <h3>Asamblea de Oración</h3>
-            <p>Momento comunitario de oración los miércoles a las 5 PM. La Hora Santa los jueves a las 5 PM.</p>
+            <p>Miércoles 5:00 P.M. · Hora Santa: Jueves 5:00 P.M.</p>
             <span class="b-more">Todos bienvenidos →</span>
           </div>
         </div>
