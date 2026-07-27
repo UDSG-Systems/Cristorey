@@ -245,6 +245,35 @@
     .ev-digit-unit { font-size: 8px; letter-spacing: 0.24em; text-transform: uppercase; color: rgba(248,243,231,0.28); margin-top: 8px; }
     .ev-countdown-passed { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-style: italic; color: var(--gold2); text-align: center; }
 
+    /* EN VIVO state */
+    .events-sec.ev-live::before {
+      background: radial-gradient(ellipse 90% 70% at 55% 40%, rgba(177,147,74,0.13) 0%, transparent 65%),
+                  radial-gradient(ellipse 40% 50% at 10% 80%, rgba(20,43,70,0.6) 0%, transparent 60%);
+      animation: evGlowPulse 3s ease-in-out infinite;
+    }
+    @keyframes evGlowPulse {
+      0%,100% { opacity: 1; } 50% { opacity: 0.55; }
+    }
+    .ev-live-badge {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: rgba(177,147,74,0.12); border: 1px solid rgba(177,147,74,0.4);
+      padding: 8px 18px; margin-bottom: 24px;
+    }
+    .ev-live-dot-big {
+      width: 10px; height: 10px; border-radius: 50%; background: #e74c3c; flex-shrink: 0;
+      box-shadow: 0 0 0 0 rgba(231,76,60,0.6);
+      animation: liveRing 1.4s ease-out infinite;
+    }
+    @keyframes liveRing {
+      0% { box-shadow: 0 0 0 0 rgba(231,76,60,0.7); }
+      70% { box-shadow: 0 0 0 12px rgba(231,76,60,0); }
+      100% { box-shadow: 0 0 0 0 rgba(231,76,60,0); }
+    }
+    .ev-live-text { font-size: 10px; font-weight: 700; letter-spacing: 0.32em; text-transform: uppercase; color: var(--gold2); }
+    .ev-live-block { text-align: center; padding: 16px 0; }
+    .ev-live-now { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.4rem, 4vw, 3.8rem); font-style: italic; color: var(--cream); line-height: 1.1; }
+    .ev-live-sub { font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase; color: rgba(248,243,231,0.35); margin-top: 10px; }
+
     /* Week strip */
     .ev-week-strip {
       display: flex; border-top: 1px solid rgba(177,147,74,0.1);
@@ -611,80 +640,114 @@
     const MONTHS = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
     const DAYS_SHORT = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
     const pad = n => String(n).padStart(2,'0');
-    const now = new Date();
-    const TODAY = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}`;
+
+    function getToday() {
+      const n = new Date();
+      return `${n.getFullYear()}-${pad(n.getMonth()+1)}-${pad(n.getDate())}`;
+    }
+
+    function renderCountdown(ev, sec) {
+      const cdEl = document.getElementById('evCountdown');
+      const sec$ = document.getElementById('eventsSec');
+
+      // "En vivo": event has started (after its time, up to 3h later)
+      const [evH, evM] = (ev.time || '19:00').split(':').map(Number);
+      const now = new Date();
+      const startToday = new Date(); startToday.setHours(evH, evM, 0, 0);
+      const endToday = new Date(startToday.getTime() + 3 * 3600000); // assume ~3h event
+
+      if (now >= startToday && now < endToday) {
+        // LIVE state
+        sec$.classList.add('ev-live');
+        document.getElementById('evBadge').textContent = 'Sucediendo ahora';
+        cdEl.innerHTML = `
+          <div class="ev-live-block">
+            <div class="ev-live-badge">
+              <div class="ev-live-dot-big"></div>
+              <span class="ev-live-text">En vivo esta noche</span>
+            </div>
+            <div class="ev-live-now">Está pasando<br/><em>en este momento</em></div>
+            <div class="ev-live-sub">7:00 P.M. · Parroquia Cristo Rey</div>
+          </div>`;
+        return; // no interval needed
+      }
+
+      if (now < startToday) {
+        // Countdown to 7 PM
+        document.getElementById('evBadge').textContent = 'Hoy';
+        function tick() {
+          const diff = startToday - new Date();
+          if (diff <= 0) { renderCountdown(ev); return; }
+          const th = Math.floor(diff / 3600000);
+          const tm = Math.floor((diff % 3600000) / 60000);
+          const ts = Math.floor((diff % 60000) / 1000);
+          document.getElementById('cdH').textContent = pad(th);
+          document.getElementById('cdM').textContent = pad(tm);
+          document.getElementById('cdS').textContent = pad(ts);
+        }
+        document.getElementById('evCountLabel').textContent = 'Comienza en';
+        cdEl.querySelector('.ev-digits').style.display = 'flex';
+        tick();
+        const iv = setInterval(() => {
+          const d2 = startToday - new Date();
+          if (d2 <= 0) { clearInterval(iv); renderCountdown(ev); return; }
+          const th = Math.floor(d2/3600000), tm = Math.floor((d2%3600000)/60000), ts = Math.floor((d2%60000)/1000);
+          document.getElementById('cdH').textContent = pad(th);
+          document.getElementById('cdM').textContent = pad(tm);
+          document.getElementById('cdS').textContent = pad(ts);
+        }, 1000);
+      }
+    }
 
     fetch('assets/events.json')
       .then(r => r.json())
       .then(events => {
-        const upcoming = events
+        const TODAY = getToday();
+        // All events not yet finished (endDate or date >= today)
+        const allUpcoming = events
           .filter(ev => (ev.endDate || ev.date) >= TODAY)
           .sort((a, b) => a.date.localeCompare(b.date));
 
-        if (!upcoming.length) {
-          document.getElementById('evEmpty').style.display = 'flex';
-          return;
-        }
+        if (!allUpcoming.length) { document.getElementById('evEmpty').style.display = 'flex'; return; }
 
-        // Find tonight's event (today's date, has a time)
-        const tonightEv = upcoming.find(e => e.date === TODAY && e.time);
-        // Find active series (events sharing same tag, starting today or later this week)
-        const seriesTag = 'Semana Pastoral';
-        const seriesEvents = upcoming.filter(e => e.tag === seriesTag);
-        const featuredEv = tonightEv || upcoming[0];
+        // Today's event with a specific time (e.g. Semana Pastoral nights)
+        const todayEv = allUpcoming.find(e => e.date === TODAY && e.time);
+        // Featured: today's if exists, else next upcoming
+        const featuredEv = todayEv || allUpcoming[0];
+        const isToday = featuredEv.date === TODAY;
 
-        // Populate main card
+        // Populate content
         const d = new Date(featuredEv.date + 'T00:00:00');
-        const isTonight = !!tonightEv;
-        const isFuture = !isTonight;
-
-        document.getElementById('evBadge').textContent = isTonight ? 'Esta noche' : `${d.getDate()} de ${MONTHS[d.getMonth()]}`;
-        document.getElementById('evLiveDot').style.display = isTonight ? 'block' : 'none';
-        document.getElementById('evSeriesPill').textContent = featuredEv.tag;
-
-        // Split title at colon for styling
         const colonIdx = featuredEv.title.indexOf(':');
         const titleHtml = colonIdx > -1
           ? `${featuredEv.title.slice(0, colonIdx + 1)} <em>${featuredEv.title.slice(colonIdx + 1).trim()}</em>`
           : `<em>${featuredEv.title}</em>`;
         document.getElementById('evTitle').innerHTML = titleHtml;
         document.getElementById('evDesc').textContent = featuredEv.description;
+        document.getElementById('evSeriesPill').textContent = featuredEv.tag;
         document.getElementById('evDecoNum').textContent = pad(d.getDate());
+        document.getElementById('evLiveDot').style.display = isToday ? 'block' : 'none';
         document.getElementById('evMain').style.display = 'grid';
 
-        // Countdown
-        if (isTonight && featuredEv.time) {
-          const [hh, mm] = featuredEv.time.split(':').map(Number);
-          const target = new Date();
-          target.setHours(hh, mm, 0, 0);
-
-          function tick() {
-            const diff = target - new Date();
-            if (diff <= 0) {
-              document.getElementById('evCountdown').innerHTML = '<div class="ev-countdown-passed">¡En curso ahora!</div>';
-              return;
-            }
-            const th = Math.floor(diff / 3600000);
-            const tm = Math.floor((diff % 3600000) / 60000);
-            const ts = Math.floor((diff % 60000) / 1000);
-            document.getElementById('cdH').textContent = pad(th);
-            document.getElementById('cdM').textContent = pad(tm);
-            document.getElementById('cdS').textContent = pad(ts);
-          }
-          tick();
-          setInterval(tick, 1000);
+        if (isToday && featuredEv.time) {
+          renderCountdown(featuredEv);
         } else {
-          // Show date instead of countdown
+          // Future event — show date in digit blocks
+          document.getElementById('evBadge').textContent = `${d.getDate()} de ${MONTHS[d.getMonth()]}`;
+          document.getElementById('evLiveDot').style.display = 'none';
           document.getElementById('evCountLabel').textContent = 'Próximamente';
           document.getElementById('cdH').textContent = pad(d.getDate());
           document.getElementById('cdM').textContent = MONTHS[d.getMonth()].slice(0,3).toUpperCase();
-          document.getElementById('cdS').style.display = 'none';
-          document.getElementById('cdS').previousElementSibling.style.display = 'none'; // hide last sep
+          const sepEls = document.querySelectorAll('.ev-digit-sep');
+          const cdSEl = document.getElementById('cdS');
+          if (sepEls[1]) sepEls[1].style.display = 'none';
+          cdSEl.closest('.ev-digit-block').style.display = 'none';
           document.getElementById('cdH').closest('.ev-digit-block').querySelector('.ev-digit-unit').textContent = 'día';
           document.getElementById('cdM').closest('.ev-digit-block').querySelector('.ev-digit-unit').textContent = 'mes';
         }
 
-        // Week strip (Semana Pastoral)
+        // Week strip — Semana Pastoral
+        const seriesEvents = allUpcoming.filter(e => e.tag === 'Semana Pastoral');
         if (seriesEvents.length) {
           const strip = document.getElementById('evWeekStrip');
           strip.style.display = 'flex';
