@@ -152,13 +152,13 @@
     .teaser-card:hover { box-shadow: 0 24px 60px rgba(20,43,70,0.12); transform: translateY(-6px); }
     .teaser-img {
       aspect-ratio: 4/3; flex-shrink: 0;
-      background: url('assets/gallery/images/WhatsApp Image 2026-07-22 at 6.39.20 PM.jpeg') center / cover no-repeat;
+      background: url('assets/hero.jpeg') center / cover no-repeat;
       position: relative;
     }
     .teaser-img::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, transparent 40%, rgba(5,12,24,0.55) 100%); transition: opacity 0.35s; }
     .teaser-card:hover .teaser-img::after { opacity: 0.7; }
-    .teaser-img-dark { background-image: url('assets/gallery/images/WhatsApp Image 2026-07-22 at 6.39.20 PM (1).jpeg'); background-position: center; filter: brightness(0.75) saturate(0.7); }
-    .teaser-img-mid { background-image: url('assets/gallery/images/WhatsApp Image 2026-07-22 at 6.39.20 PM (2).jpeg'); background-position: center 40%; filter: brightness(0.65) saturate(0.6); }
+    .teaser-img-dark { background-image: url('assets/gallery/images/1782245668051.jpeg'); background-position: center; filter: brightness(0.75) saturate(0.7); }
+    .teaser-img-mid { background-image: url('assets/gallery/images/1782245670287.jpeg'); background-position: center 40%; filter: brightness(0.65) saturate(0.6); }
     .teaser-num { position: absolute; top: 16px; left: 20px; font-family: 'Cormorant Garamond', serif; font-size: 4.5rem; font-weight: 600; color: rgba(255,255,255,0.12); line-height: 1; z-index: 1; }
     .teaser-tag { position: absolute; bottom: 16px; left: 20px; font-size: 8px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold2); background: rgba(5,12,24,0.5); padding: 4px 10px; z-index: 1; }
     .teaser-body { padding: 28px 28px 32px; flex: 1; display: flex; flex-direction: column; }
@@ -171,48 +171,109 @@
     .teaser-card:hover .teaser-link svg { transform: translateX(4px); }
 
     /* NEXT EVENT TEASER */
-    /* EVENTS SECTION */
-    .events-sec { background: var(--navy2); padding: 100px 56px; overflow: hidden; }
-    .events-head { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 60px; gap: 24px; }
-    .events-head-left .ev-label { font-size: 10px; letter-spacing: 0.4em; text-transform: uppercase; color: var(--gold2); display: block; margin-bottom: 14px; }
-    .events-head-left h2 { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.4rem, 4.5vw, 3.8rem); font-weight: 600; color: var(--cream); line-height: 1.1; }
-    .events-head-left h2 em { font-style: italic; color: var(--gold2); }
-    .events-all-link { display: inline-flex; align-items: center; gap: 8px; font-size: 10px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold2); border: 1px solid rgba(177,147,74,0.35); padding: 12px 22px; transition: background 0.25s, border-color 0.25s, color 0.25s; white-space: nowrap; flex-shrink: 0; }
-    .events-all-link:hover { background: var(--gold); border-color: var(--gold); color: var(--white); }
+    /* ── CINEMATIC EVENTS SECTION ── */
+    .events-sec {
+      position: relative; background: var(--black); overflow: hidden;
+      min-height: 92vh; display: flex; flex-direction: column;
+    }
+    /* Atmospheric background glow */
+    .events-sec::before {
+      content: ''; position: absolute; inset: 0; pointer-events: none;
+      background: radial-gradient(ellipse 80% 60% at 60% 40%, rgba(177,147,74,0.07) 0%, transparent 70%),
+                  radial-gradient(ellipse 40% 50% at 10% 80%, rgba(20,43,70,0.6) 0%, transparent 60%);
+    }
+    /* Decorative large number watermark */
+    .ev-deco-num {
+      position: absolute; right: 48px; top: 50%; transform: translateY(-55%);
+      font-family: 'Cormorant Garamond', serif; font-size: clamp(14rem, 22vw, 22rem);
+      font-weight: 600; line-height: 1; color: rgba(177,147,74,0.04);
+      pointer-events: none; letter-spacing: -0.04em; user-select: none;
+    }
 
-    /* Featured series banner */
-    .ev-series { display: flex; align-items: center; gap: 20px; background: linear-gradient(90deg, rgba(177,147,74,0.12) 0%, transparent 100%); border-left: 3px solid var(--gold); padding: 20px 28px; margin-bottom: 40px; border-radius: 0 4px 4px 0; }
-    .ev-series-icon { font-size: 28px; flex-shrink: 0; }
-    .ev-series-badge { font-size: 9px; font-weight: 700; letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold); display: block; margin-bottom: 4px; }
-    .ev-series-name { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 600; color: var(--cream); }
-    .ev-series-dates { font-size: 11px; letter-spacing: 0.12em; color: rgba(248,243,231,0.45); margin-left: auto; text-align: right; flex-shrink: 0; }
+    /* Top strip */
+    .ev-topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 32px 64px 0; position: relative; z-index: 1;
+    }
+    .ev-topbar-label { font-size: 9px; letter-spacing: 0.4em; text-transform: uppercase; color: rgba(177,147,74,0.6); }
+    .ev-topbar-link { display: inline-flex; align-items: center; gap: 8px; font-size: 9px; font-weight: 600; letter-spacing: 0.24em; text-transform: uppercase; color: rgba(248,243,231,0.4); transition: color 0.2s; }
+    .ev-topbar-link:hover { color: var(--gold2); }
 
-    /* Day cards grid */
-    .ev-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 2px; margin-bottom: 48px; }
-    .ev-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(177,147,74,0.1); padding: 28px 22px; display: flex; flex-direction: column; gap: 14px; transition: background 0.25s, border-color 0.25s; position: relative; overflow: hidden; }
-    .ev-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--gold); transform: scaleX(0); transform-origin: left; transition: transform 0.35s ease; }
-    .ev-card:hover { background: rgba(177,147,74,0.07); border-color: rgba(177,147,74,0.28); }
-    .ev-card:hover::before { transform: scaleX(1); }
-    .ev-card-day { font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); font-weight: 600; }
-    .ev-card-date { font-family: 'Cormorant Garamond', serif; font-size: 3rem; font-weight: 600; line-height: 1; color: var(--cream); }
-    .ev-card-divider { height: 1px; background: rgba(177,147,74,0.15); }
-    .ev-card-type { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(248,243,231,0.4); }
-    .ev-card-title { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; font-weight: 600; color: var(--cream); line-height: 1.3; }
-    .ev-card-time { font-size: 11px; color: var(--gold2); letter-spacing: 0.08em; margin-top: auto; }
+    /* Main content */
+    .ev-main {
+      flex: 1; display: grid; grid-template-columns: 1fr auto;
+      align-items: center; gap: 60px;
+      padding: 48px 64px 40px; position: relative; z-index: 1;
+    }
 
-    /* Upcoming singles */
-    .ev-singles { display: flex; flex-direction: column; gap: 0; border-top: 1px solid rgba(177,147,74,0.12); }
-    .ev-single { display: grid; grid-template-columns: 80px 1fr auto; align-items: center; gap: 28px; padding: 22px 0; border-bottom: 1px solid rgba(177,147,74,0.08); }
-    .ev-single-date { text-align: center; }
-    .ev-single-day { font-family: 'Cormorant Garamond', serif; font-size: 2.4rem; font-weight: 600; line-height: 1; color: var(--gold2); }
-    .ev-single-month { font-size: 8px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); }
-    .ev-single-tag { font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(248,243,231,0.4); margin-bottom: 4px; }
-    .ev-single-title { font-family: 'Cormorant Garamond', serif; font-size: 1.25rem; font-weight: 600; color: var(--cream); }
-    .ev-single-arr { color: rgba(177,147,74,0.5); transition: color 0.2s, transform 0.2s; }
-    .ev-single:hover .ev-single-arr { color: var(--gold2); transform: translateX(4px); }
+    /* Left — event info */
+    .ev-badge-row { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+    .ev-live-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gold); flex-shrink: 0; animation: pulse 1.8s ease-in-out infinite; }
+    .ev-badge { font-size: 9px; font-weight: 700; letter-spacing: 0.32em; text-transform: uppercase; color: var(--gold); }
+    .ev-series-pill { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(248,243,231,0.35); background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); padding: 3px 10px; }
+    .ev-main-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3rem, 5.5vw, 5.2rem);
+      font-weight: 600; line-height: 1.05; color: var(--cream);
+      margin-bottom: 20px; letter-spacing: -0.01em;
+    }
+    .ev-main-title em { font-style: italic; color: var(--gold2); }
+    .ev-main-desc { font-size: 13px; line-height: 1.9; color: rgba(248,243,231,0.42); max-width: 440px; margin-bottom: 36px; }
+    .ev-main-meta { display: flex; align-items: center; gap: 28px; flex-wrap: wrap; }
+    .ev-meta-item { display: flex; align-items: center; gap: 8px; font-size: 11px; letter-spacing: 0.12em; color: rgba(248,243,231,0.55); }
+    .ev-meta-item svg { color: var(--gold); opacity: 0.8; }
 
-    #eventsContainer { display: none; }
-    #evNoEvents { display: none; font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; color: rgba(248,243,231,0.3); font-style: italic; text-align: center; padding: 40px 0; }
+    /* Right — countdown */
+    .ev-countdown { text-align: center; flex-shrink: 0; }
+    .ev-countdown-label { font-size: 8px; letter-spacing: 0.36em; text-transform: uppercase; color: rgba(248,243,231,0.3); margin-bottom: 16px; }
+    .ev-digits { display: flex; align-items: flex-start; gap: 4px; }
+    .ev-digit-block { display: flex; flex-direction: column; align-items: center; }
+    .ev-digit-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3.8rem, 6vw, 6rem);
+      font-weight: 600; line-height: 1; color: var(--cream);
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(177,147,74,0.12);
+      padding: 12px 18px; min-width: 90px; text-align: center;
+      transition: color 0.3s;
+    }
+    .ev-digit-sep {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3rem, 5vw, 4.8rem); font-weight: 300;
+      color: rgba(177,147,74,0.4); line-height: 1.15;
+      padding: 12px 2px;
+    }
+    .ev-digit-unit { font-size: 8px; letter-spacing: 0.24em; text-transform: uppercase; color: rgba(248,243,231,0.28); margin-top: 8px; }
+    .ev-countdown-passed { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-style: italic; color: var(--gold2); text-align: center; }
+
+    /* Week strip */
+    .ev-week-strip {
+      display: flex; border-top: 1px solid rgba(177,147,74,0.1);
+      position: relative; z-index: 1;
+    }
+    .ev-week-day {
+      flex: 1; padding: 20px 16px 22px; text-align: center;
+      border-right: 1px solid rgba(177,147,74,0.08);
+      cursor: default; transition: background 0.2s;
+      position: relative; overflow: hidden;
+    }
+    .ev-week-day:last-child { border-right: none; }
+    .ev-week-day.ev-day-active { background: rgba(177,147,74,0.09); }
+    .ev-week-day.ev-day-active::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--gold), var(--gold2));
+    }
+    .ev-week-day.ev-day-past { opacity: 0.35; }
+    .ev-week-day-name { font-size: 8px; letter-spacing: 0.26em; text-transform: uppercase; color: rgba(248,243,231,0.35); margin-bottom: 6px; }
+    .ev-week-day.ev-day-active .ev-week-day-name { color: var(--gold); }
+    .ev-week-day-num { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 600; color: rgba(248,243,231,0.5); line-height: 1; margin-bottom: 8px; }
+    .ev-week-day.ev-day-active .ev-week-day-num { color: var(--cream); }
+    .ev-week-day-title { font-size: 9px; line-height: 1.4; color: rgba(248,243,231,0.3); }
+    .ev-week-day.ev-day-active .ev-week-day-title { color: rgba(248,243,231,0.65); }
+
+    /* Fallback no-event */
+    .ev-empty { flex: 1; display: flex; align-items: center; justify-content: center; padding: 80px 64px; font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-style: italic; color: rgba(248,243,231,0.2); }
+
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(0.85)} }
 
     /* FOOTER */
     footer { background: var(--navy2); color: rgba(248,243,231,0.55); padding: 80px 56px 36px; text-align: center; border-top: 1px solid rgba(177,147,74,0.1); }
@@ -230,12 +291,17 @@
       .teasers { padding: 80px 24px; }
       .teasers-grid { grid-template-columns: 1fr; gap: 16px; }
       .teaser-card { min-height: auto; }
-      .events-sec { padding: 72px 24px; }
-      .events-head { flex-direction: column; align-items: flex-start; margin-bottom: 36px; }
-      .ev-grid { grid-template-columns: 1fr 1fr; gap: 2px; }
-      .ev-series { flex-wrap: wrap; gap: 12px; }
-      .ev-series-dates { margin-left: 0; text-align: left; }
-      .ev-single { grid-template-columns: 60px 1fr auto; gap: 16px; }
+      .events-sec { min-height: auto; }
+      .ev-topbar { padding: 24px 24px 0; }
+      .ev-main { grid-template-columns: 1fr; gap: 40px; padding: 36px 24px 28px; }
+      .ev-countdown { display: flex; flex-direction: column; align-items: flex-start; }
+      .ev-digit-num { font-size: 3rem; padding: 8px 14px; min-width: 70px; }
+      .ev-digit-sep { font-size: 2.6rem; }
+      .ev-deco-num { display: none; }
+      .ev-week-strip { flex-wrap: wrap; }
+      .ev-week-day { flex: 0 0 calc(100% / 5); padding: 14px 8px 16px; }
+      .ev-week-day-title { display: none; }
+      .ev-main-title { font-size: clamp(2.4rem, 9vw, 4rem); }
       .nav-overlay { grid-template-columns: 1fr; } .nav-panel-right { display: none; }
       .nav-panel-left { padding: 100px 36px 56px; overflow-y: auto; justify-content: flex-start; }
       footer { padding: 60px 24px 28px; }
@@ -450,21 +516,46 @@
   </div>
 </section>
 
-<!-- EVENTS SECTION -->
-<section class="events-sec">
-  <div style="max-width:1180px;margin:0 auto;">
-    <div class="events-head reveal">
-      <div class="events-head-left">
-        <span class="ev-label">Agenda parroquial</span>
-        <h2>Próximos <em>eventos</em></h2>
-      </div>
-      <a class="events-all-link" href="eventos/">Ver todos <svg width="14" height="10" viewBox="0 0 14 10" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 5h12M8 1l5 4-5 4"/></svg></a>
-    </div>
-    <div id="eventsContainer">
-      <!-- Populated via JS -->
-    </div>
-    <div id="evNoEvents">No hay eventos próximos por el momento.</div>
+<!-- CINEMATIC EVENTS SECTION -->
+<section class="events-sec" id="eventsSec">
+  <div class="ev-topbar">
+    <span class="ev-topbar-label">Agenda parroquial</span>
+    <a class="ev-topbar-link" href="eventos/">Ver todos los eventos <svg width="12" height="9" viewBox="0 0 14 10" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 5h12M8 1l5 4-5 4"/></svg></a>
   </div>
+  <div id="evMain" class="ev-main" style="display:none;">
+    <div class="ev-left">
+      <div class="ev-badge-row">
+        <span class="ev-live-dot" id="evLiveDot"></span>
+        <span class="ev-badge" id="evBadge">Esta noche</span>
+        <span class="ev-series-pill" id="evSeriesPill"></span>
+      </div>
+      <h2 class="ev-main-title" id="evTitle"></h2>
+      <p class="ev-main-desc" id="evDesc"></p>
+      <div class="ev-main-meta">
+        <span class="ev-meta-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          <span id="evTime">7:00 P.M.</span>
+        </span>
+        <span class="ev-meta-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Parroquia Cristo Rey
+        </span>
+      </div>
+    </div>
+    <div class="ev-countdown" id="evCountdown">
+      <div class="ev-countdown-label" id="evCountLabel">Comienza en</div>
+      <div class="ev-digits">
+        <div class="ev-digit-block"><div class="ev-digit-num" id="cdH">00</div><div class="ev-digit-unit">horas</div></div>
+        <div class="ev-digit-sep">:</div>
+        <div class="ev-digit-block"><div class="ev-digit-num" id="cdM">00</div><div class="ev-digit-unit">min</div></div>
+        <div class="ev-digit-sep">:</div>
+        <div class="ev-digit-block"><div class="ev-digit-num" id="cdS">00</div><div class="ev-digit-unit">seg</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="ev-week-strip" id="evWeekStrip" style="display:none;"></div>
+  <div class="ev-empty" id="evEmpty" style="display:none;">No hay eventos próximos por el momento.</div>
+  <div class="ev-deco-num" id="evDecoNum"></div>
 </section>
 
 <!-- FOOTER -->
@@ -515,89 +606,105 @@
   const io = new IntersectionObserver(entries => { entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); }); }, { threshold: 0.12 });
   reveals.forEach(el => io.observe(el));
 
-  // Events section
-  const MONTHS = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
-  const DAYS = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
-  const _n = new Date(); const _p = n => String(n).padStart(2,'0');
-  const TODAY = `${_n.getFullYear()}-${_p(_n.getMonth()+1)}-${_p(_n.getDate())}`;
-  fetch('assets/events.json')
-    .then(r => r.json())
-    .then(events => {
-      const upcoming = events
-        .filter(ev => (ev.endDate || ev.date) >= TODAY)
-        .sort((a, b) => new Date(a.date) - new Date(b.date));
-      if (!upcoming.length) { document.getElementById('evNoEvents').style.display = 'block'; return; }
+  // ── CINEMATIC EVENTS ──
+  (function() {
+    const MONTHS = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+    const DAYS_SHORT = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+    const pad = n => String(n).padStart(2,'0');
+    const now = new Date();
+    const TODAY = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}`;
 
-      const container = document.getElementById('eventsContainer');
-      container.style.display = 'block';
+    fetch('assets/events.json')
+      .then(r => r.json())
+      .then(events => {
+        const upcoming = events
+          .filter(ev => (ev.endDate || ev.date) >= TODAY)
+          .sort((a, b) => a.date.localeCompare(b.date));
 
-      // Detect Semana Pastoral series (events with same tag in consecutive week)
-      const seriesTag = 'Semana Pastoral';
-      const seriesEvents = upcoming.filter(e => e.tag === seriesTag);
-      const otherEvents = upcoming.filter(e => e.tag !== seriesTag).slice(0, 3);
+        if (!upcoming.length) {
+          document.getElementById('evEmpty').style.display = 'flex';
+          return;
+        }
 
-      let html = '';
+        // Find tonight's event (today's date, has a time)
+        const tonightEv = upcoming.find(e => e.date === TODAY && e.time);
+        // Find active series (events sharing same tag, starting today or later this week)
+        const seriesTag = 'Semana Pastoral';
+        const seriesEvents = upcoming.filter(e => e.tag === seriesTag);
+        const featuredEv = tonightEv || upcoming[0];
 
-      if (seriesEvents.length) {
-        const first = new Date(seriesEvents[0].date + 'T00:00:00');
-        const last = new Date(seriesEvents[seriesEvents.length-1].date + 'T00:00:00');
-        const dateRange = `${first.getDate()} – ${last.getDate()} de ${MONTHS[last.getMonth()]}`;
-        html += `
-          <div class="ev-series reveal">
-            <div class="ev-series-icon">✝</div>
-            <div>
-              <span class="ev-series-badge">Serie especial</span>
-              <div class="ev-series-name">Semana Pastoral</div>
-            </div>
-            <div class="ev-series-dates">${dateRange}<br/><span style="font-size:10px;color:rgba(248,243,231,0.35);">7:00 P.M. cada noche</span></div>
-          </div>
-          <div class="ev-grid reveal">`;
-        seriesEvents.forEach(ev => {
-          const d = new Date(ev.date + 'T00:00:00');
-          const isToday = ev.date === TODAY;
-          const nowDot = isToday ? '<span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--gold);margin-left:6px;vertical-align:middle;animation:pulse 1.6s infinite;"></span>' : '';
-          // Extract type keyword from title (before colon)
-          const colonIdx = ev.title.indexOf(':');
-          const typeLabel = colonIdx > -1 ? ev.title.slice(0, colonIdx).trim() : ev.tag;
-          const titleText = colonIdx > -1 ? ev.title.slice(colonIdx+1).trim() : ev.title;
-          html += `
-            <div class="ev-card">
-              <div class="ev-card-day">${DAYS[d.getDay()]}${nowDot}</div>
-              <div class="ev-card-date">${d.getDate()}</div>
-              <div class="ev-card-divider"></div>
-              <div class="ev-card-type">${typeLabel}</div>
-              <div class="ev-card-title">${titleText}</div>
-              <div class="ev-card-time">7:00 P.M.</div>
+        // Populate main card
+        const d = new Date(featuredEv.date + 'T00:00:00');
+        const isTonight = !!tonightEv;
+        const isFuture = !isTonight;
+
+        document.getElementById('evBadge').textContent = isTonight ? 'Esta noche' : `${d.getDate()} de ${MONTHS[d.getMonth()]}`;
+        document.getElementById('evLiveDot').style.display = isTonight ? 'block' : 'none';
+        document.getElementById('evSeriesPill').textContent = featuredEv.tag;
+
+        // Split title at colon for styling
+        const colonIdx = featuredEv.title.indexOf(':');
+        const titleHtml = colonIdx > -1
+          ? `${featuredEv.title.slice(0, colonIdx + 1)} <em>${featuredEv.title.slice(colonIdx + 1).trim()}</em>`
+          : `<em>${featuredEv.title}</em>`;
+        document.getElementById('evTitle').innerHTML = titleHtml;
+        document.getElementById('evDesc').textContent = featuredEv.description;
+        document.getElementById('evDecoNum').textContent = pad(d.getDate());
+        document.getElementById('evMain').style.display = 'grid';
+
+        // Countdown
+        if (isTonight && featuredEv.time) {
+          const [hh, mm] = featuredEv.time.split(':').map(Number);
+          const target = new Date();
+          target.setHours(hh, mm, 0, 0);
+
+          function tick() {
+            const diff = target - new Date();
+            if (diff <= 0) {
+              document.getElementById('evCountdown').innerHTML = '<div class="ev-countdown-passed">¡En curso ahora!</div>';
+              return;
+            }
+            const th = Math.floor(diff / 3600000);
+            const tm = Math.floor((diff % 3600000) / 60000);
+            const ts = Math.floor((diff % 60000) / 1000);
+            document.getElementById('cdH').textContent = pad(th);
+            document.getElementById('cdM').textContent = pad(tm);
+            document.getElementById('cdS').textContent = pad(ts);
+          }
+          tick();
+          setInterval(tick, 1000);
+        } else {
+          // Show date instead of countdown
+          document.getElementById('evCountLabel').textContent = 'Próximamente';
+          document.getElementById('cdH').textContent = pad(d.getDate());
+          document.getElementById('cdM').textContent = MONTHS[d.getMonth()].slice(0,3).toUpperCase();
+          document.getElementById('cdS').style.display = 'none';
+          document.getElementById('cdS').previousElementSibling.style.display = 'none'; // hide last sep
+          document.getElementById('cdH').closest('.ev-digit-block').querySelector('.ev-digit-unit').textContent = 'día';
+          document.getElementById('cdM').closest('.ev-digit-block').querySelector('.ev-digit-unit').textContent = 'mes';
+        }
+
+        // Week strip (Semana Pastoral)
+        if (seriesEvents.length) {
+          const strip = document.getElementById('evWeekStrip');
+          strip.style.display = 'flex';
+          strip.innerHTML = seriesEvents.map(ev => {
+            const sd = new Date(ev.date + 'T00:00:00');
+            const isActive = ev.date === TODAY;
+            const isPast = ev.date < TODAY;
+            const cls = isActive ? 'ev-day-active' : isPast ? 'ev-day-past' : '';
+            const colonI = ev.title.indexOf(':');
+            const shortTitle = colonI > -1 ? ev.title.slice(0, colonI).trim() : ev.title;
+            return `<div class="ev-week-day ${cls}">
+              <div class="ev-week-day-name">${DAYS_SHORT[sd.getDay()]}</div>
+              <div class="ev-week-day-num">${sd.getDate()}</div>
+              <div class="ev-week-day-title">${shortTitle}</div>
             </div>`;
-        });
-        html += `</div>`;
-      }
-
-      if (otherEvents.length) {
-        html += `<div class="ev-singles reveal">`;
-        otherEvents.forEach(ev => {
-          const d = new Date(ev.date + 'T00:00:00');
-          html += `
-            <a class="ev-single" href="eventos/" style="text-decoration:none;">
-              <div class="ev-single-date">
-                <div class="ev-single-day">${d.getDate()}</div>
-                <div class="ev-single-month">${MONTHS[d.getMonth()].slice(0,3)}</div>
-              </div>
-              <div>
-                <div class="ev-single-tag">${ev.tag}</div>
-                <div class="ev-single-title">${ev.title}</div>
-              </div>
-              <svg class="ev-single-arr" width="16" height="12" viewBox="0 0 14 10" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 5h12M8 1l5 4-5 4"/></svg>
-            </a>`;
-        });
-        html += `</div>`;
-      }
-
-      container.innerHTML = html;
-      // Re-observe new reveal elements
-      container.querySelectorAll('.reveal').forEach(el => io.observe(el));
-    })
-    .catch(() => { document.getElementById('evNoEvents').style.display = 'block'; });
+          }).join('');
+        }
+      })
+      .catch(() => { document.getElementById('evEmpty').style.display = 'flex'; });
+  })();
 </script>
 
 <!-- WHATSAPP FLOAT -->
