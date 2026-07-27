@@ -703,18 +703,32 @@
       .then(r => r.json())
       .then(events => {
         const TODAY = getToday();
-        // All events not yet finished (endDate or date >= today)
+        const nowTs = new Date();
+
         const allUpcoming = events
           .filter(ev => (ev.endDate || ev.date) >= TODAY)
           .sort((a, b) => a.date.localeCompare(b.date));
 
         if (!allUpcoming.length) { document.getElementById('evEmpty').style.display = 'flex'; return; }
 
-        // Today's event with a specific time (e.g. Semana Pastoral nights)
-        const todayEv = allUpcoming.find(e => e.date === TODAY && e.time);
-        // Featured: today's if exists, else next upcoming
-        const featuredEv = todayEv || allUpcoming[0];
+        // Pick the featured event: prefer today's timed event; skip if already finished (>3h past start)
+        let featuredEv = null;
+        for (const ev of allUpcoming) {
+          if (ev.date === TODAY && ev.time) {
+            const [hh, mm] = ev.time.split(':').map(Number);
+            const evEnd = new Date(); evEnd.setHours(hh + 3, mm, 0, 0);
+            if (nowTs < evEnd) { featuredEv = ev; break; }
+          } else if (!featuredEv) {
+            featuredEv = ev;
+          }
+        }
+        if (!featuredEv) featuredEv = allUpcoming[0];
+
         const isToday = featuredEv.date === TODAY;
+        const isTomorrow = (() => {
+          const t = new Date(); t.setDate(t.getDate() + 1);
+          return featuredEv.date === `${t.getFullYear()}-${pad(t.getMonth()+1)}-${pad(t.getDate())}`;
+        })();
 
         // Populate content
         const d = new Date(featuredEv.date + 'T00:00:00');
@@ -726,25 +740,63 @@
         document.getElementById('evDesc').textContent = featuredEv.description;
         document.getElementById('evSeriesPill').textContent = featuredEv.tag;
         document.getElementById('evDecoNum').textContent = pad(d.getDate());
-        document.getElementById('evLiveDot').style.display = isToday ? 'block' : 'none';
         document.getElementById('evMain').style.display = 'grid';
 
-        if (isToday && featuredEv.time) {
-          renderCountdown(featuredEv);
+        // Badge label
+        const badgeEl = document.getElementById('evBadge');
+        const dotEl = document.getElementById('evLiveDot');
+        if (isToday) {
+          badgeEl.textContent = 'Esta noche'; dotEl.style.display = 'block';
+        } else if (isTomorrow) {
+          badgeEl.textContent = 'Mañana'; dotEl.style.display = 'none';
         } else {
-          // Future event — show date in digit blocks
-          document.getElementById('evBadge').textContent = `${d.getDate()} de ${MONTHS[d.getMonth()]}`;
-          document.getElementById('evLiveDot').style.display = 'none';
-          document.getElementById('evCountLabel').textContent = 'Próximamente';
-          document.getElementById('cdH').textContent = pad(d.getDate());
-          document.getElementById('cdM').textContent = MONTHS[d.getMonth()].slice(0,3).toUpperCase();
-          const sepEls = document.querySelectorAll('.ev-digit-sep');
-          const cdSEl = document.getElementById('cdS');
-          if (sepEls[1]) sepEls[1].style.display = 'none';
-          cdSEl.closest('.ev-digit-block').style.display = 'none';
-          document.getElementById('cdH').closest('.ev-digit-block').querySelector('.ev-digit-unit').textContent = 'día';
-          document.getElementById('cdM').closest('.ev-digit-block').querySelector('.ev-digit-unit').textContent = 'mes';
+          badgeEl.textContent = `${d.getDate()} de ${MONTHS[d.getMonth()]}`; dotEl.style.display = 'none';
         }
+
+        // --- COUNTDOWN: always run toward the event start ---
+        const evTime = featuredEv.time || '19:00';
+        const [evH, evM] = evTime.split(':').map(Number);
+        const target = new Date(featuredEv.date + 'T00:00:00');
+        target.setHours(evH, evM, 0, 0);
+
+        // Check if currently LIVE (started, within 3h)
+        const evEnd = new Date(target.getTime() + 3 * 3600000);
+        if (isToday && nowTs >= target && nowTs < evEnd) {
+          renderCountdown(featuredEv);
+          return; // live state handled inside
+        }
+
+        // Otherwise: running countdown (even if days away)
+        document.getElementById('evCountLabel').textContent =
+          isToday ? 'Comienza en' : isTomorrow ? 'Mañana a las 7 PM' : 'Faltan';
+
+        function tick() {
+          const diff = target - new Date();
+          if (diff <= 0 && isToday) { renderCountdown(featuredEv); return; }
+          if (diff <= 0) return;
+          const totalH = Math.floor(diff / 3600000);
+          const days = Math.floor(totalH / 24);
+          const hrs  = totalH % 24;
+          const mins = Math.floor((diff % 3600000) / 60000);
+          const secs = Math.floor((diff % 60000) / 1000);
+          if (days > 0) {
+            document.getElementById('cdH').textContent = pad(days);
+            document.getElementById('cdM').textContent = pad(hrs);
+            document.getElementById('cdS').textContent = pad(mins);
+            document.getElementById('cdH').closest('.ev-digit-block').querySelector('.ev-digit-unit').textContent = days === 1 ? 'día' : 'días';
+            document.getElementById('cdM').closest('.ev-digit-block').querySelector('.ev-digit-unit').textContent = 'horas';
+            document.getElementById('cdS').closest('.ev-digit-block').querySelector('.ev-digit-unit').textContent = 'min';
+          } else {
+            document.getElementById('cdH').textContent = pad(hrs);
+            document.getElementById('cdM').textContent = pad(mins);
+            document.getElementById('cdS').textContent = pad(secs);
+            document.getElementById('cdH').closest('.ev-digit-block').querySelector('.ev-digit-unit').textContent = 'horas';
+            document.getElementById('cdM').closest('.ev-digit-block').querySelector('.ev-digit-unit').textContent = 'min';
+            document.getElementById('cdS').closest('.ev-digit-block').querySelector('.ev-digit-unit').textContent = 'seg';
+          }
+        }
+        tick();
+        setInterval(tick, 1000);
 
         // Week strip — Semana Pastoral
         const seriesEvents = allUpcoming.filter(e => e.tag === 'Semana Pastoral');
