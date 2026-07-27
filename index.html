@@ -114,6 +114,24 @@
     .hero-content { position: relative; z-index: 2; max-width: 940px; }
     .hero-eyebrow { display: block; font-size: 11px; letter-spacing: 0.5em; text-transform: uppercase; color: var(--gold2); margin-bottom: 30px; animation: heroIn 1s ease 0.2s both; }
 
+    /* HERO EVENT CHIP */
+    .hero-ev-chip {
+      display: inline-flex; align-items: center; gap: 12px;
+      padding: 13px 26px 13px 18px;
+      border-radius: 100px;
+      background: linear-gradient(110deg, #1a7a3a, #25c85a, #1db84f, #1a7a3a);
+      background-size: 300% 100%;
+      border: none; cursor: pointer; text-decoration: none;
+      box-shadow: 0 0 28px rgba(37,200,90,0.55), 0 0 60px rgba(37,200,90,0.2);
+      animation: heroIn 1s ease 1.0s both, chipFlow 3s linear 2s infinite;
+      transition: box-shadow 0.3s, transform 0.25s;
+    }
+    .hero-ev-chip:hover { box-shadow: 0 0 42px rgba(37,200,90,0.75), 0 0 80px rgba(37,200,90,0.3); transform: translateY(-3px) scale(1.03); }
+    .hero-ev-chip .chip-dot { width: 9px; height: 9px; border-radius: 50%; background: #fff; box-shadow: 0 0 7px rgba(255,255,255,0.9); animation: pulse 1.4s ease-in-out infinite; }
+    .hero-ev-chip .chip-text { font-size: 12px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: #fff; }
+    .hero-ev-chip .chip-arrow { font-size: 14px; color: rgba(255,255,255,0.8); transition: transform 0.3s; }
+    .hero-ev-chip:hover .chip-arrow { transform: translateY(4px); }
+
     /* LIVE EVENT CHIP — header */
     .header-chip {
       display: inline-flex; align-items: center; gap: 8px;
@@ -451,11 +469,6 @@
       <span class="sub">Iglesia Católica</span>
     </span>
   </a>
-  <a class="header-chip" id="headerChip" href="#eventsSec" onclick="document.getElementById('eventsSec').scrollIntoView({behavior:'smooth'});return false;" style="display:none;">
-    <span class="chip-dot"></span>
-    <span class="chip-text">Semana Pastoral · Esta semana</span>
-    <span class="chip-arrow">↓</span>
-  </a>
   <button class="menu-btn" id="menuBtn" aria-label="Abrir menú" aria-expanded="false">
     <span></span><span></span><span></span>
   </button>
@@ -508,8 +521,11 @@
     <h1>Cristo Rey<em>Comunidad de fe</em></h1>
     <p>Un lugar de encuentro, oración y servicio. Te invitamos a vivir tu fe junto a nosotros.</p>
     <div class="hero-cta">
-      <a class="btn btn-gold" href="horarios/">Horarios de Misa</a>
-      <a class="btn btn-outline" href="contacto/">Cómo llegar</a>
+      <a class="hero-ev-chip" href="#eventsSec" onclick="document.getElementById('eventsSec').scrollIntoView({behavior:'smooth'});return false;">
+        <span class="chip-dot"></span>
+        <span class="chip-text">Ver eventos de esta semana</span>
+        <span class="chip-arrow">↓</span>
+      </a>
     </div>
   </div>
   <a class="hero-scroll" href="#statement">
