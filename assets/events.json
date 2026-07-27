@@ -65,40 +65,40 @@
     "description": "Talleres de verano — Arte, Ciencia y Deporte. Para niños de 6 a 12 años. Horario: 9:00 A.M. a 12:00 P.M. Costo por día: $70."
   },
   {
-    "id": "2026072801",
-    "date": "2026-07-28",
+    "id": "2026072701",
+    "date": "2026-07-27",
     "time": "19:00",
     "tag": "Semana Pastoral",
     "title": "Meditación Orante: El Envío del Maestro",
     "description": "7:00 P.M. — Semana Pastoral. Lunes de reflexión y oración profunda sobre el llamado misionero."
   },
   {
-    "id": "2026072901",
-    "date": "2026-07-29",
+    "id": "2026072801",
+    "date": "2026-07-28",
     "time": "19:00",
     "tag": "Semana Pastoral",
     "title": "Conversatorio: Llamados a Más",
     "description": "7:00 P.M. — Semana Pastoral. Martes de diálogo comunitario sobre la vocación y el llamado personal."
   },
   {
-    "id": "2026073001",
-    "date": "2026-07-30",
+    "id": "2026072901",
+    "date": "2026-07-29",
     "time": "19:00",
     "tag": "Semana Pastoral",
     "title": "Tertulia: ¿Sigue teniendo sentido la Iglesia?",
     "description": "7:00 P.M. — Semana Pastoral. Miércoles de conversación abierta: ¿Sigue teniendo sentido la Iglesia en el mundo de hoy?"
   },
   {
-    "id": "2026073101",
-    "date": "2026-07-31",
+    "id": "2026073001",
+    "date": "2026-07-30",
     "time": "19:00",
     "tag": "Semana Pastoral",
     "title": "Concierto Eucarístico: Ante el Rey",
     "description": "7:00 P.M. — Semana Pastoral. Jueves de alabanza y adoración eucarística con concierto."
   },
   {
-    "id": "2026080101",
-    "date": "2026-08-01",
+    "id": "2026073101",
+    "date": "2026-07-31",
     "time": "19:00",
     "tag": "Semana Pastoral",
     "title": "Charla: Promesas que encienden la batalla",
